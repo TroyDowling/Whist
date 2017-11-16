@@ -2,6 +2,6 @@
 
 void Gamestate::new_round ()
 {
-	Deck.Shuffle();
+	Deck.Shuffle(); // This will need to be added to the Deck class
 	
 }
