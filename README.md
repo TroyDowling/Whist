@@ -11,7 +11,7 @@ Please, please, make good comments in your code. Please. This will help with gen
 
 In the words of Kendal Jenner
 >You can get a million comments about how beautiful you look and how awesome you are, but the one comment that says they hate you and you're ugly is the one that sticks.
-
+Most importantly, have fun working!
 ### Timeline
 Classes to be built
 - [ ] Card
