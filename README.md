@@ -5,7 +5,7 @@ Project for Software Design Fall 2017
 Eventually, and ideally, there will be a way to install this to many Computers
 
 ## Contributing
-As usual, **pull _before_ pushing.** This is especially important if you are working on main for some reason.
+As usual, **pull _before_ pushing.** 'git pull origin master' This is especially important if you are working on main for some reason.
 
 Please, please, make good comments in your code. Please. This will help with general readability and debugging.
 
@@ -20,6 +20,11 @@ Classes to be built
 - [ ] Player
 - [ ] Human
 - [ ] AI
+
+Other things to be done
+- [ ] Finish Whist.cpp (Main code)
+- [ ] Impliment graphics
+- [ ] Impliment sound
 
 ## Built in C++ using OpenGL
 
