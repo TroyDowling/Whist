@@ -18,3 +18,5 @@ class Card
 	int get_val () {return val;}
 	int set_val (int v) {val = v;}
 }
+
+#endif //_CARD_H_
