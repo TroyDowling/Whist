@@ -11,12 +11,16 @@ class Card
 		D_A, D_2, D_3, D_4, D_5, D_6, D_7, D_8, D_9, D_10, D_J, D_Q, D_K 
 	} val;
 	public:
-	Card(int v){if(v >= 0 && v < 52) val = v;}
+	//Enum implementaion is a little broken, but we don't need it for the demo.
+	//I'll comment it out for now -Bennett
+	Card(); //Temp default constr.
+	//Card(int v){if(v >= 0 && v < 52) val = v;}
 	bool Clicked(int x,int y); //Not finished
 	//void show(); <- Good chance this won't be used
 	//void animate(); <- Same here, both of these ought to be handled elsewhere
 	int get_val () {return val;}
-	int set_val (int v) {val = v;}
-}
+	//changed int to void return, removed temp.
+	//void set_val (int v) {val = v;}
+};
 
 #endif //_CARD_H_

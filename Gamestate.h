@@ -4,7 +4,7 @@
 #include<iostream>
 #include<fstream>
 #include "Card.h"
-#include "Deck.h"
+//#include "Deck.h"
 
 using namespace std;
 
@@ -24,6 +24,6 @@ class Gamestate
 	/*essentially clears all data for hands,
 	and shuffles up and deals a new round. */
 	void new_round();
-}
+};
 
 #endif //_GAMESTATE_H_
