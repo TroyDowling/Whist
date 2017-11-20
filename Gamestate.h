@@ -4,7 +4,7 @@
 #include<iostream>
 #include<fstream>
 #include "Card.h"
-//#include "Deck.h"
+#include "Deck.h"
 
 using namespace std;
 
