@@ -4,7 +4,7 @@
 #include<iostream>
 #include<fstream>
 #include "Card.h"
-//#include "Deck.h"
+#include "Deck.h"
 
 using namespace std;
 
@@ -15,7 +15,10 @@ class Gamestate
 	int score[2];
 	Card * hands[4];
 	enum players {p1, p2, p3, p4} turn;
-	
+	Deck deck;
+	Card * cards;
+
+        public:	
 	//Default Constructor
 	Gamestate() {score[0] = score[1] = 0; turn = p1; new_round();}
 	

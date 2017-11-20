@@ -1,34 +1,25 @@
 #ifndef _CARD_H_
 #define _CARD_H_
 
+enum suits {clubs, hearts, spades, diamonds};
+
 class Card
 {
-	protected:
-	int x_pos, y_pos w, h;
+ protected:
+  int x_pos, y_pos, w, h, val;
+  suits suit;
+ public:	
+  Card(){val = -1; }
 	
-	public:
-	//2=0 - Ace = 12
-	enum cardvals {
-		two, three, four, five, six, seven,
-		eight, nine, ten, jack, queen, king, ace
-	};
-	//clubs, hearts, spades, diamonds
-	enum suit {c, h, s, d};
+  //Constructor
+  Card(int v, int s){if(v >= 0 && v < 13) val = v; if(s >= 0 && s < 4) suit = s;}
 	
-	//Enum implementaion is a little broken, but we don't need it for the demo.
-	//I'll comment it out for now -Bennett (Should work now) -AO
-	
-	Card(){val = -1; }
-	
-	//Constructor
-	Card(int v){if(v >= 0 && v < 52) val = v;}
-	
-	bool mouse_over(int x,int y);
-	//void show(); <- Good chance this won't be used
-	//void animate(); <- Same here, both of these ought to be handled elsewhere
-	
-	int get_val () {return val;}
-	void set_val (int v) {val = v;}
+  bool mouse_over(int x,int y); //mouse x and mouse y
+
+  int get_val () {return val;}
+  suits get_suit () {return suit;}
+  void set_suit (suits s) (suit = s;)
+  void set_val (int v) {val = v;}
 };
 
 #endif //_CARD_H_
