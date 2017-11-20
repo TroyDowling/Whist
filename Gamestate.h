@@ -6,8 +6,6 @@
 #include "Card.h"
 #include "Deck.h"
 
-using namespace std;
-
 class Gamestate
 {
 	//State Variables
