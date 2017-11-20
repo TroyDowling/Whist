@@ -18,9 +18,9 @@ class Gamestate
 	Deck deck;
 	Card * cards;
 
-        public:	
+    public:
 	//Default Constructor
-	Gamestate() {score[0] = score[1] = 0; turn = p1; new_round();}
+	Gamestate() {score[0] = score[1] = 0; turn = p1;}
 	
 	//Constructor (if needed)
 	
