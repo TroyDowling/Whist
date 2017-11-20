@@ -38,7 +38,7 @@ bool mouseIsDragging = false;
 int game_Width = 1080;
 int game_Height = 720;
 char programName[] = "Whist";
-int bg;
+int bg, fs;
 int dummyWidth = 100, dummyHeight = 140;
 
 //A wonderful "borrowed" helper funtion.
@@ -142,6 +142,7 @@ void init_gl_window(){
   init();
 
   bg = loadTexture("bg.pam");
+  fs = loadTexture("fibspir.pam");
 
   glutDisplayFunc(drawWindow);
   glutReshapeFunc(reshape);
