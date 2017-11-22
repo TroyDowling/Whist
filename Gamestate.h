@@ -2,6 +2,7 @@
 #ifndef _GAMESTATE_H_
 #define _GAMESTATE_H_
 
+#include<vector>
 #include<iostream>
 #include<fstream>
 #include<iostream>
@@ -13,7 +14,7 @@ class Gamestate
 	//State Variables
 	protected:
 	int score[2];
-	Card * hands[4];
+	std::vector< vector< <Card*> > hands(4, vector<Card*>(13));
 	enum players {p1, p2, p3, p4} turn;
 	Deck deck;
 	Card * cards;
@@ -24,15 +25,17 @@ class Gamestate
 	
 	//Constructor (if needed)
 	
-	/*essentially clears all data for hands,
-	and shuffles up and deals a new round. */
+	//Shuffles deck and calls the deal function
 	void new_round();
 	
-	//Needs to record the score, and the hands.
-	void save_game();
+	//Needs to record the score, and the hands
+	void save_game(int);
 	
-	//Deals out a shuffled deck into four hands
-	void deal ();
+	//Reads the save_game file and sets up the game as such
+	void load_game(int);
+	
+	//Deals out a shuffled deck into four hands (helper)
+	void deal();
 };
 
 #endif //_GAMESTATE_H_
