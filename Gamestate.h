@@ -4,6 +4,7 @@
 
 #include<iostream>
 #include<fstream>
+#include<iostream>
 #include "Card.h"
 #include "Deck.h"
 
@@ -26,6 +27,12 @@ class Gamestate
 	/*essentially clears all data for hands,
 	and shuffles up and deals a new round. */
 	void new_round();
+	
+	//Needs to record the score, and the hands.
+	void save_game();
+	
+	//Deals out a shuffled deck into four hands
+	void deal ();
 };
 
 #endif //_GAMESTATE_H_
