@@ -59,6 +59,43 @@ int dummyWidth = 30, dummyHeight = 40;
 int sdummyWidth = 40, sdummyHeight = 30;
 int pDummyW = 40, pDummyH = 50;
 
+//Loads up the user hand
+void loadUserText()
+{
+	Card * cardsInHand;
+	//The 0 stands for the user's hand
+	//returns the integer value for how many cards there are in the user's hand
+	userHandLen = get_handLen(0);
+	//Returns an array of pointers to cards.
+	cardsInHand = get_hand(0);
+	
+	for(int i = 0; i < userHandLen; ++i)
+	{
+		//clubs
+		if(cardsInHand[i]->get_suit == 1)
+		{
+			//returns the value (0-12) of the i-th card in the list of cards.
+			userText[i] = cText[cardsInHand[i]->get_val()];
+		}
+		//hearts
+		if(cardInHand[i]->get_suit == 2)
+		{
+			userText[i] = hText[cardsInHand[i]->get_val()];
+		}
+		//spades
+		if(cardsInHand[i]->get_suit == 3)
+		{
+			userText[i] = sText[cardsInHand[i]->get_val()];
+		}
+		//diamonds
+		if(cardsInHand[i]->get_suit == 4)
+		{
+			userText[i] = dText[cardsInHand[i]->get_val()];
+		}
+	}	
+	
+}
+
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
 {
@@ -75,7 +112,8 @@ void drawCards(){
   //Displays all hand zones.
 
   // user         left         top          right
-  userHandLen = aiHandLen1 = aiHandLen2 = aiHandLen3 = 13;
+  loadUserText();
+	aiHandLen1 = aiHandLen2 = aiHandLen3 = 13;
 
   //spacing to align cards in center of screen
   double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
@@ -96,11 +134,8 @@ void drawCards(){
     drawTexture(bg, card_Height/3.5, (hspacing + (i*(card_Width/2))), card_Width, card_Height, 1, PI/2);
   }
   //Draw user cards
-  //Eventually, this will iterate through the user hand - This will be true for all other hands
-  //Need to know the length of the hand, and swap 13 for that.
-  //           here ||
   for(int l= 0; l < userHandLen; l++){
-    drawTexture(cText[l], wspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
+    drawTexture(userText[l], wspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
   }
 }
 

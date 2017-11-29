@@ -3,10 +3,12 @@
 #include "Card.h"
 
 class Hand{
+	int length;
   Card* hand[13];
  public:
   Hand(){
-    for(int i = 0; i < 13; i++){
+		length = 13;
+    for(int i = 0; i < length; i++){
       hand[i] = NULL;
     }
   }
@@ -16,15 +18,17 @@ class Hand{
     int i = 0;
     while(!inserted){
       if(hand[i] != NULL){
-	*hand[i] = c;
-	inserted = true;
+				*hand[i] = c;
+				inserted = true;
       }
       else i++;
     }
   }
-  void removeCard(int c){
-    hand[c] = NULL;
-  }
+	
+  void removeCard(int c){hand[c] = NULL; length--;}
+	
+	int getLength(){return length;}
+	Card * getHand(){return hand;}
 };
 
 #endif
