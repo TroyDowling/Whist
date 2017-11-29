@@ -37,8 +37,8 @@ using namespace std;
 
 bool mouseIsDragging = false;
 
-int game_Width = 1080;
-int game_Height = 1080;
+int game_Width = 700;
+int game_Height = 700;
 char programName[] = "Whist";
 //texture for card back
 int bg;
@@ -68,17 +68,23 @@ void drawCards(){
   //Updated to 13 cards per row
   //(Will)Display all hand zones.
   glColor3f(0.5,0.5,0.5);
-  for(int i = 0; i < 8; i++){
-    drawBox(25+(i*(dummyWidth+31)), 25, dummyWidth, dummyHeight);
+  for(int i = 0; i < 13; i++){
+    drawBox(120+(i*(dummyWidth+5)), 10, dummyWidth, dummyHeight);
   }
-  for(int j = 0; j < 8; j++){
-    drawBox(25+(j*(dummyWidth+31)), 555, dummyWidth, dummyHeight);
+  for(int j = 0; j < 13; j++){
+    drawBox(30+(j*(pDummyW+10)), 600, pDummyW, pDummyH);
+  }
+  for(int k= 0; k < 13; k++){
+    drawBox(10, 70+(k*(sdummyHeight+5)), sdummyWidth, sdummyHeight);
+  }
+  for(int l= 0; l < 13; l++){
+    drawBox(650, 70+(l*(sdummyHeight+5)), sdummyWidth, sdummyHeight);
   }
 }
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
-  drawTexture(bg,0,0,1080,720);
+  drawTexture(bg,0,0,700,700);
   drawCards();
   //This is be the implementation for drawing a *half* board of cards,
   //suitable only for testing.
@@ -104,7 +110,7 @@ void keyboard(unsigned char c, int x, int y){
 //I don't want to mess with resizing textures and mipmaps, if at all possible.
 //This likely only delays the inevitable ;_;
 void reshape(int w, int h){
-  glutReshapeWindow(1080,1080);
+  glutReshapeWindow(700,700);
 }
 
 void mouse(int button, int state, int x, int y){
