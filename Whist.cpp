@@ -40,11 +40,17 @@ bool mouseIsDragging = false;
 int game_Width = 1080;
 int game_Height = 1080;
 char programName[] = "Whist";
+//texture for card back
 int bg;
-int h2, h3, h4, h5, h6, h7, h8, h9, hj, hq, hk, ha;
-int s2, s3, s4, s5, s6, s7, s8, s9, sj, sq, sk, sa;
-int c2, c3, c4, c5, c6, c7, c8, c9, cj, cq, ck, ca;
-int d2, d3, d4, d5, d6, d7, d8, d9, dj, dq, dk, da;
+//textures for hearts
+int hText[13];
+//textures for spades
+int sText[13];
+//textures for clubs
+int cText[13];
+//textures for diamonds
+int dText[13];
+//all of the grey rectangles (used for locations)
 int dummyWidth = 100, dummyHeight = 140;
 
 //A wonderful "borrowed" helper funtion.
@@ -136,6 +142,69 @@ void init(void){
   cout << "A \"Functional\" demo!" << endl;
 }
 
+//Loads all textures, 
+void loadAlltextures()
+{
+	bg = loadTexture("cardback.pam");
+	
+	//load textures for clubs
+	for(int i = 0; i < 9; ++i)
+	{
+		string fname1 = "clubs-";
+		string fname2 = "-75.pam";
+		int val = i + 2;
+		string file = fname1 + to_string(val) +fname2;
+		cText[i] = loadTexture(file);
+	}
+	cText[9] = loadTexture("clubs-a-75.pam");
+	cText[10] = loadTexture("clubs-j-75.pam");
+	cText[11] = loadTexture("clubs-q-75.pam");
+	cText[12] = loadTexture("clubs-k-75.pam");
+	
+	//load textures for hearts
+	for(int i = 0; i < 9; ++i)
+	{
+		string fname1 = "hearts-";
+		string fname2 = "-75.pam";
+		int val = i + 2;
+		string file = fname1 + to_string(val) +fname2;
+		hText[i] = loadTexture(file);
+	}
+	hText[9] = loadTexture("hearts-a-75.pam");
+	hText[10] = loadTexture("hearts-j-75.pam");
+	hText[11] = loadTexture("hearts-q-75.pam");
+	hText[12] = loadTexture("hearts-k-75.pam");
+	
+	
+	//load textures for spades
+	for(int i = 0; i < 9; ++i)
+	{
+		string fname1 = "spades-";
+		string fname2 = "-75.pam";
+		int val = i + 2;
+		string file = fname1 + to_string(val) +fname2;
+		sText[i] = loadTexture(file);
+	}
+	sText[9] = loadTexture("spades-a-75.pam");
+	sText[10] = loadTexture("spades-j-75.pam");
+	sText[11] = loadTexture("spades-q-75.pam");
+	sText[12] = loadTexture("spades-k-75.pam");
+	
+	//load textures for diamonds
+	for(int i = 0; i < 9; ++i)
+	{
+		string fname1 = "diamonds-";
+		string fname2 = "-75.pam";
+		int val = i + 2;
+		string file = fname1 + to_string(val) +fname2;
+		dText[i] = loadTexture(file);
+	}
+	dText[9] = loadTexture("diamonds-a-75.pam");
+	dText[10] = loadTexture("diamonds-j-75.pam");
+	dText[11] = loadTexture("diamonds-q-75.pam");
+	dText[12] = loadTexture("diamonds-k-75.pam");
+}
+
 //This function is OpenGL's GOD.
 void init_gl_window(){
   char*argv[] = {programName};
@@ -148,9 +217,8 @@ void init_gl_window(){
   init();
 
   //LOAD ALL THE TEXTURES
-  bg = loadTexture("bg.pam");
-
-
+  loadAllTextures();  
+  //Draw stuff
   glutDisplayFunc(drawWindow);
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
