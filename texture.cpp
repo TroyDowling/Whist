@@ -252,14 +252,6 @@ void drawTexture(int texNum, double *arr, double alpha)
   drawTexture(texNum, arr[0], arr[1], arr[2], arr[3], alpha);
 }
 
-//Adding Implementation of ANIMATION/drawing texture parts
-//--Bennett
-//If all else fails, I'll make an array of texture ids with animation frames...
-//...AND DRAW THEM ONE AT A TIME! mwahaha
-void animateCard(int texNum, double x, double y, double width, double height, double alpha, double rotationAngle)
-{//TOBEIMP
-}
-
 
 // find the first power of two greater than val
 int power_of_two(int val)

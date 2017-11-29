@@ -8,13 +8,16 @@
 #include<iostream>
 #include "Card.h"
 #include "Deck.h"
+#include "hand.h"
+
 
 class Gamestate
 {
 	//State Variables
 	protected:
 	int score[2];
-	std::vector< vector< <Card*> > hands(4, vector<Card*>(13));
+	Hand* hands[4];
+	//std::vector vector< <Card*> > hands(4, vector<Card*>(13));
 	enum players {p1, p2, p3, p4} turn;
 	Deck deck;
 	Card * cards;

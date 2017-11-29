@@ -10,7 +10,7 @@ class Deck
  public:
   Deck();
   void shuffle();
-  Card * get_deck() {return deck;}
-}
+  Card * get_deck() {return *deck;}
+};
 
-
+#endif

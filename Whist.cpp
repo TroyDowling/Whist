@@ -31,14 +31,19 @@ using namespace std;
 #include <stdlib.h>
 #include "Gamestate.h"
 #include "texture.h"
+#include "hand.h"
 //End Imported Libraries(tm)
 
 bool mouseIsDragging = false;
 
 int game_Width = 1080;
-int game_Height = 720;
+int game_Height = 1080;
 char programName[] = "Whist";
-int bg, fs;
+int bg;
+int h2, h3, h4, h5, h6, h7, h8, h9, hj, hq, hk, ha;
+int s2, s3, s4, s5, s6, s7, s8, s9, sj, sq, sk, sa;
+int c2, c3, c4, c5, c6, c7, c8, c9, cj, cq, ck, ca;
+int d2, d3, d4, d5, d6, d7, d8, d9, dj, dq, dk, da;
 int dummyWidth = 100, dummyHeight = 140;
 
 //A wonderful "borrowed" helper funtion.
@@ -53,8 +58,8 @@ void drawBox(double x, double y, double width, double height)
 }
 
 void drawCards(){
-  //Starting with 10 cards per row.
-  //...also, only 2 hands. Oh well.
+  //Updated to 13 cards per row
+  //(Will)Display all hand zones.
   glColor3f(0.5,0.5,0.5);
   for(int i = 0; i < 8; i++){
     drawBox(25+(i*(dummyWidth+31)), 25, dummyWidth, dummyHeight);
@@ -92,7 +97,7 @@ void keyboard(unsigned char c, int x, int y){
 //I don't want to mess with resizing textures and mipmaps, if at all possible.
 //This likely only delays the inevitable ;_;
 void reshape(int w, int h){
-  glutReshapeWindow(1080,720);
+  glutReshapeWindow(1080,1080);
 }
 
 void mouse(int button, int state, int x, int y){
@@ -141,8 +146,9 @@ void init_gl_window(){
   glutCreateWindow(programName);
   init();
 
+  //LOAD ALL THE TEXTURES
   bg = loadTexture("bg.pam");
-  fs = loadTexture("fibspir.pam");
+
 
   glutDisplayFunc(drawWindow);
   glutReshapeFunc(reshape);
