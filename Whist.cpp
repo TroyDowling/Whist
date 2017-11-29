@@ -151,68 +151,68 @@ void init(void){
 //Loads all textures, 
 void loadAllTextures()
 {
-	bg = loadTexture("cardback.pam");
+	bg = loadTexture("imgs/cardback.pam");
 	
 	//load textures for clubs
 	for(int i = 0; i < 9; ++i)
 	{
-		string fname1 = "clubs-";
+		string fname1 = "imgs/clubs-";
 		string fname2 = "-75.pam";
 		int val = i + 2;
 		string file = fname1 + to_string(val) +fname2;
 		const char * param = file.c_str();
 		cText[i] = loadTexture(param);
 	}
-	cText[9] = loadTexture("clubs-a-75.pam");
-	cText[10] = loadTexture("clubs-j-75.pam");
-	cText[11] = loadTexture("clubs-q-75.pam");
-	cText[12] = loadTexture("clubs-k-75.pam");
+	cText[9] = loadTexture("imgs/clubs-a-75.pam");
+	cText[10] = loadTexture("imgs/clubs-j-75.pam");
+	cText[11] = loadTexture("imgs/clubs-q-75.pam");
+	cText[12] = loadTexture("imgs/clubs-k-75.pam");
 	
 	//load textures for hearts
 	for(int i = 0; i < 9; ++i)
 	{
-		string fname1 = "hearts-";
+		string fname1 = "imgs/hearts-";
 		string fname2 = "-75.pam";
 		int val = i + 2;
 		string file = fname1 + to_string(val) +fname2;
 		const char * param = file.c_str();
 		hText[i] = loadTexture(param);
 	}
-	hText[9] = loadTexture("hearts-a-75.pam");
-	hText[10] = loadTexture("hearts-j-75.pam");
-	hText[11] = loadTexture("hearts-q-75.pam");
-	hText[12] = loadTexture("hearts-k-75.pam");
+	hText[9] = loadTexture("imgs/hearts-a-75.pam");
+	hText[10] = loadTexture("imgs/hearts-j-75.pam");
+	hText[11] = loadTexture("imgs/hearts-q-75.pam");
+	hText[12] = loadTexture("imgs/hearts-k-75.pam");
 	
 	
 	//load textures for spades
 	for(int i = 0; i < 9; ++i)
 	{
-		string fname1 = "spades-";
+		string fname1 = "imgs/spades-";
 		string fname2 = "-75.pam";
 		int val = i + 2;
 		string file = fname1 + to_string(val) +fname2;
 		const char * param = file.c_str();
 		sText[i] = loadTexture(param);
 	}
-	sText[9] = loadTexture("spades-a-75.pam");
-	sText[10] = loadTexture("spades-j-75.pam");
-	sText[11] = loadTexture("spades-q-75.pam");
-	sText[12] = loadTexture("spades-k-75.pam");
+	sText[9] = loadTexture("imgs/spades-a-75.pam");
+	sText[10] = loadTexture("imgs/spades-j-75.pam");
+	sText[11] = loadTexture("imgs/spades-q-75.pam");
+	sText[12] = loadTexture("imgs/spades-k-75.pam");
 	
 	//load textures for diamonds
 	for(int i = 0; i < 9; ++i)
 	{
-		string fname1 = "diamonds-";
+		string fname1 = "imgs/diamonds-";
 		string fname2 = "-75.pam";
 		int val = i + 2;
 		string file = fname1 + to_string(val) +fname2;
 		const char * param = file.c_str();
 		dText[i] = loadTexture(param);
 	}
-	dText[9] = loadTexture("diamonds-a-75.pam");
-	dText[10] = loadTexture("diamonds-j-75.pam");
-	dText[11] = loadTexture("diamonds-q-75.pam");
-	dText[12] = loadTexture("diamonds-k-75.pam");
+	dText[9] = loadTexture("imgs/diamonds-a-75.pam");
+	dText[10] = loadTexture("imgs/diamonds-j-75.pam");
+	dText[11] = loadTexture("imgs/diamonds-q-75.pam");
+	dText[12] = loadTexture("imgs/diamonds-k-75.pam");
 }
 
 //This function is OpenGL's GOD.
