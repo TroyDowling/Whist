@@ -10,28 +10,6 @@ struct node
   node*next;
 };
 
-/*
-node recurse(node current, char* c){
-  if(current.next == NULL){
-    return n;
-  }
-  else{
-    if(current.contents == c){
-      current.next++;
-      recurse(current.next, c);
-    }
-    else{
-      rec2(current.next, c);
-    }
-  }
-}
-*/
-//This code sucks ass and I'll fix it later.
-//The point:
-//recurse moves through a linked list until it finds a node whose contents match array c
-//after which it deletes the subject node, repairs the array, and returns the whole thing.
-
-//
 bool stringEqual(const char * subject, const char * test)
 {
   int i = 0, len = 0;
@@ -44,9 +22,6 @@ bool stringEqual(const char * subject, const char * test)
 node recurse (node cur, char * c)
 {
   int i = 0;
-  //cout << cur.contents <<" "<< c << endl;
-  while ( c[i] == cur.contents[i] ){ ++i;}
-  cout << stringEqual(c,cur.contents) <<endl;
   if ( stringEqual(c,cur.contents) )
   {
 	//this node's contents match
@@ -63,7 +38,6 @@ node recurse (node cur, char * c)
   }
 }
 
-//This probably doesn't work
 int main()
 {
   node * Nodes[5];

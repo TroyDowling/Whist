@@ -21,7 +21,6 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 //Include all imports, including relevant OpenGL libraries.
 #include <iostream>
 #include <fstream>
-using namespace std;
 #ifdef MACOSX
 #include <GL/glut.h>
 #else
@@ -29,9 +28,11 @@ using namespace std;
 #endif
 #include <math.h>
 #include <stdlib.h>
+#include <string>
 #include "Gamestate.h"
 #include "texture.h"
 #include "hand.h"
+using namespace std;
 //End Imported Libraries(tm)
 
 bool mouseIsDragging = false;
