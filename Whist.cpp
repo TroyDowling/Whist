@@ -37,9 +37,12 @@ using namespace std;
 
 bool mouseIsDragging = false;
 
-int game_Width = 700;
-int game_Height = 700;
+int game_Width = 1440;
+int game_Height = 890;
 char programName[] = "Whist";
+
+double PI = 3.14159264;
+
 //texture for card back
 int bg;
 //textures for hearts
@@ -50,12 +53,18 @@ int sText[13];
 int cText[13];
 //textures for diamonds
 int dText[13];
+//textures for user hand
+int userHandLen, aiHandLen1, aiHandLen2, aiHandLen3;
+int userText[13];
+
+//Card parameters (sizes)
+int card_Height = game_Height/7;
+int card_Width = card_Height*.618;
+
 //all of the grey rectangles (used for locations)
 int dummyWidth = 30, dummyHeight = 40;
 int sdummyWidth = 40, sdummyHeight = 30;
 int pDummyW = 40, pDummyH = 50;
-
-void loadAllTextures();
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -70,19 +79,35 @@ void drawBox(double x, double y, double width, double height)
 
 void drawCards(){
   //Updated to 13 cards per row
-  //(Will)Display all hand zones.
+  //Display all hand zones.
+
+  // user         left         top          right
+  userHandLen = aiHandLen1 = aiHandLen2 = aiHandLen3 = 13;
+
+  //spacing to align cards in center of screen
+  double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
+  double hspacing = (game_Height/2) - (card_Width/2)*((aiHandLen1/2)+2);
+
+  //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
+
+  //Draw top cards
   for(int i = 0; i < 13; i++){
-    drawTexture(bg, 120+(i*(30+5)), 10, 30, 40, 1, 0);
+    drawTexture(bg, wspacing+(i*(card_Width/2)), 10, card_Width, card_Height, 1, 0);
   }
-  glColor3f(0.5,0.5,0.5);
+  //Draw right cards
   for(int j = 0; j < 13; j++){
-    drawBox(30+(j*(pDummyW+10)), 600, pDummyW, pDummyH);
+    drawTexture(bg, game_Width - (card_Height-10), (hspacing + (j*(card_Width/2))), card_Width, card_Height, 1, (3*PI)/2);
   }
+  //Draw left cards
   for(int i = 0; i < 13; i++){
-    drawTexture(bg, 120+(i*(30+5)), 10, 30, 40, 1, 90);
+    drawTexture(bg, card_Height/3.5, (hspacing + (i*(card_Width/2))), card_Width, card_Height, 1, PI/2);
   }
-  for(int l= 0; l < 13; l++){
-    drawBox(650, 70+(l*(sdummyHeight+5)), sdummyWidth, sdummyHeight);
+  //Draw user cards
+  //Eventually, this will iterate through the user hand - This will be true for all other hands
+  //Need to know the length of the hand, and swap 13 for that.
+  //           here ||
+  for(int l= 0; l < userHandLen; l++){
+    drawTexture(cText[l], wspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
   }
 }
 
@@ -110,7 +135,7 @@ void keyboard(unsigned char c, int x, int y){
 //I don't want to mess with resizing textures and mipmaps, if at all possible.
 //This likely only delays the inevitable ;_;
 void reshape(int w, int h){
-  glutReshapeWindow(700,700);
+  glutReshapeWindow(game_Width,game_Height);
 }
 
 void mouse(int button, int state, int x, int y){
@@ -163,10 +188,17 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		cText[i] = loadTexture(param);
 	}
+<<<<<<< HEAD
 	cText[9] = loadTexture("imgs/clubs-a-75.pam");
 	cText[10] = loadTexture("imgs/clubs-j-75.pam");
 	cText[11] = loadTexture("imgs/clubs-q-75.pam");
 	cText[12] = loadTexture("imgs/clubs-k-75.pam");
+=======
+	cText[9] = loadTexture("clubs-j-75.pam");
+	cText[10] = loadTexture("clubs-q-75.pam");
+	cText[11] = loadTexture("clubs-k-75.pam");
+	cText[12] = loadTexture("clubs-a-75.pam");
+>>>>>>> 70c111a70c507954bf5dec29b71535e8faa704b8
 	
 	//load textures for hearts
 	for(int i = 0; i < 9; ++i)
@@ -178,10 +210,17 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		hText[i] = loadTexture(param);
 	}
+<<<<<<< HEAD
 	hText[9] = loadTexture("imgs/hearts-a-75.pam");
 	hText[10] = loadTexture("imgs/hearts-j-75.pam");
 	hText[11] = loadTexture("imgs/hearts-q-75.pam");
 	hText[12] = loadTexture("imgs/hearts-k-75.pam");
+=======
+	hText[9] = loadTexture("hearts-j-75.pam");
+	hText[10] = loadTexture("hearts-q-75.pam");
+	hText[11] = loadTexture("hearts-k-75.pam");
+	hText[12] = loadTexture("hearts-a-75.pam");
+>>>>>>> 70c111a70c507954bf5dec29b71535e8faa704b8
 	
 	
 	//load textures for spades
@@ -194,10 +233,17 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		sText[i] = loadTexture(param);
 	}
+<<<<<<< HEAD
 	sText[9] = loadTexture("imgs/spades-a-75.pam");
 	sText[10] = loadTexture("imgs/spades-j-75.pam");
 	sText[11] = loadTexture("imgs/spades-q-75.pam");
 	sText[12] = loadTexture("imgs/spades-k-75.pam");
+=======
+	sText[9] = loadTexture("spades-j-75.pam");
+	sText[10] = loadTexture("spades-q-75.pam");
+	sText[11] = loadTexture("spades-k-75.pam");
+	sText[12] = loadTexture("spades-a-75.pam");
+>>>>>>> 70c111a70c507954bf5dec29b71535e8faa704b8
 	
 	//load textures for diamonds
 	for(int i = 0; i < 9; ++i)
@@ -209,10 +255,17 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		dText[i] = loadTexture(param);
 	}
+<<<<<<< HEAD
 	dText[9] = loadTexture("imgs/diamonds-a-75.pam");
 	dText[10] = loadTexture("imgs/diamonds-j-75.pam");
 	dText[11] = loadTexture("imgs/diamonds-q-75.pam");
 	dText[12] = loadTexture("imgs/diamonds-k-75.pam");
+=======
+	dText[9] = loadTexture("diamonds-j-75.pam");
+	dText[10] = loadTexture("diamonds-q-75.pam");
+	dText[11] = loadTexture("diamonds-k-75.pam");
+	dText[12] = loadTexture("diamonds-a-75.pam");
+>>>>>>> 70c111a70c507954bf5dec29b71535e8faa704b8
 }
 
 //This function is OpenGL's GOD.
@@ -222,12 +275,13 @@ void init_gl_window(){
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
   glutInitWindowSize(game_Width, game_Height);
-  glutInitWindowPosition(200,200);
+  glutInitWindowPosition(300,50);
   glutCreateWindow(programName);
   init();
 
   //LOAD ALL THE TEXTURES
   loadAllTextures();  
+
   //Draw stuff
   glutDisplayFunc(drawWindow);
   glutReshapeFunc(reshape);
