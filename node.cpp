@@ -1,8 +1,6 @@
 #include <iostream>
 using namespace std;
 
-
-
 struct node
 {
   const char*contents;
@@ -10,6 +8,10 @@ struct node
   node*next;
 };
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> baabd0c5d56b2145f2f05b29605230409e720be8
 bool stringEqual(const char * subject, const char * test)
 {
   int i = 0, len = 0;
@@ -19,12 +21,18 @@ bool stringEqual(const char * subject, const char * test)
   else return false;
 }
 
-node recurse (node cur, char * c)
+
+node recurse (node cur, const char * c)
 {
   int i = 0;
+<<<<<<< HEAD
+  cout << cur.contents <<" "<< c << endl;
+  //cout << stringEqual(c,cur.contents) <<endl;
+=======
+>>>>>>> baabd0c5d56b2145f2f05b29605230409e720be8
   if ( stringEqual(c,cur.contents) )
   {
-	//this node's contents match
+    //this node's contents match
     cout << "Match found" << endl;
     cur.last->next = cur.next;
     return cur;	
@@ -32,12 +40,16 @@ node recurse (node cur, char * c)
   else
   {
     //this node's contents do not match
-	if (cur.next != NULL)
+    if (cur.next != NULL)
 	  return recurse(*cur.next, c);
     else return *cur.last;
   }
 }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> baabd0c5d56b2145f2f05b29605230409e720be8
 int main()
 {
   node * Nodes[5];

@@ -40,6 +40,9 @@ bool mouseIsDragging = false;
 int game_Width = 700;
 int game_Height = 700;
 char programName[] = "Whist";
+
+double PI = 3.14159264;
+
 //texture for card back
 int bg;
 //textures for hearts
@@ -50,6 +53,11 @@ int sText[13];
 int cText[13];
 //textures for diamonds
 int dText[13];
+
+//Card parameters (sizes)
+int card_Width = game_Width/11;
+  int card_Height = game_Height/8;
+
 //all of the grey rectangles (used for locations)
 int dummyWidth = 30, dummyHeight = 40;
 int sdummyWidth = 40, sdummyHeight = 30;
@@ -70,19 +78,28 @@ void drawBox(double x, double y, double width, double height)
 
 void drawCards(){
   //Updated to 13 cards per row
-  //(Will)Display all hand zones.
+  //Display all hand zones.
+
+  //drawTexture(texture ID, x, y, width, height, alpha, angle in radians);
+
+  //Draw top cards
   for(int i = 0; i < 13; i++){
-    drawTexture(bg, 120+(i*(30+5)), 10, 30, 40, 1, 0);
+    drawTexture(hText[i], 120+(i*(35)), 10, card_Width, card_Height, 1, 0);
   }
-  glColor3f(0.5,0.5,0.5);
+  //Draw right cards
   for(int j = 0; j < 13; j++){
-    drawBox(30+(j*(pDummyW+10)), 600, pDummyW, pDummyH);
+    drawTexture(sText[j], game_Width - (card_Width + 20), 120+(j*35), card_Width, card_Height, 1, (3*PI)/2);
   }
+  //Draw left cards
   for(int i = 0; i < 13; i++){
-    drawTexture(bg, 120+(i*(30+5)), 10, 30, 40, 1, 90);
+    drawTexture(dText[i], 20, 120+(i*35), card_Width, card_Height, 1, PI/2);
   }
+  //Draw user cards
+  //Eventually, this will iterate through the user hand - This will be true for all other hands
+  //Need to know the length of the hand, and swap 13 for that.
+  //           here ||
   for(int l= 0; l < 13; l++){
-    drawBox(650, 70+(l*(sdummyHeight+5)), sdummyWidth, sdummyHeight);
+    drawTexture(cText[l], 120+(l*(35)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
   }
 }
 
@@ -163,10 +180,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		cText[i] = loadTexture(param);
 	}
-	cText[9] = loadTexture("clubs-a-75.pam");
-	cText[10] = loadTexture("clubs-j-75.pam");
-	cText[11] = loadTexture("clubs-q-75.pam");
-	cText[12] = loadTexture("clubs-k-75.pam");
+	cText[9] = loadTexture("clubs-j-75.pam");
+	cText[10] = loadTexture("clubs-q-75.pam");
+	cText[11] = loadTexture("clubs-k-75.pam");
+	cText[12] = loadTexture("clubs-a-75.pam");
 	
 	//load textures for hearts
 	for(int i = 0; i < 9; ++i)
@@ -178,10 +195,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		hText[i] = loadTexture(param);
 	}
-	hText[9] = loadTexture("hearts-a-75.pam");
-	hText[10] = loadTexture("hearts-j-75.pam");
-	hText[11] = loadTexture("hearts-q-75.pam");
-	hText[12] = loadTexture("hearts-k-75.pam");
+	hText[9] = loadTexture("hearts-j-75.pam");
+	hText[10] = loadTexture("hearts-q-75.pam");
+	hText[11] = loadTexture("hearts-k-75.pam");
+	hText[12] = loadTexture("hearts-a-75.pam");
 	
 	
 	//load textures for spades
@@ -194,10 +211,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		sText[i] = loadTexture(param);
 	}
-	sText[9] = loadTexture("spades-a-75.pam");
-	sText[10] = loadTexture("spades-j-75.pam");
-	sText[11] = loadTexture("spades-q-75.pam");
-	sText[12] = loadTexture("spades-k-75.pam");
+	sText[9] = loadTexture("spades-j-75.pam");
+	sText[10] = loadTexture("spades-q-75.pam");
+	sText[11] = loadTexture("spades-k-75.pam");
+	sText[12] = loadTexture("spades-a-75.pam");
 	
 	//load textures for diamonds
 	for(int i = 0; i < 9; ++i)
@@ -209,10 +226,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		dText[i] = loadTexture(param);
 	}
-	dText[9] = loadTexture("diamonds-a-75.pam");
-	dText[10] = loadTexture("diamonds-j-75.pam");
-	dText[11] = loadTexture("diamonds-q-75.pam");
-	dText[12] = loadTexture("diamonds-k-75.pam");
+	dText[9] = loadTexture("diamonds-j-75.pam");
+	dText[10] = loadTexture("diamonds-q-75.pam");
+	dText[11] = loadTexture("diamonds-k-75.pam");
+	dText[12] = loadTexture("diamonds-a-75.pam");
 }
 
 //This function is OpenGL's GOD.
