@@ -51,7 +51,11 @@ int cText[13];
 //textures for diamonds
 int dText[13];
 //all of the grey rectangles (used for locations)
-int dummyWidth = 100, dummyHeight = 140;
+int dummyWidth = 30, dummyHeight = 40;
+int sdummyWidth = 40, sdummyHeight = 30;
+int pDummyW = 40, pDummyH = 50;
+
+void loadAllTextures();
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -67,15 +71,15 @@ void drawBox(double x, double y, double width, double height)
 void drawCards(){
   //Updated to 13 cards per row
   //(Will)Display all hand zones.
-  glColor3f(0.5,0.5,0.5);
   for(int i = 0; i < 13; i++){
-    drawBox(120+(i*(dummyWidth+5)), 10, dummyWidth, dummyHeight);
+    drawTexture(bg, 120+(i*(30+5)), 10, 30, 40, 1, 0);
   }
+  glColor3f(0.5,0.5,0.5);
   for(int j = 0; j < 13; j++){
     drawBox(30+(j*(pDummyW+10)), 600, pDummyW, pDummyH);
   }
-  for(int k= 0; k < 13; k++){
-    drawBox(10, 70+(k*(sdummyHeight+5)), sdummyWidth, sdummyHeight);
+  for(int i = 0; i < 13; i++){
+    drawTexture(bg, 120+(i*(30+5)), 10, 30, 40, 1, 90);
   }
   for(int l= 0; l < 13; l++){
     drawBox(650, 70+(l*(sdummyHeight+5)), sdummyWidth, sdummyHeight);
@@ -84,11 +88,7 @@ void drawCards(){
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
-  drawTexture(bg,0,0,700,700);
   drawCards();
-  //This is be the implementation for drawing a *half* board of cards,
-  //suitable only for testing.
-  //The final implementaion will (in all good favor) be dynamic.
   glutSwapBuffers();
 }
 
@@ -149,7 +149,7 @@ void init(void){
 }
 
 //Loads all textures, 
-void loadAlltextures()
+void loadAllTextures()
 {
 	bg = loadTexture("cardback.pam");
 	
@@ -160,7 +160,8 @@ void loadAlltextures()
 		string fname2 = "-75.pam";
 		int val = i + 2;
 		string file = fname1 + to_string(val) +fname2;
-		cText[i] = loadTexture(file);
+		const char * param = file.c_str();
+		cText[i] = loadTexture(param);
 	}
 	cText[9] = loadTexture("clubs-a-75.pam");
 	cText[10] = loadTexture("clubs-j-75.pam");
@@ -174,7 +175,8 @@ void loadAlltextures()
 		string fname2 = "-75.pam";
 		int val = i + 2;
 		string file = fname1 + to_string(val) +fname2;
-		hText[i] = loadTexture(file);
+		const char * param = file.c_str();
+		hText[i] = loadTexture(param);
 	}
 	hText[9] = loadTexture("hearts-a-75.pam");
 	hText[10] = loadTexture("hearts-j-75.pam");
@@ -189,7 +191,8 @@ void loadAlltextures()
 		string fname2 = "-75.pam";
 		int val = i + 2;
 		string file = fname1 + to_string(val) +fname2;
-		sText[i] = loadTexture(file);
+		const char * param = file.c_str();
+		sText[i] = loadTexture(param);
 	}
 	sText[9] = loadTexture("spades-a-75.pam");
 	sText[10] = loadTexture("spades-j-75.pam");
@@ -203,7 +206,8 @@ void loadAlltextures()
 		string fname2 = "-75.pam";
 		int val = i + 2;
 		string file = fname1 + to_string(val) +fname2;
-		dText[i] = loadTexture(file);
+		const char * param = file.c_str();
+		dText[i] = loadTexture(param);
 	}
 	dText[9] = loadTexture("diamonds-a-75.pam");
 	dText[10] = loadTexture("diamonds-j-75.pam");

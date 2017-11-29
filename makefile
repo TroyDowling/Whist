@@ -16,7 +16,7 @@ endif
 whist:	Whist.o texture.o
 	g++ $(OPTS) -o Whist Whist.o texture.o $(LIBS)
 
-Whist.o:	Whist.cpp
+Whist.o:	Whist.cpp texture.h
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Whist.cpp
 
 texture.o:	texture.cpp texture.h
