@@ -64,8 +64,9 @@ void loadUserText()
 {
 	Card * cardsInHand;
 	//The 0 stands for the user's hand
+	//returns the integer value for how many cards there are in the user's hand
 	userHandLen = get_handLen(0);
-	//The 0 stands for the user's hand
+	//Returns an array of pointers to cards.
 	cardsInHand = get_hand(0);
 	
 	for(int i = 0; i < userHandLen; ++i)
@@ -73,6 +74,7 @@ void loadUserText()
 		//clubs
 		if(cardsInHand[i]->get_suit == 1)
 		{
+			//returns the value (0-12) of the i-th card in the list of cards.
 			userText[i] = cText[cardsInHand[i]->get_val()];
 		}
 		//hearts
@@ -110,7 +112,7 @@ void drawCards(){
   //Displays all hand zones.
 
   // user         left         top          right
-  userHandLen = 
+  loadUserText();
 	aiHandLen1 = aiHandLen2 = aiHandLen3 = 13;
 
   //spacing to align cards in center of screen
@@ -132,11 +134,8 @@ void drawCards(){
     drawTexture(bg, card_Height/3.5, (hspacing + (i*(card_Width/2))), card_Width, card_Height, 1, PI/2);
   }
   //Draw user cards
-  //Eventually, this will iterate through the user hand - This will be true for all other hands
-  //Need to know the length of the hand, and swap 13 for that.
-  //           here ||
   for(int l= 0; l < userHandLen; l++){
-    drawTexture(cText[l], wspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
+    drawTexture(userText[l], wspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
   }
 }
 

@@ -10,7 +10,7 @@ class Card
   int x_pos, y_pos, w, h, val;
   int suit;
  public:
-  Card(){val = -1; }
+  Card(){val = -1; suit = 0;}
 	
   //Constructor
   Card(int v, int s){if(v >= 0 && v < 13) val = v; if(s >= 1 && s <= 4) suit = s;}
