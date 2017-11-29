@@ -7,11 +7,12 @@ Deck::Deck()
   int i = 0, val = 0;
   while(i < 52)
     {
+			//val=>card --- 0=>2, 12=>Ace
       deck[i]->set_value[val];
-      if(i < 13) deck[i]->set_suit(Card::suits::hearts);
-      else if(i < 26) deck[i]->set_suit(Card::suits::clubs);
-      else if(i < 39) deck[i]->set_suit(Card::suits::spades);
-      else if(i < 52) deck[i]->set_suit(Card::suits::diamonds);
+      if(i < 13) deck[i]->set_suit(1);
+      else if(i < 26) deck[i]->set_suit(2);
+      else if(i < 39) deck[i]->set_suit(3);
+      else if(i < 52) deck[i]->set_suit(4);
       ++i;
       if(val < 13) ++val;
       else val = 0;
