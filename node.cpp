@@ -31,29 +31,36 @@ node recurse(node current, char* c){
 //recurse moves through a linked list until it finds a node whose contents match array c
 //after which it deletes the subject node, repairs the array, and returns the whole thing.
 
+//
 bool stringEqual(const char * subject, const char * test)
 {
-
-  return false;
+  int i = 0, len = 0;
+  while(test[len] != '\0') ++len;
+  while(test[i] == subject[i] && test[i] != '\0') ++i;
+  if (len == i) return true;
+  else return false;
 }
 
 node recurse (node cur, char * c)
 {
   int i = 0;
-  cout << cur.contents <<" "<< c << endl;
+  //cout << cur.contents <<" "<< c << endl;
   while ( c[i] == cur.contents[i] ){ ++i;}
-  if ( )
-    {
-      //this node's contents do not match
-      return recurse(*cur.next, c);
-    }
+  cout << stringEqual(c,cur.contents) <<endl;
+  if ( stringEqual(c,cur.contents) )
+  {
+	//this node's contents match
+    cout << "Match found" << endl;
+    cur.last->next = cur.next;
+    return cur;	
+  }
   else
-    {
-      //this node's contents match
-      cout << "Match found" << endl;
-      cur.last->next = cur.next;
-      return cur;
-    }
+  {
+    //this node's contents do not match
+	if (cur.next != NULL)
+	  return recurse(*cur.next, c);
+    else return *cur.last;
+  }
 }
 
 //This probably doesn't work
