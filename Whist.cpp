@@ -8,14 +8,7 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 //this file (in addition to texture.cpp)
 //contains barely enough functional code to constitute a demo.
 
-/**********************
-      SUPER GOAL:
-   REMOVE DEPENDENCE
-          ON
-     TEXTURE.CPP/H
-   AND USE OPENGL'S
-    IMPLEMENTATION
-**********************/
+//Turns out we're gonna be stuck with Texture.h/cpp
 //-Bennett
 
 //Include all imports, including relevant OpenGL libraries.
@@ -79,7 +72,7 @@ void drawBox(double x, double y, double width, double height)
 
 void drawCards(){
   //Updated to 13 cards per row
-  //Display all hand zones.
+  //Displays all hand zones.
 
   // user         left         top          right
   userHandLen = aiHandLen1 = aiHandLen2 = aiHandLen3 = 13;
@@ -188,17 +181,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		cText[i] = loadTexture(param);
 	}
-<<<<<<< HEAD
 	cText[9] = loadTexture("imgs/clubs-a-75.pam");
 	cText[10] = loadTexture("imgs/clubs-j-75.pam");
 	cText[11] = loadTexture("imgs/clubs-q-75.pam");
 	cText[12] = loadTexture("imgs/clubs-k-75.pam");
-=======
-	cText[9] = loadTexture("clubs-j-75.pam");
-	cText[10] = loadTexture("clubs-q-75.pam");
-	cText[11] = loadTexture("clubs-k-75.pam");
-	cText[12] = loadTexture("clubs-a-75.pam");
->>>>>>> 70c111a70c507954bf5dec29b71535e8faa704b8
 	
 	//load textures for hearts
 	for(int i = 0; i < 9; ++i)
@@ -210,17 +196,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		hText[i] = loadTexture(param);
 	}
-<<<<<<< HEAD
 	hText[9] = loadTexture("imgs/hearts-a-75.pam");
 	hText[10] = loadTexture("imgs/hearts-j-75.pam");
 	hText[11] = loadTexture("imgs/hearts-q-75.pam");
 	hText[12] = loadTexture("imgs/hearts-k-75.pam");
-=======
-	hText[9] = loadTexture("hearts-j-75.pam");
-	hText[10] = loadTexture("hearts-q-75.pam");
-	hText[11] = loadTexture("hearts-k-75.pam");
-	hText[12] = loadTexture("hearts-a-75.pam");
->>>>>>> 70c111a70c507954bf5dec29b71535e8faa704b8
 	
 	
 	//load textures for spades
@@ -233,17 +212,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		sText[i] = loadTexture(param);
 	}
-<<<<<<< HEAD
 	sText[9] = loadTexture("imgs/spades-a-75.pam");
 	sText[10] = loadTexture("imgs/spades-j-75.pam");
 	sText[11] = loadTexture("imgs/spades-q-75.pam");
 	sText[12] = loadTexture("imgs/spades-k-75.pam");
-=======
-	sText[9] = loadTexture("spades-j-75.pam");
-	sText[10] = loadTexture("spades-q-75.pam");
-	sText[11] = loadTexture("spades-k-75.pam");
-	sText[12] = loadTexture("spades-a-75.pam");
->>>>>>> 70c111a70c507954bf5dec29b71535e8faa704b8
 	
 	//load textures for diamonds
 	for(int i = 0; i < 9; ++i)
@@ -255,17 +227,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		dText[i] = loadTexture(param);
 	}
-<<<<<<< HEAD
 	dText[9] = loadTexture("imgs/diamonds-a-75.pam");
 	dText[10] = loadTexture("imgs/diamonds-j-75.pam");
 	dText[11] = loadTexture("imgs/diamonds-q-75.pam");
 	dText[12] = loadTexture("imgs/diamonds-k-75.pam");
-=======
-	dText[9] = loadTexture("diamonds-j-75.pam");
-	dText[10] = loadTexture("diamonds-q-75.pam");
-	dText[11] = loadTexture("diamonds-k-75.pam");
-	dText[12] = loadTexture("diamonds-a-75.pam");
->>>>>>> 70c111a70c507954bf5dec29b71535e8faa704b8
 }
 
 //This function is OpenGL's GOD.
