@@ -1,6 +1,17 @@
 #include "Gamestate.h"
 using namespace std;
 
+Gamestate::Gamestate()
+{
+  score[0] = score[1] = 0;
+  turn = p1;
+  for(int i = 0; i < 52; ++i){
+    cards[i] = 0;
+  }
+  for(int i = 0; i < 4; ++i){
+    hands[i] = new Hand;
+  }
+}
 /*
 Number identifier of save game
 Scores
@@ -86,22 +97,24 @@ void Gamestate::load_game(int num_load_game)
 */
 void Gamestate::deal()
 {
-	deck.shuffle();
-	cards = deck.get_deck();
+        deck.shuffle();
+	for(int i = 0; i < 52; ++i){
+	  cards[i] = deck.getCard(i);
+	}
 	for(int i = 0; i < 13; ++i)
 	{
-		hands[0].addCard(*cards[i]);
+		hands[0]->addCard(cards[i]);
 	}
 	for(int i = 13; i < 26; ++i)
 	{
-		hands[1].addCard(*cards[i]);
+		hands[1]->addCard(cards[i]);
 	}
 	for(int i = 26; i < 39; ++i)
 	{
-		hands[2].addCard(*cards[i])
+	  hands[2]->addCard(cards[i]);
 	}
 	for(int i = 39; i < 52; ++i)
 	{
-		hands[3].addCard(*cards[i]);
+	  hands[3]->addCard(cards[i]);
 	}
 }

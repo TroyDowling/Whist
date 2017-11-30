@@ -23,7 +23,7 @@ class Gamestate
 
     public:
 	//Default Constructor
-	Gamestate() {score[0] = score[1] = 0; turn = p1;}
+	Gamestate();
 	
 	//Constructor (if needed)
 	
@@ -41,7 +41,7 @@ class Gamestate
 	
 	//return a requested hand
 	//0 = user, 1 = ai1, etc;
-	Card ** get_hand(int h){return hands[h]->getHand();}
+	Card * get_card(int h, int c){return hands[h]->getCard(c);}
 	int get_handLen(int h){return hands[h]->getLen();}
 };
 

@@ -64,14 +64,15 @@ Gamestate game;
 //Loads up the user hand
 void loadUserText()
 {
-	Card ** cardsInHand;
-	game.deal();
 	//The 0 stands for the user's hand
 	//returns the integer value for how many cards there are in the user's hand
 	userHandLen = game.get_handLen(0);
-	//Returns an array of pointers to cards.
-	cardsInHand = game.get_hand(0);
-	
+	Card * cardsInHand[userHandLen];
+
+	for(int j = 0; j < userHandLen; ++j){
+	  cardsInHand[j] = game.get_card(0,j);
+	  cout << cardsInHand[j]->get_suit() <<" "<< cardsInHand[j]->get_val()+2 << endl;
+	}
 	for(int i = 0; i < userHandLen; ++i)
 	{
 		//clubs
@@ -81,17 +82,17 @@ void loadUserText()
 			userText[i] = cText[cardsInHand[i]->get_val()];
 		}
 		//hearts
-		if(cardsInHand[i]->get_suit() == 2)
+		else if(cardsInHand[i]->get_suit() == 2)
 		{
 			userText[i] = hText[cardsInHand[i]->get_val()];
 		}
 		//spades
-		if(cardsInHand[i]->get_suit() == 3)
+		else if(cardsInHand[i]->get_suit() == 3)
 		{
 			userText[i] = sText[cardsInHand[i]->get_val()];
 		}
 		//diamonds
-		if(cardsInHand[i]->get_suit() == 4)
+		else if(cardsInHand[i]->get_suit() == 4)
 		{
 			userText[i] = dText[cardsInHand[i]->get_val()];
 		}
@@ -115,8 +116,7 @@ void drawCards(){
   //Displays all hand zones.
 
   // user         left         top          right
-  loadUserText();
-	aiHandLen1 = aiHandLen2 = aiHandLen3 = 13;
+  aiHandLen1 = aiHandLen2 = aiHandLen3 = 13;
 
   //spacing to align cards in center of screen
   double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
@@ -219,10 +219,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		cText[i] = loadTexture(param);
 	}
-	cText[9] = loadTexture("imgs/clubs-a-75.pam");
-	cText[10] = loadTexture("imgs/clubs-j-75.pam");
-	cText[11] = loadTexture("imgs/clubs-q-75.pam");
-	cText[12] = loadTexture("imgs/clubs-k-75.pam");
+	cText[9] = loadTexture("imgs/clubs-j-75.pam");
+	cText[10] = loadTexture("imgs/clubs-q-75.pam");
+	cText[11] = loadTexture("imgs/clubs-k-75.pam");
+	cText[12] = loadTexture("imgs/clubs-a-75.pam");
 	
 	//load textures for hearts
 	for(int i = 0; i < 9; ++i)
@@ -234,10 +234,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		hText[i] = loadTexture(param);
 	}
-	hText[9] = loadTexture("imgs/hearts-a-75.pam");
-	hText[10] = loadTexture("imgs/hearts-j-75.pam");
-	hText[11] = loadTexture("imgs/hearts-q-75.pam");
-	hText[12] = loadTexture("imgs/hearts-k-75.pam");
+	hText[9] = loadTexture("imgs/hearts-j-75.pam");
+	hText[10] = loadTexture("imgs/hearts-q-75.pam");
+	hText[11] = loadTexture("imgs/hearts-k-75.pam");
+	hText[12] = loadTexture("imgs/hearts-a-75.pam");
 	
 	
 	//load textures for spades
@@ -250,10 +250,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		sText[i] = loadTexture(param);
 	}
-	sText[9] = loadTexture("imgs/spades-a-75.pam");
-	sText[10] = loadTexture("imgs/spades-j-75.pam");
-	sText[11] = loadTexture("imgs/spades-q-75.pam");
-	sText[12] = loadTexture("imgs/spades-k-75.pam");
+	sText[9] = loadTexture("imgs/spades-j-75.pam");
+	sText[10] = loadTexture("imgs/spades-q-75.pam");
+	sText[11] = loadTexture("imgs/spades-k-75.pam");
+	sText[12] = loadTexture("imgs/spades-a-75.pam");
 	
 	//load textures for diamonds
 	for(int i = 0; i < 9; ++i)
@@ -265,10 +265,10 @@ void loadAllTextures()
 		const char * param = file.c_str();
 		dText[i] = loadTexture(param);
 	}
-	dText[9] = loadTexture("imgs/diamonds-a-75.pam");
-	dText[10] = loadTexture("imgs/diamonds-j-75.pam");
-	dText[11] = loadTexture("imgs/diamonds-q-75.pam");
-	dText[12] = loadTexture("imgs/diamonds-k-75.pam");
+	dText[9] = loadTexture("imgs/diamonds-j-75.pam");
+	dText[10] = loadTexture("imgs/diamonds-q-75.pam");
+	dText[11] = loadTexture("imgs/diamonds-k-75.pam");
+	dText[12] = loadTexture("imgs/diamonds-a-75.pam");
 }
 
 //This function is OpenGL's GOD.
@@ -297,5 +297,8 @@ void init_gl_window(){
 //This stays like this.
 int main ()
 {
+  loadAllTextures();
+  game.deal();
+  loadUserText();
   init_gl_window();
 }

@@ -3,11 +3,11 @@ using namespace std;
 
 Deck::Deck()
 {
-  for(int i; i < 52; ++i) deck[i] = new Card; //sets up pointers to cards
+  for(int i = 0; i < 52; ++i) deck[i] = new Card; //sets up pointers to cards
   int i = 0, val = 0;
   while(i < 52)
     {
-			//val=>card --- 0=>2, 12=>Ace
+      //val=>card --- 0=>2, 12=>Ace
       deck[i]->set_val(val);
       if(i < 13) deck[i]->set_suit(1);
       else if(i < 26) deck[i]->set_suit(2);

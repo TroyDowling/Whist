@@ -11,6 +11,7 @@ class Deck
   Deck();
   void shuffle();
   Card ** get_deck() {return deck;}
+  Card * getCard(int index) {return deck[index];}
 };
 
 #endif

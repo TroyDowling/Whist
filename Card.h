@@ -1,5 +1,6 @@
 #ifndef _CARD_H_
 #define _CARD_H_
+#include<iostream>
 
 //         1      2       3       4
 //suits {clubs, hearts, spades, diamonds};
