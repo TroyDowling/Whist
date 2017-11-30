@@ -30,8 +30,8 @@ using namespace std;
 
 bool mouseIsDragging = false;
 
-int game_Width = 1440;
-int game_Height = 890;
+int game_Width = 720;
+int game_Height = 405;
 char programName[] = "Whist";
 
 double PI = 3.14159264;
@@ -47,8 +47,9 @@ int cText[13];
 //textures for diamonds
 int dText[13];
 //textures for user hand
-int userHandLen, aiHandLen1, aiHandLen2, aiHandLen3;
+int userHandLen, ai1HandLen, ai2HandLen, ai3HandLen;
 int userText[13];
+int aiText[13];
 
 //Card parameters (sizes)
 int card_Height = game_Height/7;
@@ -61,7 +62,17 @@ int pDummyW = 40, pDummyH = 50;
 
 Gamestate game;
 
-//Loads up the user hand
+//A wonderful "borrowed" helper funtion.
+void drawBox(double x, double y, double width, double height)
+{
+  glBegin(GL_POLYGON);
+    glVertex2f(x, y);  // upper left
+    glVertex2f(x, y + height);  // lower left
+    glVertex2f(x + width, y + height);  // lower right
+    glVertex2f(x + width, y);  // upper right
+  glEnd();
+}
+
 void loadUserText()
 {
 	//The 0 stands for the user's hand
@@ -71,7 +82,7 @@ void loadUserText()
 
 	for(int j = 0; j < userHandLen; ++j){
 	  cardsInHand[j] = game.get_card(0,j);
-	  cout << cardsInHand[j]->get_suit() <<" "<< cardsInHand[j]->get_val()+2 << endl;
+	  //cout << cardsInHand[j]->get_suit() <<" "<< cardsInHand[j]->get_val() << endl;
 	}
 	for(int i = 0; i < userHandLen; ++i)
 	{
@@ -100,33 +111,23 @@ void loadUserText()
 	
 }
 
-//A wonderful "borrowed" helper funtion.
-void drawBox(double x, double y, double width, double height)
-{
-  glBegin(GL_POLYGON);
-    glVertex2f(x, y);  // upper left
-    glVertex2f(x, y + height);  // lower left
-    glVertex2f(x + width, y + height);  // lower right
-    glVertex2f(x + width, y);  // upper right
-  glEnd();
-}
 
 void drawCards(){
   //Updated to 13 cards per row
   //Displays all hand zones.
 
-  // user         left         top          right
-  aiHandLen1 = aiHandLen2 = aiHandLen3 = 13;
+  // user = 0      left = 1         top = 2        right = 3
+  ai2HandLen = ai3HandLen = 13;
 
   //spacing to align cards in center of screen
   double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
-  double hspacing = (game_Height/2) - (card_Width/2)*((aiHandLen1/2)+2);
+  double hspacing = (game_Height/2) - (card_Width/2)*((ai3HandLen/2)+2);
 
   //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
 
   //Draw top cards
   for(int i = 0; i < 13; i++){
-    drawTexture(bg, wspacing+(i*(card_Width/2)), 10, card_Width, card_Height, 1, 0);
+    drawTexture(aiText[i], wspacing+(i*(card_Width/2)), 10, card_Width, card_Height, 1, 0);
   }
   //Draw right cards
   for(int j = 0; j < 13; j++){
@@ -201,7 +202,8 @@ void init(void){
   glEnable(GL_BLEND);
 
   cout << "Welcome to " << programName << "." << endl;
-  cout << "A \"Functional\" demo!" << endl;
+  cout << "A Functional demo!" << endl;
+  cout << "Shuffles the deck, and deals out four hands." << endl;
 }
 
 //Loads all textures, 

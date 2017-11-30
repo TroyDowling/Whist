@@ -1,6 +1,8 @@
 #ifndef _DECK_H_
 #define _DECK_H_
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 #include "Card.h"
 
