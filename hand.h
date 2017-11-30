@@ -27,8 +27,8 @@ class Hand{
 	
   void removeCard(int c){hand[c] = NULL; length--;}
 	
-	int getLength(){return length;}
-	Card * getHand(){return hand;}
+  int getLen(){return length;}
+  Card ** getHand(){return hand;}
 };
 
 #endif

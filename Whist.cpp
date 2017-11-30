@@ -59,36 +59,39 @@ int dummyWidth = 30, dummyHeight = 40;
 int sdummyWidth = 40, sdummyHeight = 30;
 int pDummyW = 40, pDummyH = 50;
 
+Gamestate game;
+
 //Loads up the user hand
 void loadUserText()
 {
-	Card * cardsInHand;
+	Card ** cardsInHand;
+	game.deal();
 	//The 0 stands for the user's hand
 	//returns the integer value for how many cards there are in the user's hand
-	userHandLen = get_handLen(0);
+	userHandLen = game.get_handLen(0);
 	//Returns an array of pointers to cards.
-	cardsInHand = get_hand(0);
+	cardsInHand = game.get_hand(0);
 	
 	for(int i = 0; i < userHandLen; ++i)
 	{
 		//clubs
-		if(cardsInHand[i]->get_suit == 1)
+	        if(cardsInHand[i]->get_suit() == 1)
 		{
 			//returns the value (0-12) of the i-th card in the list of cards.
 			userText[i] = cText[cardsInHand[i]->get_val()];
 		}
 		//hearts
-		if(cardInHand[i]->get_suit == 2)
+		if(cardsInHand[i]->get_suit() == 2)
 		{
 			userText[i] = hText[cardsInHand[i]->get_val()];
 		}
 		//spades
-		if(cardsInHand[i]->get_suit == 3)
+		if(cardsInHand[i]->get_suit() == 3)
 		{
 			userText[i] = sText[cardsInHand[i]->get_val()];
 		}
 		//diamonds
-		if(cardsInHand[i]->get_suit == 4)
+		if(cardsInHand[i]->get_suit() == 4)
 		{
 			userText[i] = dText[cardsInHand[i]->get_val()];
 		}

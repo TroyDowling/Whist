@@ -37,11 +37,11 @@ class Gamestate
 	void deal();
 	
 	//Is this play a legal move?
-	bool isLegal(Card c,int s){if(c.get_suit == s) return true; else return false;}
+	bool isLegal(Card c,int s){if(c.get_suit() == s) return true; else return false;}
 	
 	//return a requested hand
 	//0 = user, 1 = ai1, etc;
-	Card * get_hand(int h){return hands[h]->getHand();}
+	Card ** get_hand(int h){return hands[h]->getHand();}
 	int get_handLen(int h){return hands[h]->getLen();}
 };
 

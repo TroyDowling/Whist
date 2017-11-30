@@ -89,18 +89,18 @@ void Gamestate::deal()
 	cards = deck.get_deck();
 	for(int i = 0; i < 13; ++i)
 	{
-		hands[0]->addCard(*cards[i]);
+		hands[0].addCard(*cards[i]);
 	}
 	for(int i = 13; i < 26; ++i)
 	{
-		hands[1]->addCard(*cards[i]);
+		hands[1].addCard(*cards[i]);
 	}
 	for(int i = 26; i < 39; ++i)
 	{
-		hands[2]->addCard(*cards[i])
+		hands[2].addCard(*cards[i])
 	}
 	for(int i = 39; i < 52; ++i)
 	{
-		hands[3]->addCard(*cards[i]);
+		hands[3].addCard(*cards[i]);
 	}
 }
