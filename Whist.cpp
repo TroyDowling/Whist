@@ -116,7 +116,6 @@ void drawCards(){
   //Updated to 13 cards per row
   //Displays all hand zones.
 
-  // user = 0      left = 1         top = 2        right = 3
   ai2HandLen = ai3HandLen = 13;
 
   //spacing to align cards in center of screen
@@ -127,7 +126,7 @@ void drawCards(){
 
   //Draw top cards
   for(int i = 0; i < 13; i++){
-    drawTexture(aiText[i], wspacing+(i*(card_Width/2)), 10, card_Width, card_Height, 1, 0);
+    drawTexture(bg, wspacing+(i*(card_Width/2)), 10, card_Width, card_Height, 1, 0);
   }
   //Draw right cards
   for(int j = 0; j < 13; j++){
