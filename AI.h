@@ -4,13 +4,13 @@
 
 class AI
 {
-	Card * hand;
+	Card * hand[13];
 	short difficulty;
 	public:
 	AI(){hand = 0; difficulty = 0;}
 	AI(Card**, short);
 	
-	Card * makePlay();
+	Card * makePlay(suitLed);
 }
 
 
