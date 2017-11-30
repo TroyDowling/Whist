@@ -8,7 +8,7 @@ Deck::Deck()
   while(i < 52)
     {
 			//val=>card --- 0=>2, 12=>Ace
-      deck[i]->set_val[val];
+      deck[i]->set_val(val);
       if(i < 13) deck[i]->set_suit(1);
       else if(i < 26) deck[i]->set_suit(2);
       else if(i < 39) deck[i]->set_suit(3);
