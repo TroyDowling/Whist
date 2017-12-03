@@ -61,8 +61,8 @@ void Gamestate::save_game(int num_save_game)
 void Gamestate::load_game(int num_load_game)
 {
 	ifstream loadfile;
-	int save_id, numCardsInHand, card_val;
-	Card::suits card_suit;
+	int save_id, numCardsInHand, card_val, card_suit;
+	Card * newCard;
 	loadfile.open("saves.txt");
 	if(!loadfile)
 	{
@@ -86,9 +86,10 @@ void Gamestate::load_game(int num_load_game)
 				for(int currentcard = 0; currentcard < numCardsInHand; currentcard++)
 				{
 					loadfile >> card_suit;
-					hands[currenthand][currentcard]->set_suit(card_suit);
 					loadfile >> card_val;
-					hands[currenthand][currentcard]->set_val(card_val);
+					newCard = new Card(card_val, card_suit);
+					hands[currenthand]->addCard(newCard);
+					
 				}
 			}
 			loadfile.close();
