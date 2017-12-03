@@ -18,9 +18,10 @@ Scores
 turn
 Hands (suit and value of cards separated by newlines)
 */
-/* Commented out for debugging
+
 void Gamestate::save_game(int num_save_game)
 {
+	Card * cardInHand;
 	ofstream savefile ("saves.txt");
 	if (savefile.is_open())
 	{
@@ -39,11 +40,12 @@ void Gamestate::save_game(int num_save_game)
 		//---
 		for(int currenthand = 0; currenthand < 4; ++currenthand)
 		{ 
-			numCardsInHand = hands[currenthand]->size();
+			numCardsInHand = hands[currenthand]->getLen();
 			for(int currentcard = 0; currentcard < numCardsInHand; ++currentcard)
 			{
-				savefile << hands[currenthand][currentcard]->get_suit() <<" ";
-				savefile << hands[currenthand][currentcard]->get_val() << endl;
+				cardInHand = hands[currenthand]->getCard(currentcard);
+				savefile << cardInHand->get_suit() <<" ";
+				savefile << cardInHand->get_val() << endl;
 			}
 			savefile << endl;
 		}
@@ -94,7 +96,7 @@ void Gamestate::load_game(int num_load_game)
 		}
 	}
 }
-*/
+
 void Gamestate::deal()
 {
         deck.shuffle();
