@@ -22,7 +22,7 @@ Hands (suit and value of cards separated by newlines)
 void Gamestate::save_game(int num_save_game)
 {
 	Card * cardInHand;
-	ofstream savefile ("saves.txt");
+	ofstream savefile ("saves.txt", std::fstream::app);
 	if (savefile.is_open())
 	{
 		//allocate an address (greater than 15)
@@ -30,7 +30,7 @@ void Gamestate::save_game(int num_save_game)
 		//save scores
 		savefile << score[0] <<" "<< score[1] << endl;
 		//save whose turn
-		savefile << turn << endl << endl;
+		savefile << turn << endl;
 		int numCardsInHand;
 		
 		//save hands 
@@ -41,6 +41,7 @@ void Gamestate::save_game(int num_save_game)
 		for(int currenthand = 0; currenthand < 4; ++currenthand)
 		{ 
 			numCardsInHand = hands[currenthand]->getLen();
+			savefile << numCardsInHand << endl;
 			for(int currentcard = 0; currentcard < numCardsInHand; ++currentcard)
 			{
 				cardInHand = hands[currenthand]->getCard(currentcard);
@@ -61,6 +62,7 @@ void Gamestate::save_game(int num_save_game)
 void Gamestate::load_game(int num_load_game)
 {
   //opens a file
+        bool loading = true;
 	ifstream loadfile;
 	int save_id, numCardsInHand, card_val, card_suit;
 	char whosTurn;
@@ -72,7 +74,7 @@ void Gamestate::load_game(int num_load_game)
 		return;
 	}
 	//No idea if this will work on the first try.
-	while(true)
+	while(loading)
 	{
 		loadfile >> save_id;
 		if(save_id == num_load_game)
@@ -95,8 +97,9 @@ void Gamestate::load_game(int num_load_game)
 				}
 			}
 			loadfile.close();
-			return;
+			loading = false;
 		}
+		else loadfile >> save_id;
 	}
 }
 
