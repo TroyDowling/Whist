@@ -30,7 +30,7 @@ void Gamestate::save_game(int num_save_game)
 		//save scores
 		savefile << score[0] <<" "<< score[1] << endl;
 		//save whose turn
-		savefile << turn;
+		savefile << turn << endl << endl;
 		int numCardsInHand;
 		
 		//save hands 
@@ -62,6 +62,7 @@ void Gamestate::load_game(int num_load_game)
 {
 	ifstream loadfile;
 	int save_id, numCardsInHand, card_val, card_suit;
+	char whosTurn;
 	Card * newCard;
 	loadfile.open("saves.txt");
 	if(!loadfile)
@@ -78,7 +79,7 @@ void Gamestate::load_game(int num_load_game)
 			//load scores
 			loadfile >> score[0]; loadfile >> score[1];
 			//load turn
-			loadfile >> turn;
+			loadfile >> whosTurn;
 			//load hands
 			for(int currenthand = 0; currenthand < 4; currenthand++)
 			{

@@ -116,7 +116,7 @@ void drawCards(){
   //Updated to 13 cards per row
   //Displays all hand zones.
 
-  ai2HandLen = ai3HandLen = 13;
+  ai1HandLen = ai2HandLen = ai3HandLen = 13;
 
   //spacing to align cards in center of screen
   double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
@@ -125,15 +125,15 @@ void drawCards(){
   //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
 
   //Draw top cards
-  for(int i = 0; i < 13; i++){
+  for(int i = 0; i < ai2HandLen; i++){
     drawTexture(bg, wspacing+(i*(card_Width/2)), 10, card_Width, card_Height, 1, 0);
   }
   //Draw right cards
-  for(int j = 0; j < 13; j++){
+  for(int j = 0; j < ai3HandLen; j++){
     drawTexture(bg, game_Width - (card_Height-10), (hspacing + (j*(card_Width/2))), card_Width, card_Height, 1, (3*PI)/2);
   }
   //Draw left cards
-  for(int i = 0; i < 13; i++){
+  for(int i = 0; i < ai1HandLen; i++){
     drawTexture(bg, card_Height/3.5, (hspacing + (i*(card_Width/2))), card_Width, card_Height, 1, PI/2);
   }
   //Draw user cards
@@ -284,7 +284,9 @@ void init_gl_window(){
   init();
 
   //LOAD ALL THE TEXTURES
-  loadAllTextures();  
+  loadAllTextures();
+  game.deal();
+  loadUserText();
 
   //Draw stuff
   glutDisplayFunc(drawWindow);
@@ -298,8 +300,5 @@ void init_gl_window(){
 //This stays like this.
 int main ()
 {
-  loadAllTextures();
-  game.deal();
-  loadUserText();
   init_gl_window();
 }
