@@ -62,6 +62,12 @@ int pDummyW = 40, pDummyH = 50;
 
 Gamestate game;
 
+// button info
+bool buttonIsPressed = false, overButton = false;
+double buttonPos[] = { 300, 150,   150, 60 };  // upper left, width, height
+//button2
+bool button2IsPressed = false, overButton2 = false;
+double buttonPos2[] = { 300, 230,   150, 60 };
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
 {
@@ -72,6 +78,12 @@ void drawBox(double x, double y, double width, double height)
     glVertex2f(x + width, y);  // upper right
   glEnd();
 }
+
+void drawBox(double *pos)
+{
+  drawBox(pos[0], pos[1], pos[2], pos[3]);
+ } 
+
 
 void loadUserText()
 {
@@ -144,7 +156,19 @@ void drawCards(){
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
+     // draw the button
+  if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
+  else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
+  else glColor3f(.5, .5, .5);  // gray
+  drawBox(buttonPos);
+//draw button2
+  if ( button2IsPressed ) glColor3f(0., 1., 0.);  // make it green
+  else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
+  else glColor3f(1, 1, 1);  // white
+  drawBox(buttonPos2);
+
   drawCards();
+
   glutSwapBuffers();
 }
 
@@ -166,24 +190,63 @@ void keyboard(unsigned char c, int x, int y){
 //I don't want to mess with resizing textures and mipmaps, if at all possible.
 //This likely only delays the inevitable ;_;
 void reshape(int w, int h){
-  glutReshapeWindow(game_Width,game_Height);
+	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+   game_Width = w;  game_Height = h;
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   glOrtho(0.,game_Width -1, game_Height-1, 0., -1.0, 1.0);
+
+  //glutReshapeWindow(game_Width,game_Height);
 }
 
+// the following function tests whether a point at position x,y is inside
+//   the rectangle on the screen corresponding to the button
+bool onButton(int x, int y)
+{
+  return x >= buttonPos[0]  && y >= buttonPos[1] &&
+         x <= buttonPos[0] + buttonPos[2] &&
+         y <= buttonPos[1] + buttonPos[3];
+}
+bool onButton2(int x, int y)
+{
+  return x >= buttonPos2[0]  && y >= buttonPos2[1] &&
+         x <= buttonPos2[0] + buttonPos2[2] &&
+         y <= buttonPos2[1] + buttonPos2[3];
+}
+
+// the mouse function is called when a mouse button is pressed down or released
 void mouse(int button, int state, int x, int y){
   if(GLUT_LEFT_BUTTON == button){
     if(GLUT_DOWN == state){
-      mouseIsDragging = true;
+      //mouseIsDragging = true;
+      // the user just pressed down on the mouse-- do something
+      if ( onButton(x,y) ) buttonIsPressed = true;
+      else buttonIsPressed = false;
+      if ( onButton2(x,y) ) button2IsPressed = true;
+      else button2IsPressed = false;
     }
     else{
-      mouseIsDragging = false;
+      //mouseIsDragging = false;
+    	// the user just let go the mouse-- do something
+      if ( onButton(x,y) && buttonIsPressed )
+        cout << "Button press." << endl;
+      buttonIsPressed = false;
+      if ( onButton2(x,y) && button2IsPressed )
+        cout << "Button press." << endl;
+      button2IsPressed = false;
     }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
   glutPostRedisplay();
 }
 
+
+// the mouse_motion function is called when the mouse is being dragged,
+//   and gives the current location of the mouse
 void mouse_motion(int x, int y){
   //The mouse is moving?!?! Will be integrated in time.
+
+
   glutPostRedisplay();
 }
 
