@@ -60,6 +60,7 @@ void Gamestate::save_game(int num_save_game)
 
 void Gamestate::load_game(int num_load_game)
 {
+  //opens a file
 	ifstream loadfile;
 	int save_id, numCardsInHand, card_val, card_suit;
 	char whosTurn;
