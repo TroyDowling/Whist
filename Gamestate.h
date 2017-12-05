@@ -16,7 +16,7 @@ class Gamestate
 	//State Variables
 	protected:
 	int score[2];
-	enum players {p1, p2, p3, p4} turn;
+	enum players {p1=0, p2, p3, p4} turn;
 	Deck deck;
 	Card * cards[52];
 	Hand * hands[4];
