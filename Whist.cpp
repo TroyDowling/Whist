@@ -285,9 +285,9 @@ void init_gl_window(){
 
   //LOAD ALL THE TEXTURES
   loadAllTextures();
-  //game.deal();
+  game.deal();
   //game.save_game(60);
-  game.load_game(8675309);
+  //game.load_game(8675309);
   loadUserText();
 
   //Draw stuff
