@@ -10,7 +10,8 @@ class Card
  protected:
   int x_pos, y_pos, w, h;
   int suit, val;
- public:
+ public:rns202-18.cs.stolaf.edu% ./Whist
+
   Card(){val = -1; suit = 0;}
 	
   //Constructor

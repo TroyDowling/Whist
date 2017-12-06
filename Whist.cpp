@@ -233,6 +233,8 @@ void mouse(int button, int state, int x, int y){
     if(GLUT_DOWN == state){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
+
+
       if ( onButton(x,y) ) buttonIsPressed = true;
       else buttonIsPressed = false;
       if ( onButton2(x,y) ) button2IsPressed = true;

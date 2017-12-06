@@ -35,6 +35,9 @@ class Gamestate
 	
 	//Deals out a shuffled deck into four hands (helper)
 	void deal();
+
+	//Returns the current turn.
+	int getTurn(){ return turn; }
 	
 	//Is this play a legal move?
 	bool isLegal(Card c,int s){if(c.get_suit() == s) return true; else return false;}
