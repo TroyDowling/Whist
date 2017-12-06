@@ -61,6 +61,9 @@ int dummyWidth = 30, dummyHeight = 40;
 int sdummyWidth = 40, sdummyHeight = 30;
 int pDummyW = 40, pDummyH = 50;
 
+//What should be displayed? 0 = main menu, 1 = options, 2 = playgame
+int DisplayState = 0;
+
 Gamestate game;
 
 // button in the Menu
@@ -135,7 +138,9 @@ void drawCards(){
   //Updated to 13 cards per row
   //Displays all hand zones.
 
-  ai2HandLen = ai3HandLen = 13;
+  card_Height = game_Height/7;
+  card_Width = card_Height * .618;
+  ai1HandLen = ai2HandLen = ai3HandLen = 13;
 
   //spacing to align cards in center of screen
   double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
@@ -144,15 +149,15 @@ void drawCards(){
   //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
 
   //Draw top cards
-  for(int i = 0; i < 13; i++){
+  for(int i = 0; i < ai2HandLen; i++){
     drawTexture(bg, wspacing+(i*(card_Width/2)), 10, card_Width, card_Height, 1, 0);
   }
   //Draw right cards
-  for(int j = 0; j < 13; j++){
+  for(int j = 0; j < ai3HandLen; j++){
     drawTexture(bg, game_Width - (card_Height-10), (hspacing + (j*(card_Width/2))), card_Width, card_Height, 1, (3*PI)/2);
   }
   //Draw left cards
-  for(int i = 0; i < 13; i++){
+  for(int i = 0; i < ai1HandLen; i++){
     drawTexture(bg, card_Height/3.5, (hspacing + (i*(card_Width/2))), card_Width, card_Height, 1, PI/2);
   }
   //Draw user cards
@@ -163,7 +168,6 @@ void drawCards(){
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
-
 
      // draw the button
   if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
@@ -234,6 +238,15 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
       if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
+      for(int i = 0; i < 13; i++){
+	if(game.hands[0].getCard[i].mouseOver(x,y)){
+	  if(game.isLegal(hands[0].getCard[i])){
+	    game.hands[0].removeCard(i);
+	  }
+	}
+	  
+
+	if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
       else buttonIsPressed = false;
       if ( onButton(x,y, OptionPos) ) button2IsPressed = true;
       else button2IsPressed = false;
@@ -249,6 +262,7 @@ void mouse(int button, int state, int x, int y){
       buttonIsPressed = false;
       if ( onButton(x,y,OptionPos) && button2IsPressed )
         cout << "Button press." << endl;
+      }
       button2IsPressed = false;
       if ( onButton(x,y,ExitPos) && button3IsPressed )
         cout << "Button press." << endl;
@@ -364,12 +378,10 @@ void init_gl_window(){
   glutInitWindowPosition(300,50);
   glutCreateWindow(programName);
   init();
-
  
   whistT= loadTexture("whist1.pam"); // key to textures:  load them!
   w2T= loadTexture("w2.pam");
   w3T= loadTexture("w3.pam");
-
 
    //LOAD ALL THE TEXTURES
   loadAllTextures();  
@@ -385,8 +397,5 @@ void init_gl_window(){
 //This stays like this.
 int main ()
 {
-  loadAllTextures();
-  game.deal();
-  loadUserText();
   init_gl_window();
 }

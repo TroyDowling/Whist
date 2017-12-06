@@ -18,10 +18,11 @@ Scores
 turn
 Hands (suit and value of cards separated by newlines)
 */
-/* Commented out for debugging
+
 void Gamestate::save_game(int num_save_game)
 {
-	ofstream savefile ("saves.txt");
+	Card * cardInHand;
+	ofstream savefile ("saves.txt", std::fstream::app);
 	if (savefile.is_open())
 	{
 		//allocate an address (greater than 15)
@@ -29,7 +30,7 @@ void Gamestate::save_game(int num_save_game)
 		//save scores
 		savefile << score[0] <<" "<< score[1] << endl;
 		//save whose turn
-		savefile << turn;
+		savefile << turn << endl;
 		int numCardsInHand;
 		
 		//save hands 
@@ -39,11 +40,13 @@ void Gamestate::save_game(int num_save_game)
 		//---
 		for(int currenthand = 0; currenthand < 4; ++currenthand)
 		{ 
-			numCardsInHand = hands[currenthand]->size();
+			numCardsInHand = hands[currenthand]->getLen();
+			savefile << numCardsInHand << endl;
 			for(int currentcard = 0; currentcard < numCardsInHand; ++currentcard)
 			{
-				savefile << hands[currenthand][currentcard]->get_suit() <<" ";
-				savefile << hands[currenthand][currentcard]->get_val() << endl;
+				cardInHand = hands[currenthand]->getCard(currentcard);
+				savefile << cardInHand->get_suit() <<" ";
+				savefile << cardInHand->get_val() << endl;
 			}
 			savefile << endl;
 		}
@@ -58,9 +61,12 @@ void Gamestate::save_game(int num_save_game)
 
 void Gamestate::load_game(int num_load_game)
 {
+  //opens a file
+        bool loading = true;
 	ifstream loadfile;
-	int save_id, numCardsInHand, card_val;
-	Card::suits card_suit;
+	int save_id, numCardsInHand, card_val, card_suit;
+	char whosTurn;
+	Card * newCard;
 	loadfile.open("saves.txt");
 	if(!loadfile)
 	{
@@ -68,7 +74,7 @@ void Gamestate::load_game(int num_load_game)
 		return;
 	}
 	//No idea if this will work on the first try.
-	while(true)
+	while(loading)
 	{
 		loadfile >> save_id;
 		if(save_id == num_load_game)
@@ -76,7 +82,7 @@ void Gamestate::load_game(int num_load_game)
 			//load scores
 			loadfile >> score[0]; loadfile >> score[1];
 			//load turn
-			loadfile >> turn;
+			loadfile >> whosTurn;
 			//load hands
 			for(int currenthand = 0; currenthand < 4; currenthand++)
 			{
@@ -84,17 +90,19 @@ void Gamestate::load_game(int num_load_game)
 				for(int currentcard = 0; currentcard < numCardsInHand; currentcard++)
 				{
 					loadfile >> card_suit;
-					hands[currenthand][currentcard]->set_suit(card_suit);
 					loadfile >> card_val;
-					hands[currenthand][currentcard]->set_val(card_val);
+					newCard = new Card(card_val, card_suit);
+					hands[currenthand]->addCard(newCard);
+					
 				}
 			}
 			loadfile.close();
-			return;
+			loading = false;
 		}
+		else loadfile >> save_id;
 	}
 }
-*/
+
 void Gamestate::deal()
 {
         deck.shuffle();

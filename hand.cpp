@@ -24,3 +24,11 @@ void Hand::addCard(Card * c)
       else i++;
     }
 }
+
+Hand & Hand::operator=(const Hand & h)
+{
+  length = h.length;
+  for(int i = 0; i < length; ++i){
+    hand[i] = h.hand[i];
+  }
+}

@@ -23,7 +23,7 @@ Gamestate: Gamestate.o Card.o Deck.o
 
 Button.o: Button.cpp Button.h
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Button.cpp
-	
+
 hand.o: hand.h hand.cpp
 	g++ $(OPTS) $(MACOSX_DEFINE) -c hand.cpp
 
