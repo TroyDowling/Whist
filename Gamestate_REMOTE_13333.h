@@ -25,6 +25,14 @@ class Gamestate
 	//Deck class
 	Deck deck;
 
+	//Entire round
+	Card * allCardsPlayed[52];
+	int allWhoPlayed[52]; // use enum turn
+
+	//This trick
+	Card * handCardsPlayed[4];
+	int handWhoPlayed[4]; // use enum turn
+
 	//Essentially the deck
 	Card * cards[52];
 
@@ -37,14 +45,6 @@ class Gamestate
 	
 	//Constructor (if needed)
 	
-	//Entire round
-	Card * allCardsPlayed[52];
-	int allWhoPlayed[52]; // use enum turn
-
-	//This trick
-	Card * handCardsPlayed[4];
-	int handWhoPlayed[4]; // use enum turn
-
 	//Needs to record the score, and the hands
 	void save_game(int);
 	
@@ -53,13 +53,9 @@ class Gamestate
 	
 	//Deals out a shuffled deck into four hands (helper)
 	void deal();
-
-	//Returns the current turn.
-	int getTurn(){ return turn; }
-       
 	
 	//Is this play a legal move?
-	bool isLegal(Card c,int s);
+	bool isLegal(Card c,int s){if(c.get_suit() == s) return true; else return false;}
 	
 	//return a requested card in a requested hand
 	//0 = user, 1 = ai1, etc;

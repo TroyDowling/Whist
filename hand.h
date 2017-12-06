@@ -22,7 +22,9 @@ class Hand{
 	
   int getLen(){return length;}
   Card ** getHand(){return hand;}
-  Hand& operator= (&Hand);
+
+  Hand & operator= (const Hand&);
+
 };
 
 #endif

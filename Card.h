@@ -10,6 +10,7 @@ class Card
  protected:
   int x_pos, y_pos, w, h;
   int suit, val;
+
  public:
   Card(){val = -1; suit = 0;}
 	

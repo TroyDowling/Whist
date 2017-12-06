@@ -233,7 +233,13 @@ void mouse(int button, int state, int x, int y){
     if(GLUT_DOWN == state){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
-
+      for(int i = 0; i < 13; i++){
+	if(game.hands[0].getCard[i].mouseOver(x,y)){
+	  if(game.isLegal(hands[0].getCard[i])){
+	    game.hands[0].removeCard(i);
+	  }
+	}
+	  
 
       if ( onButton(x,y) ) buttonIsPressed = true;
       else buttonIsPressed = false;
