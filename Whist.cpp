@@ -239,9 +239,9 @@ void mouse(int button, int state, int x, int y){
       // the user just pressed down on the mouse-- do something
       if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
       for(int i = 0; i < 13; i++){
-	if(game.hands[0].getCard[i].mouseOver(x,y)){
+	if(game.get_hand(0)->getCard[i].mouseOver(x,y)){
 	  if(game.isLegal(hands[0].getCard[i])){
-	    game.hands[0].removeCard(i);
+	    game.get_hand(0)->removeCard(i);
 	  }
 	}
 	  
