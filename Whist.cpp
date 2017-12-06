@@ -33,7 +33,7 @@ bool mouseIsDragging = false;
 int game_Width = 720;
 int game_Height = 405;
 char programName[] = "Whist";
-
+int whistT,w2T,w3T; //texture IDs
 double PI = 3.14159264;
 
 //texture for card back
@@ -156,16 +156,22 @@ void drawCards(){
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
+
+
      // draw the button
   if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
   else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(.5, .5, .5);  // gray
+  else glColor3f(0.0, .65, .1);  // gray
   drawBox(buttonPos);
 //draw button2
   if ( button2IsPressed ) glColor3f(0., 1., 0.);  // make it green
   else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
   else glColor3f(1, 1, 1);  // white
   drawBox(buttonPos2);
+  //draw stuff
+  drawTexture(whistT,  94,55,    400, 150, .9); // texID,   x,y,    width, height
+  drawTexture(w2T,  500,210,    300, 200, .45);
+  drawTexture(w3T,  300,150,    150, 60 );
 
   drawCards();
 
@@ -346,9 +352,14 @@ void init_gl_window(){
   glutCreateWindow(programName);
   init();
 
-  //LOAD ALL THE TEXTURES
-  loadAllTextures();  
+ 
+  whistT= loadTexture("whist1.pam"); // key to textures:  load them!
+  w2T= loadTexture("w2.pam");
+  w3T= loadTexture("w3.pam");
 
+
+   //LOAD ALL THE TEXTURES
+  loadAllTextures();  
   //Draw stuff
   glutDisplayFunc(drawWindow);
   glutReshapeFunc(reshape);
