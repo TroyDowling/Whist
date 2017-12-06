@@ -59,7 +59,7 @@ class Gamestate
        
 	
 	//Is this play a legal move?
-	bool isLegal(Card c,int s){if(c.get_suit() == s) return true; else return false;}
+	bool isLegal(Card c,int s);
 	
 	//return a requested card in a requested hand
 	//0 = user, 1 = ai1, etc;
