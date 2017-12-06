@@ -22,6 +22,7 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 #include <math.h>
 #include <stdlib.h>
 #include <string>
+#include "Button.h"
 #include "Gamestate.h"
 #include "texture.h"
 #include "hand.h"
@@ -33,7 +34,7 @@ bool mouseIsDragging = false;
 int game_Width = 720;
 int game_Height = 405;
 char programName[] = "Whist";
-
+int whistT,w2T,w3T; //texture IDs
 double PI = 3.14159264;
 
 //texture for card back
@@ -62,12 +63,18 @@ int pDummyW = 40, pDummyH = 50;
 
 Gamestate game;
 
-// button info
+// button in the Menu
 bool buttonIsPressed = false, overButton = false;
-double buttonPos[] = { 300, 150,   150, 60 };  // upper left, width, height
+double PlaygamePos[] = { 300, 150,   150, 60 };  // upper left, width, height
 //button2
 bool button2IsPressed = false, overButton2 = false;
-double buttonPos2[] = { 300, 230,   150, 60 };
+double OptionPos[] = { 300, 230,   150, 60 };
+//button3
+bool button3IsPressed = false, overButton3 = false;
+double ExitPos[] = {280,300,190,20};
+
+
+
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
 {
@@ -156,16 +163,28 @@ void drawCards(){
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
+
+
      // draw the button
   if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
   else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(.5, .5, .5);  // gray
-  drawBox(buttonPos);
+  else glColor3f(0.0, .65, .1);  // gray
+  drawBox(PlaygamePos);
 //draw button2
   if ( button2IsPressed ) glColor3f(0., 1., 0.);  // make it green
   else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
   else glColor3f(1, 1, 1);  // white
-  drawBox(buttonPos2);
+  drawBox(OptionPos);
+  //Button funtion
+  Button Exit;
+  if ( button3IsPressed) glColor3f(1., 0., 0.);
+  else if (overButton3) glColor3f(.75, .75, .75);
+  else glColor3f(0., 1., 0.);
+  Exit.drawButton(ExitPos);
+  //draw stuff
+  drawTexture(whistT,  94,55,    400, 150, .9); // texID,   x,y,    width, height
+  drawTexture(w2T,  500,210,    300, 200, .45);
+  drawTexture(w3T,  300,150,    150, 60 );
 
   drawCards();
 
@@ -201,17 +220,11 @@ void reshape(int w, int h){
 
 // the following function tests whether a point at position x,y is inside
 //   the rectangle on the screen corresponding to the button
-bool onButton(int x, int y)
+bool onButton(int x, int y, double* buttonPos)
 {
   return x >= buttonPos[0]  && y >= buttonPos[1] &&
          x <= buttonPos[0] + buttonPos[2] &&
          y <= buttonPos[1] + buttonPos[3];
-}
-bool onButton2(int x, int y)
-{
-  return x >= buttonPos2[0]  && y >= buttonPos2[1] &&
-         x <= buttonPos2[0] + buttonPos2[2] &&
-         y <= buttonPos2[1] + buttonPos2[3];
 }
 
 // the mouse function is called when a mouse button is pressed down or released
@@ -220,20 +233,26 @@ void mouse(int button, int state, int x, int y){
     if(GLUT_DOWN == state){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
-      if ( onButton(x,y) ) buttonIsPressed = true;
+      if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
       else buttonIsPressed = false;
-      if ( onButton2(x,y) ) button2IsPressed = true;
+      if ( onButton(x,y, OptionPos) ) button2IsPressed = true;
       else button2IsPressed = false;
+      if ( onButton(x,y, ExitPos) ) button3IsPressed = true;
+      else button3IsPressed = false;
+
     }
     else{
       //mouseIsDragging = false;
     	// the user just let go the mouse-- do something
-      if ( onButton(x,y) && buttonIsPressed )
+      if ( onButton(x,y, PlaygamePos) && buttonIsPressed )
         cout << "Button press." << endl;
       buttonIsPressed = false;
-      if ( onButton2(x,y) && button2IsPressed )
+      if ( onButton(x,y,OptionPos) && button2IsPressed )
         cout << "Button press." << endl;
       button2IsPressed = false;
+      if ( onButton(x,y,ExitPos) && button3IsPressed )
+        cout << "Button press." << endl;
+      button3IsPressed = false;
     }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
@@ -346,9 +365,14 @@ void init_gl_window(){
   glutCreateWindow(programName);
   init();
 
-  //LOAD ALL THE TEXTURES
-  loadAllTextures();  
+ 
+  whistT= loadTexture("whist1.pam"); // key to textures:  load them!
+  w2T= loadTexture("w2.pam");
+  w3T= loadTexture("w3.pam");
 
+
+   //LOAD ALL THE TEXTURES
+  loadAllTextures();  
   //Draw stuff
   glutDisplayFunc(drawWindow);
   glutReshapeFunc(reshape);
