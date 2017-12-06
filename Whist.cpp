@@ -235,9 +235,9 @@ void mouse(int button, int state, int x, int y){
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
 	for(int i = 0; i < 13; i++){
-	  if(game.hands[0]->getCard(i)->mouse_over(x,y)){
+	  if(game.get_hand(0)->getCard(i)->mouse_over(x,y)){
 	    //if(game.isLegal((game.hands[0]->getCard(i)), 0){
-	    game.hands[0]->removeCard(i);
+	    game.get_hand(0)->removeCard(i);
 	    cout << "Card Removed." << endl;
 	    //}
 	  }
