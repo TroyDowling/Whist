@@ -25,14 +25,6 @@ class Gamestate
 	//Deck class
 	Deck deck;
 
-	//Entire round
-	Card * allCardsPlayed[52];
-	int allWhoPlayed[52]; // use enum turn
-
-	//This trick
-	Card * handCardsPlayed[4];
-	int handWhoPlayed[4]; // use enum turn
-
 	//Essentially the deck
 	Card * cards[52];
 
@@ -45,6 +37,14 @@ class Gamestate
 	
 	//Constructor (if needed)
 	
+	//Entire round
+	Card * allCardsPlayed[52];
+	int allWhoPlayed[52]; // use enum turn
+
+	//This trick
+	Card * handCardsPlayed[4];
+	int handWhoPlayed[4]; // use enum turn
+
 	//Needs to record the score, and the hands
 	void save_game(int);
 	
