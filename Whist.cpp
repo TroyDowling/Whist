@@ -131,6 +131,8 @@ void drawCards(){
   //Updated to 13 cards per row
   //Displays all hand zones.
 
+  card_Height = game_Height/7;
+  card_Width = card_Height * .618;
   ai1HandLen = ai2HandLen = ai3HandLen = 13;
 
   //spacing to align cards in center of screen
