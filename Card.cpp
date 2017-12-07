@@ -1,4 +1,5 @@
 #include "Card.h"
+using namespace std;
 
 bool Card::mouse_over(int x, int y)
 {
@@ -6,7 +7,8 @@ bool Card::mouse_over(int x, int y)
 	{
 		if(y >= y_pos && y <= y_pos + h)
 		{
-			return true;
+		  cout << "card clicked" << endl;
+		  return true;
 		}
 		else return false;
 	}

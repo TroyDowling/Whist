@@ -23,6 +23,7 @@ class Card
   int get_suit () {return suit;}
   void set_suit (int s) {suit = s;}
   void set_val (int v) {if(v >= 0 && v <= 12) val = v; else val = -1;}
+  void set_pos(int x, int y, int width, int height){w = width; h = height; x_pos = x; y_pos = y;}
 };
 
 #endif //_CARD_H_

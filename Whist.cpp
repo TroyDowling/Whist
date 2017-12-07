@@ -157,6 +157,7 @@ void drawCards(){
   //Draw user cards
   for(int l= 0; l < userHandLen; l++){
     drawTexture(userText[l], wspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
+    game.get_card(0,l)->set_pos((wspacing+(l*(card_Width/2))), (game_Height - (card_Height + 10)), card_Width, card_Height);
   }
 }
 
