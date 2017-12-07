@@ -31,4 +31,5 @@ Hand & Hand::operator=(const Hand & h)
   for(int i = 0; i < length; ++i){
     hand[i] = h.hand[i];
   }
+  return *this;
 }

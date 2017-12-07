@@ -134,6 +134,7 @@ void drawCards(){
   card_Height = game_Height/7;
   card_Width = card_Height * .618;
   ai1HandLen = ai2HandLen = ai3HandLen = 13;
+  loadUserText();
 
   //spacing to align cards in center of screen
   double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
@@ -378,8 +379,6 @@ void init_gl_window(){
 
   //LOAD ALL THE TEXTURES
   loadAllTextures();
-  //game.deal();
-  //loadUserText();
  
   whistT= loadTexture("whist1.pam"); // key to textures:  load them!
   w2T= loadTexture("w2.pam");
