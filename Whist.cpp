@@ -38,6 +38,8 @@ double PI = 3.14159264;
 
 int mouseX = 0, mouseY = 0;
 
+//texture for game background
+int bkg;
 //texture for card back
 int bg;
 //textures for hearts
@@ -247,6 +249,7 @@ void drawCards(int over = -1){
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
+  drawTexture(bkg, 0,0, game_Width, game_Height, 1, 0);
 
   if(DisplayState == 0){
     // draw the button
@@ -395,7 +398,8 @@ void init(void){
 void loadAllTextures()
 {
 	bg = loadTexture("imgs/cardback.pam");
-	
+	bkg = loadTexture("imgs/gameback.pam");
+
 	//load textures for clubs
 	for(int i = 0; i < 9; ++i)
 	{
