@@ -36,6 +36,8 @@ char programName[] = "Whist";
 int whistT,w2T,w3T; //texture IDs
 double PI = 3.14159264;
 
+int mouseX = 0, mouseY = 0;
+
 //texture for card back
 int bg;
 //textures for hearts
@@ -71,6 +73,7 @@ double buttonPos[] = { 300, 150,   150, 60 };  // upper left, width, height
 //button2
 bool button2IsPressed = false, overButton2 = false;
 double buttonPos2[] = { 300, 230,   150, 60 };
+
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
 {
@@ -87,6 +90,11 @@ void drawBox(double *pos)
   drawBox(pos[0], pos[1], pos[2], pos[3]);
  } 
 
+void mouse_update(int x, int y)
+{
+  mouseX = x; mouseY = y;
+  glutPostRedisplay();
+}
 
 void loadUserText()
 {
@@ -127,17 +135,21 @@ void loadUserText()
 }
 
 
-void drawCards(){
+void drawCards(int over = -1){
   //Updated to 13 cards per row
   //Displays all hand zones.
 
   card_Height = game_Height/7;
   card_Width = card_Height * .618;
-  ai1HandLen = ai2HandLen = ai3HandLen = 13;
+  ai3HandLen = game.get_handLen(3);
+  ai2HandLen = game.get_handLen(2);
+  ai1HandLen = game.get_handLen(1);
+  userHandLen = game.get_handLen(0);
   loadUserText();
 
   //spacing to align cards in center of screen
-  double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
+  double uwspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
+  double wspacing = (game_Width/2) - (card_Width/2)*((ai1HandLen/2)+1);
   double hspacing = (game_Height/2) - (card_Width/2)*((ai3HandLen/2)+2);
 
   //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
@@ -156,8 +168,15 @@ void drawCards(){
   }
   //Draw user cards
   for(int l= 0; l < userHandLen; l++){
-    drawTexture(userText[l], wspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
-    game.get_card(0,l)->set_pos((wspacing+(l*(card_Width/2))), (game_Height - (card_Height + 10)), card_Width, card_Height);
+    //if(game.get_card(0,l)->mouse_over(mouseX,mouseY)) {
+    if(l == over){
+      drawTexture(userText[l], uwspacing+(l*(card_Width/2)), game_Height - (card_Height*1.1 + 10), card_Width*1.1, card_Height*1.1, 1, 0);
+      game.get_card(0,l)->set_pos((uwspacing+(l*(card_Width/2))), (game_Height - (card_Height + 10)), card_Width, card_Height);
+    }
+    else{
+      drawTexture(userText[l], uwspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
+      game.get_card(0,l)->set_pos((uwspacing+(l*(card_Width/2))), (game_Height - (card_Height + 10)), card_Width, card_Height);
+    }
   }
 }
 
@@ -182,8 +201,11 @@ void drawWindow(){
   }
   else if(DisplayState == 2){
     drawCards();
+    for(int i = 0; i < 13; ++i){
+      if(game.get_card(0,i)->mouse_over(mouseX, mouseY))
+	drawCards(i);
+    }
   }
-
   glutSwapBuffers();
 }
 
@@ -243,7 +265,7 @@ void mouse(int button, int state, int x, int y){
 	    cout << "Card Removed." << endl;
 	    //}
 	  }
-	  else{ cout << "Card not removed (Conditions not met)." << endl; }
+	  //else{ cout << "Card not removed (Conditions not met)." << endl; }
 	}
       }
 
@@ -269,6 +291,7 @@ void mouse(int button, int state, int x, int y){
     }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
+  mouseX = x; mouseY = y;
   glutPostRedisplay();
 }
 
@@ -276,9 +299,8 @@ void mouse(int button, int state, int x, int y){
 // the mouse_motion function is called when the mouse is being dragged,
 //   and gives the current location of the mouse
 void mouse_motion(int x, int y){
-  //The mouse is moving?!?! Will be integrated in time.
-
-
+  //The mouse is moving and a button is down?!?! Will be integrated in time.
+  mouseX = x, mouseY = y;
   glutPostRedisplay();
 }
 
@@ -391,6 +413,7 @@ void init_gl_window(){
   glutKeyboardFunc(keyboard);
   glutMouseFunc(mouse);
   glutMotionFunc(mouse_motion);
+  glutPassiveMotionFunc(mouse_update);
   glutMainLoop();
 }
 
