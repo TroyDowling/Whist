@@ -268,11 +268,12 @@ void mouse(int button, int state, int x, int y){
 	  //else{ cout << "Card not removed (Conditions not met)." << endl; }
 	}
       }
-
-      if ( onButton(x,y) ) buttonIsPressed = true;
-      else buttonIsPressed = false;
-      if ( onButton2(x,y) ) button2IsPressed = true;
-      else button2IsPressed = false;
+      else if(DisplayState==0){
+	if ( onButton(x,y) ) buttonIsPressed = true;
+	else buttonIsPressed = false;
+	if ( onButton2(x,y) ) button2IsPressed = true;
+	else button2IsPressed = false;
+      }
     }
     else{
       //mouseIsDragging = false;
