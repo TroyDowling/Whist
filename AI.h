@@ -15,6 +15,7 @@ class AI
 	 * settings. 0 = easy, 1 = interm, etc.
 	 */
 	short difficulty;
+	int partnerInvite;
 
 	public:
 	AI(){hand = 0; difficulty = 0;}

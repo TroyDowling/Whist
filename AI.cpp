@@ -52,6 +52,7 @@ Card * AI::makePlay(const Gamestate & game)
     //This AI goes first
     if(game.handWhoPlayed[0] == -1){
 
+    }
   }
 
   /* INTERMEDIATE DIFFICULTY */
