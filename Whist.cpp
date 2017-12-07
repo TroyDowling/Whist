@@ -223,12 +223,26 @@ void drawCards(int over = -1){
 		    (((game_Height/2) - (card_Height/2))+card_Height),
 		    card_Width, card_Height, 1, 0);
       }
-      //Draw AI[1]'s Card
-      //Draw AI[2]'s Card
-      //Draw AI[3]'s Card
+      //Draw AI[1]'s Card (RIGHT)
+      else if(k == 1){
+	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))+card_Width),
+		    ((game_Height/2) - (card_Height/2)),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[2]'s Card (TOP)
+      else if(k ==2){
+	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
+		    (((game_Height/2) - (card_Height/2))-card_Height),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[3]'s Card (LEFT)
+      else if (k == 3){
+	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))-card_Width),
+		    ((game_Height/2) - (card_Height/2)),
+		    card_Width, card_Height, 1, 0);
+      }
     }
   }
-
 }
 
 void drawWindow(){
