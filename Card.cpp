@@ -7,7 +7,6 @@ bool Card::mouse_over(int x, int y)
 	{
 		if(y >= y_pos && y <= y_pos + h)
 		{
-		  cout << "card clicked" << endl;
 		  return true;
 		}
 		else return false;
