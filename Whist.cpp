@@ -53,6 +53,9 @@ int userHandLen, ai1HandLen, ai2HandLen, ai3HandLen;
 int userText[13];
 int aiText[13];
 
+//textures for the played cards of each trick
+int playedText[4];
+
 //Card parameters (sizes)
 int card_Height = game_Height/7;
 int card_Width = card_Height*.618;
@@ -134,6 +137,33 @@ void loadUserText()
 	
 }
 
+void loadPlayedText(){
+  Card* cardsPlayed[4];
+  for(int i = 0; i < 4; i++){
+    cardsPlayed[i] = game.cards_played[i];
+  }
+  for(int l = 0; l < 4; l++){
+    if(cardsPlayed[l] != NULL){
+      //clubs
+      if(cardsPlayed[l]->get_suit() == 1){
+	playedText[l] = cText[cardsPlayed[l]->get_val()];
+      }
+      //hearts
+      else if(cardsPlayed[l]->get_suit() == 2){
+	playedText[l] = hText[cardsPlayed[l]->get_val()];
+      }
+      //spades
+      else if(cardsPlayed[l]->get_suit() == 3){
+	playedText[l] = sText[cardsPlayed[l]->get_val()];
+      }
+      //diamonds
+      else if(cardsPlayed[l]->get_suit() == 4){
+	playedText[l] = dText[cardsPlayed[l]->get_val()];
+      }
+    }
+  }
+}
+
 
 void drawCards(int over = -1){
   //Updated to 13 cards per row
@@ -146,6 +176,7 @@ void drawCards(int over = -1){
   ai1HandLen = game.get_handLen(1);
   userHandLen = game.get_handLen(0);
   loadUserText();
+  loadPlayedText();
 
   //spacing to align cards in center of screen
   double uwspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
@@ -170,14 +201,34 @@ void drawCards(int over = -1){
   for(int l= 0; l < userHandLen; l++){
     //if(game.get_card(0,l)->mouse_over(mouseX,mouseY)) {
     if(l == over){
-      drawTexture(userText[l], uwspacing+(l*(card_Width/2)), game_Height - (card_Height*1.1 + 10), card_Width*1.1, card_Height*1.1, 1, 0);
-      game.get_card(0,l)->set_pos((uwspacing+(l*(card_Width/2))), (game_Height - (card_Height + 10)), card_Width, card_Height);
+      drawTexture(userText[l], uwspacing+(l*(card_Width/2)),
+		  game_Height - (card_Height*1.1 + 10), card_Width*1.1, card_Height*1.1, 1, 0);
+      game.get_card(0,l)->set_pos((uwspacing+(l*(card_Width/2))),
+				  (game_Height - (card_Height + 10)), card_Width, card_Height);
     }
     else{
-      drawTexture(userText[l], uwspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
-      game.get_card(0,l)->set_pos((uwspacing+(l*(card_Width/2))), (game_Height - (card_Height + 10)), card_Width, card_Height);
+      drawTexture(userText[l], uwspacing+(l*(card_Width/2)),
+		  game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
+      game.get_card(0,l)->set_pos((uwspacing+(l*(card_Width/2))),
+				  (game_Height - (card_Height + 10)), card_Width, card_Height);
     }
   }
+
+  //Draw PLAYED cards
+  for(int k = 0; k < 4; k++){
+    if(game.cards_played[k] != NULL){
+      //Draw the Player's Card
+      if(k == 0){
+	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
+		    (((game_Height/2) - (card_Height/2))+card_Height),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[1]'s Card
+      //Draw AI[2]'s Card
+      //Draw AI[3]'s Card
+    }
+  }
+
 }
 
 void drawWindow(){
@@ -259,8 +310,11 @@ void mouse(int button, int state, int x, int y){
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
 	for(int i = 0; i < 13; i++){
-	  if(game.get_hand(0)->getCard(i)->mouse_over(x,y)){
+	  if(game.get_card(0,i)->mouse_over(x,y)){
+	    //if(game.get_hand(0)->getCard(i)->mouse_over(x,y)){
 	    //if(game.isLegal((game.hands[0]->getCard(i)), 0){
+
+	    game.cards_played[0] = game.get_card(0,i);
 	    game.get_hand(0)->removeCard(i);
 	    cout << "Card Removed." << endl;
 	    //}

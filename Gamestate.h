@@ -41,9 +41,11 @@ class Gamestate
 	Card * allCardsPlayed[52];
 	int allWhoPlayed[52]; // use enum turn
 
-	//This trick
-	Card * handCardsPlayed[4];
-	int handWhoPlayed[4]; // use enum turn
+	//This trick (renamed slightly for convenience)
+	//Card * handCardsPlayed[4];
+	//int handWhoPlayed[4];
+	Card * cards_played[4]; 
+	int who_played[4]; // use enum turn
 
 	//Needs to record the score, and the hands
 	void save_game(int);

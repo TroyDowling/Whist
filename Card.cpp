@@ -13,3 +13,13 @@ bool Card::mouse_over(int x, int y)
 	}
 	else return false;
 }
+
+Card& Card::operator = (Card& c){
+  this->x_pos = c.get_x();
+  this->y_pos = c.get_y();
+  this->w = c.get_w();
+  this->h = c.get_h();
+  this->suit = c.get_suit();
+  this->val = c.get_val();
+  return *this;
+}
