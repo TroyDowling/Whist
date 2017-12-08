@@ -10,7 +10,10 @@ class AI
 	AI(){hand = 0; difficulty = 0;}
 	AI(Card**, short);
 	
-	Card * makePlay(suitLed);
+	void aiSetHand(Card ** h, int len){for(int i=0; i<len; ++i) hand[i] = h[i];}
+	void setDiff(int d){difficulty = d;}
+	
+	Card * makePlay(int suitLed);
 }
 
 

@@ -28,8 +28,10 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 using namespace std;
 //End Imported Libraries(tm)
 
+//mouse stuff
 bool mouseIsDragging = false;
 
+//Window things
 int game_Width = 720;
 int game_Height = 405;
 char programName[] = "Whist";
@@ -60,7 +62,9 @@ int dummyWidth = 30, dummyHeight = 40;
 int sdummyWidth = 40, sdummyHeight = 30;
 int pDummyW = 40, pDummyH = 50;
 
+//set up global classes
 Gamestate game;
+AI ai1, ai2, ai3;
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -87,7 +91,7 @@ void loadUserText()
 	for(int i = 0; i < userHandLen; ++i)
 	{
 		//clubs
-	        if(cardsInHand[i]->get_suit() == 1)
+	  if(cardsInHand[i]->get_suit() == 1)
 		{
 			//returns the value (0-12) of the i-th card in the list of cards.
 			userText[i] = cText[cardsInHand[i]->get_val()];
@@ -115,8 +119,6 @@ void loadUserText()
 void drawCards(){
   //Updated to 13 cards per row
   //Displays all hand zones.
-
-  ai2HandLen = ai3HandLen = 13;
 
   //spacing to align cards in center of screen
   double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
@@ -301,5 +303,9 @@ int main ()
   loadAllTextures();
   game.deal();
   loadUserText();
+	ai1HandLen = ai1HandLen = ai3HandLen = 13;
+	ai1.aiSetHand(game.get_hand(1), ai1HandLen);
+	ai2.aiSetHand(game.get_hand(2), ai2HandLen);
+	ai3.aiSetHand(game.get_hand(3), ai3HandLen);
   init_gl_window();
 }
