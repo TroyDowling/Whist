@@ -357,11 +357,11 @@ void mouse(int button, int state, int x, int y){
         cout << "Button press." << endl;
       }
       button2IsPressed = false;
-			if(game.get_card(0,cardMatch)->mouse_over(x,y){
-				game.cards_played[0] = game.get_card(0,cardMatch);
-				game.get_hand(0)->removeCard(cardMatch);
-			}
-		}
+      if(game.get_card(0,cardMatch)->mouse_over(x,y)){
+	game.cards_played[0] = game.get_card(0,cardMatch);
+	game.get_hand(0)->removeCard(cardMatch);
+      }
+    }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
   mouseX = x; mouseY = y;
