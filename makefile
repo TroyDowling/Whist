@@ -1,6 +1,7 @@
 FMOD_DIR = /usr/local/dept/apps/fmod
 FMOD_INCLUDE = -I$(FMOD_DIR)/api/inc -I$(FMOD_DIR)/examples/common
 FMOD_LIB = $(FMOD_DIR)/api/lib/libfmodex64.so
+TARBALL_FILES = README.md makefile $(wildcard *.cpp *.h *.pam imgs)
 
 # Compiler option setup and library stuff
 OPTS = -Wall -g -std=c++11
@@ -35,3 +36,6 @@ Whist.o:	Whist.cpp texture.h
 
 texture.o:	texture.cpp texture.h
 	g++ $(OPTS) $(MACOSX_DEFINE) -c texture.cpp
+
+tarball: $(TARBALL_FILES)
+	tar cfz Whist.tar.gz $(TARBALL_FILES)
