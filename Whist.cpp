@@ -36,6 +36,8 @@ char programName[] = "Whist";
 int whistT,w2T,w3T; //texture IDs
 double PI = 3.14159264;
 
+int cardMatch = 0;
+
 int mouseX = 0, mouseY = 0;
 
 //texture for game background
@@ -321,7 +323,6 @@ bool onButton2(int x, int y)
 
 // the mouse function is called when a mouse button is pressed down or released
 void mouse(int button, int state, int x, int y){
-  int cardMatch = -1;
   if(GLUT_LEFT_BUTTON == button){
     if(GLUT_DOWN == state){
       //mouseIsDragging = true;
@@ -329,8 +330,8 @@ void mouse(int button, int state, int x, int y){
       if(DisplayState==2){
 	for(int i = 0; i < 13; i++){
 	  if(game.get_card(0,i)->mouse_over(x,y)){
-			cardMatch = i;
-	    cout << "Card Removed." << endl;
+	    cardMatch = i;
+	    cout << "Card Removed." << cardMatch << endl;
 	    //}
 	  }
 	  //else{ cout << "Card not removed (Conditions not met)." << endl; }
