@@ -34,7 +34,7 @@ bool mouseIsDragging = false;
 int game_Width = 720;
 int game_Height = 405;
 char programName[] = "Whist";
-int whistT,w2T,w3T,oT,eT; //texture IDs
+int whistT,w2T,w3T,oT,eT,bT,mT; //texture IDs
 double PI = 3.14159264;
 
 //texture for card back
@@ -78,10 +78,14 @@ double ExitPos[] = {300,280,150,60};
 
 
 //buttons for Option Screen
-bool SouBISPressed = false, overButton4 = false;
-double SouPos[] = {300,120,150,60};
 bool AiBISPressed = false, overButton5 = false;
-double AiPos[] = {300,220,150,60};
+double AiPos[] = {300,80,150,60};
+bool SouBISPressed = false, overButton4 = false;
+double SouPos[] = {300,160,150,60};
+bool ConBISPressed = false, overButton6 = false;
+double ConPos[] = {300,240,150,60};
+bool BackBISPressed = false, overButton7 = false;
+double BackPos[] = {505,318,90,62};
 
 
 
@@ -175,6 +179,7 @@ void drawCards(){
 
 void drawOption() {
    cout <<DisplayState<<endl;
+if (DisplayState == 1){
   if ( SouBISPressed ) glColor3f(1., 0., 0.);  // make it red
   else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
   else glColor3f(0.0, .65, .1);  // gray
@@ -186,8 +191,29 @@ void drawOption() {
   else glColor3f(0.0, .65, .1);  // gray
   Ai.drawButton(AiPos);
 
+  Button Con;
+  if ( ConBISPressed ) glColor3f(1., 0., 0.);  // make it red
+  else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
+  else glColor3f(0.0, .65, .1);  // gray
+  Con.drawButton(ConPos);
 
-    }
+  Button Back;
+  if ( BackBISPressed ) glColor3f(1., 0., 0.);  // make it red
+  else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
+  else glColor3f(0.0, .65, .1);  // gray
+  Back.drawButton(BackPos);
+
+  //button texture
+  drawTexture(mT,  305, 165, 142, 50);
+  drawTexture(bT,  509, 324,  82, 50 );
+
+}
+
+else if (DisplayState ==3){
+  
+}
+}
+    
 
 
 void drawWindow(){
@@ -211,7 +237,6 @@ void drawWindow(){
   else if (overButton3) glColor3f(.75, .75, .75);
   else glColor3f(0., .65, 0.1);
   Exit.drawButton(ExitPos); 
-
   //draw stuff
   drawTexture(whistT,  94,30,    400, 150, .9); // texID,   x,y,    width, height
   drawTexture(w2T,  500,210,    300, 200, .45);
@@ -219,9 +244,9 @@ void drawWindow(){
   drawTexture(w3T,  290,115,    170, 70 );
   drawTexture(oT,  302, 203,    145, 50 );
   drawTexture(eT,  300, 285,    152, 50 );
-
-
+  
 }
+
 else if (DisplayState ==1){
   drawOption();
 }
@@ -233,11 +258,22 @@ else if(DisplayState == 2){
       if(game.get_card(0,i)->mouse_over(mouseX, mouseY))
 */
 
-  else if (DisplayState ==3){}
-  glutSwapBuffers();
+else if (DisplayState ==3){
+    int win = glutGetWindow();
+    glutDestroyWindow(win);
+    exit(0);
+    glutPostRedisplay();
 }
+else if(DisplayState == 4){
+  cout <<DisplayState<<endl;
+  DisplayState=0;
+  drawWindow();
+    //drawCards();
+  }
 //}
+glutSwapBuffers();
 
+}
 
 void keyboard(unsigned char c, int x, int y){
   int win = glutGetWindow();
@@ -306,11 +342,16 @@ void mouse(int button, int state, int x, int y){
 
     else if (DisplayState == 1){
       if ( onButton(x,y, SouPos) ) SouBISPressed = true;
-      else SouBISPressed = false;
-      if ( onButton(x,y, AiPos) ) SouBISPressed = true;
-      else SouBISPressed = false;
-
+      else  SouBISPressed = false;
+      if ( onButton(x,y, AiPos) ) AiBISPressed = true;
+      else AiBISPressed = false; 
+      if ( onButton(x,y, ConPos) ) ConBISPressed = true;
+      else ConBISPressed = false; 
+      if ( onButton(x,y, BackPos) ) BackBISPressed = true;
+      else BackBISPressed = false; 
     }
+
+
 
     }
     else{
@@ -338,6 +379,22 @@ void mouse(int button, int state, int x, int y){
           cout << "Sound Button press." << endl;
       }
       SouBISPressed = false;
+
+      if ( onButton(x,y,AiPos) && AiBISPressed ){
+          cout << "Ai Button press." << endl;
+      }
+      AiBISPressed = false;
+
+      if ( onButton(x,y,ConPos) && ConBISPressed ){
+          cout << "Control Button press." << endl;
+      }
+      ConBISPressed = false;
+
+      if ( onButton(x,y,BackPos) && BackBISPressed ){
+        DisplayState=4;
+          cout << "Back Button press." << endl;
+      }
+      BackBISPressed = false;
     }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
@@ -456,6 +513,9 @@ void init_gl_window(){
   w3T= loadTexture("imgs/p1.pam");
   oT= loadTexture("imgs/o1.pam");
   eT= loadTexture("imgs/e1.pam");
+  //optinos
+  mT= loadTexture("imgs/m1.pam");
+  bT= loadTexture("imgs/b1.pam");
 
    //LOAD ALL THE TEXTURES
   loadAllTextures();  
