@@ -271,7 +271,7 @@ void drawWindow(){
     drawCards();
     for(int i = 0; i < 13; ++i){
       if(game.get_card(0,i)->mouse_over(mouseX, mouseY))
-	drawCards(i);
+		drawCards(i);
     }
   }
   glutSwapBuffers();
@@ -321,6 +321,7 @@ bool onButton2(int x, int y)
 
 // the mouse function is called when a mouse button is pressed down or released
 void mouse(int button, int state, int x, int y){
+  int cardMatch = -1;
   if(GLUT_LEFT_BUTTON == button){
     if(GLUT_DOWN == state){
       //mouseIsDragging = true;
@@ -328,11 +329,7 @@ void mouse(int button, int state, int x, int y){
       if(DisplayState==2){
 	for(int i = 0; i < 13; i++){
 	  if(game.get_card(0,i)->mouse_over(x,y)){
-	    //if(game.get_hand(0)->getCard(i)->mouse_over(x,y)){
-	    //if(game.isLegal((game.hands[0]->getCard(i)), 0){
-
-	    game.cards_played[0] = game.get_card(0,i);
-	    game.get_hand(0)->removeCard(i);
+			cardMatch = i;
 	    cout << "Card Removed." << endl;
 	    //}
 	  }
@@ -360,7 +357,11 @@ void mouse(int button, int state, int x, int y){
         cout << "Button press." << endl;
       }
       button2IsPressed = false;
-    }
+			if(game.get_card(0,cardMatch)->mouse_over(x,y){
+				game.cards_played[0] = game.get_card(0,cardMatch);
+				game.get_hand(0)->removeCard(cardMatch);
+			}
+		}
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
   mouseX = x; mouseY = y;
