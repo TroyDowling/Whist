@@ -34,7 +34,7 @@ bool mouseIsDragging = false;
 int game_Width = 720;
 int game_Height = 405;
 char programName[] = "Whist";
-int whistT,w2T,w3T; //texture IDs
+int whistT,w2T,w3T,oT,eT; //texture IDs
 double PI = 3.14159264;
 
 //texture for card back
@@ -68,13 +68,20 @@ Gamestate game;
 
 // button in the Menu
 bool buttonIsPressed = false, overButton = false;
-double PlaygamePos[] = { 300, 150,   150, 60 };  // upper left, width, height
+double PlaygamePos[] = { 300, 120,   150, 60 };  // upper left, width, height
 //button2
 bool button2IsPressed = false, overButton2 = false;
-double OptionPos[] = { 300, 230,   150, 60 };
+double OptionPos[] = { 300, 200,   150, 60 };
 //button3
 bool button3IsPressed = false, overButton3 = false;
-double ExitPos[] = {280,300,190,20};
+double ExitPos[] = {300,280,150,60};
+
+
+//buttons for Option Screen
+bool SouBISPressed = false, overButton4 = false;
+double SouPos[] = {300,120,150,60};
+bool AiBISPressed = false, overButton5 = false;
+double AiPos[] = {300,220,150,60};
 
 
 
@@ -166,34 +173,71 @@ void drawCards(){
   }
 }
 
+void drawOption() {
+   cout <<DisplayState<<endl;
+  if ( SouBISPressed ) glColor3f(1., 0., 0.);  // make it red
+  else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
+  else glColor3f(0.0, .65, .1);  // gray
+  drawBox(SouPos);
+
+  Button Ai;
+  if ( AiBISPressed ) glColor3f(1., 0., 0.);  // make it red
+  else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
+  else glColor3f(0.0, .65, .1);  // gray
+  Ai.drawButton(AiPos);
+
+
+    }
+
+
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
 
-     // draw the button
+  if(DisplayState == 0){
+       // draw the button
+  cout <<DisplayState<<endl;
   if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
   else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
   else glColor3f(0.0, .65, .1);  // gray
   drawBox(PlaygamePos);
 //draw button2
-  if ( button2IsPressed ) glColor3f(0., 1., 0.);  // make it green
+  if ( button2IsPressed ) glColor3f(1., 0., 0.);  // make it green
   else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(1, 1, 1);  // white
+  else glColor3f(.0, .70, .1);  // white
   drawBox(OptionPos);
   //Button funtion
   Button Exit;
   if ( button3IsPressed) glColor3f(1., 0., 0.);
   else if (overButton3) glColor3f(.75, .75, .75);
-  else glColor3f(0., 1., 0.);
-  Exit.drawButton(ExitPos);
+  else glColor3f(0., .65, 0.1);
+  Exit.drawButton(ExitPos); 
+
   //draw stuff
-  drawTexture(whistT,  94,55,    400, 150, .9); // texID,   x,y,    width, height
+  drawTexture(whistT,  94,30,    400, 150, .9); // texID,   x,y,    width, height
   drawTexture(w2T,  500,210,    300, 200, .45);
-  drawTexture(w3T,  300,150,    150, 60 );
+//main menu buttons textures
+  drawTexture(w3T,  290,115,    170, 70 );
+  drawTexture(oT,  302, 203,    145, 50 );
+  drawTexture(eT,  300, 285,    152, 50 );
 
-  drawCards();
 
+}
+else if (DisplayState ==1){
+  drawOption();
+}
+else if(DisplayState == 2){
+  cout <<DisplayState<<endl;
+    drawCards();
+  }
+    /*for(int i = 0; i < 13; ++i){
+      if(game.get_card(0,i)->mouse_over(mouseX, mouseY))
+*/
+
+  else if (DisplayState ==3){}
   glutSwapBuffers();
 }
+//}
+
 
 void keyboard(unsigned char c, int x, int y){
   int win = glutGetWindow();
@@ -238,43 +282,68 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
-	for(int i = 0; i < 13; i++){
-	  if(game.get_hand(0)->getCard(i)->mouse_over(x,y)){
+	     for(int i = 0; i < 13; i++){
+	      if(game.get_hand(0)->getCard(i)->mouse_over(x,y)){
 	    //if(game.isLegal((game.hands[0]->getCard(i)), 0){
-	    game.get_hand(0)->removeCard(i);
-	    cout << "Card Removed." << endl;
-	    //}
-	  }
-	  else{ cout << "Card not removed (Conditions not met)." << endl; }
-	}
-      }
+      //game.cards_played[0] = game.get_card(0,i);
 
-	if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
+	         game.get_hand(0)->removeCard(i);
+	         cout << "Card Removed." << endl;
+	    //}
+	       }
+	  //else{ cout << "Card not removed (Conditions not met)." << endl; }
+	     }
+      //}
+      }
+    else if (DisplayState == 0){
+	   if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
       else buttonIsPressed = false;
       if ( onButton(x,y, OptionPos) ) button2IsPressed = true;
       else button2IsPressed = false;
       if ( onButton(x,y, ExitPos) ) button3IsPressed = true;
       else button3IsPressed = false;
+        }
+
+    else if (DisplayState == 1){
+      if ( onButton(x,y, SouPos) ) SouBISPressed = true;
+      else SouBISPressed = false;
+      if ( onButton(x,y, AiPos) ) SouBISPressed = true;
+      else SouBISPressed = false;
+
+    }
 
     }
     else{
       //mouseIsDragging = false;
     	// the user just let go the mouse-- do something
-      if ( onButton(x,y, PlaygamePos) && buttonIsPressed )
-        cout << "Button press." << endl;
+      if ( onButton(x,y, PlaygamePos) && buttonIsPressed ){
+        DisplayState=2;
+        game.deal();
+        loadUserText();
+          cout << "PlayGame Button press." << endl;
+      }
       buttonIsPressed = false;
-      if ( onButton(x,y,OptionPos) && button2IsPressed )
-        cout << "Button press." << endl;
+      if ( onButton(x,y,OptionPos) && button2IsPressed ){
+        DisplayState=1;
+        cout << "Options Button press." << endl;
       }
       button2IsPressed = false;
-      if ( onButton(x,y,ExitPos) && button3IsPressed )
-        cout << "Button press." << endl;
+      if ( onButton(x,y,ExitPos) && button3IsPressed ){
+        DisplayState=3;
+        cout << "Exit Button press." << endl;
+      }
       button3IsPressed = false;
+
+      if ( onButton(x,y,SouPos) && SouBISPressed ){
+          cout << "Sound Button press." << endl;
+      }
+      SouBISPressed = false;
     }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
   glutPostRedisplay();
 }
+//}
 
 
 // the mouse_motion function is called when the mouse is being dragged,
@@ -305,8 +374,7 @@ void init(void){
 }
 
 //Loads all textures, 
-void loadAllTextures()
-{
+void loadAllTextures(){
 	bg = loadTexture("imgs/cardback.pam");
 	
 	//load textures for clubs
@@ -382,9 +450,12 @@ void init_gl_window(){
   glutCreateWindow(programName);
   init();
  
-  whistT= loadTexture("whist1.pam"); // key to textures:  load them!
-  w2T= loadTexture("w2.pam");
-  w3T= loadTexture("w3.pam");
+  whistT= loadTexture("imgs/whist1.pam"); // key to textures:  load them!
+  w2T= loadTexture("imgs/w2.pam");
+
+  w3T= loadTexture("imgs/p1.pam");
+  oT= loadTexture("imgs/o1.pam");
+  eT= loadTexture("imgs/e1.pam");
 
    //LOAD ALL THE TEXTURES
   loadAllTextures();  
