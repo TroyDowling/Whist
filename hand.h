@@ -16,13 +16,13 @@ class Hand{
 
   void addCard(Card * c);
 	
-  void removeCard(int c){for(int card = c; card < length-1; card++) hand[card] = hand[card+1]; hand[length-1] = 0; length--;}
+  void removeCard(int c);
 
   Card * getCard(int c){return hand[c];}
 	
   int getLen(){return length;}
   Card ** getHand(){return hand;}
-  Hand operator= (&Hand);
+  Hand & operator= (const Hand&);
 };
 
 #endif
