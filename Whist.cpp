@@ -389,8 +389,9 @@ void init(void){
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
 
-  cout << "Welcome to " << programName << "." << endl;
-  cout << "A Functional demo!" << endl;
+  cout << "Welcome to " << programName << "!" << endl;
+  //No longer a demo, and yet is nothing more...
+  //cout << "A Functional demo!" << endl;
   cout << "Shuffles the deck, and deals out four hands." << endl;
 }
 
