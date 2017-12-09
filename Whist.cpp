@@ -359,10 +359,10 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = false;
     	// the user just let go the mouse-- do something
       if ( onButton(x,y) && buttonIsPressed ){
-	DisplayState = 2;
 	game.deal();
 	loadUserText();
         cout << "Play Game" << endl;
+	DisplayState = 2;
       }
       buttonIsPressed = false;
       if ( onButton2(x,y) && button2IsPressed ){

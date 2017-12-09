@@ -6,8 +6,8 @@
 
 class AI
 {
-        //This is the array of cards in the AI hand
 	int len, id, partner;
+	bool invited = false;
 
 	/* There will be different algorithms in
 	 * makePlay that correspond to difficulty
