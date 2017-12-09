@@ -13,6 +13,9 @@ else
  LIBS = -I/usr/common/include -I/usr/include/GL -L/System/Library/Frameworks/OpenGL.framework/Libraries -framework GLUT -framework OpenGL -lGL -lm -lobjc -lstdc++
 
 endif
+AI.o: AI.cpp AI.h
+	g++ $(OPTS) $(MACOSX_DEFINE) -c AI.cpp
+
 Card.o:	Card.cpp Card.h
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Card.cpp
 
@@ -28,8 +31,8 @@ hand.o: hand.h hand.cpp
 Deck.o: Deck.h Deck.cpp
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Deck.cpp
 
-whist:  texture.o Gamestate.o Deck.o Card.o hand.o Whist.o
-	g++ $(OPTS) -o Whist Whist.o texture.o Card.o Gamestate.o hand.o Deck.o $(LIBS)
+whist:  texture.o Gamestate.o Deck.o Card.o hand.o Whist.o AI.o
+	g++ $(OPTS) -o Whist Whist.o texture.o Card.o Gamestate.o hand.o Deck.o AI.o $(LIBS)
 
 Whist.o:	Whist.cpp texture.h
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Whist.cpp

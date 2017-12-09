@@ -1,32 +1,18 @@
 #include "AI.h"
 
-AI::AI (Card ** h, short diff)
-{
-	difficulty = diff;
-	for(len = 0; h[len] != 0; ++len)
-	for(int i = 0; i < len; ++i)
-	{
-		handarr[i] = h[i];
-	}
-}
-
-AI::AI(Hand h, short diff)
-{
-  difficulty = diff;
-  len = h.getLen();
-  for(int i = 0; i < len; ++i)
-    handarr[i] = h.getCard(i);
-}
-
 AI::AI(const Gamestate & game, int handid, short diff)
 {
+  id = handid;
+  if(handid == 1) partner = 3; //left and right
+  else if(handid == 2) partner = 0; //top and user
+  else if(handid == 3) partner = 1; //right and left
   difficulty = diff;
-  for(int i = 0; i < game.get_handlen(handid); ++i)
-    handarr[i] = game.get_card(handid, i);
 }
 
-Card * AI::makePlay(const Gamestate & game)
+Card * AI::makePlay(Gamestate & game)
 {
+  int play_suit = 5;
+  
   /* 
    * Using the reference to our Gamestate
    * makes this part a lot easier.
@@ -50,8 +36,27 @@ Card * AI::makePlay(const Gamestate & game)
   /* EASY DIFFICULTY */
   if(difficulty == 0){
     //This AI goes first
-    if(game.handWhoPlayed[0] == -1){
+    if(game.who_played[0] == -1){
+      game.set_who_played(0,id);
 
+      //Check for an invite from partner
+      //(i%4 == 0 returns the first card from each trick played so far)
+      for(int i = 0; i < 52; ++i){
+	if(game.allWhoPlayed[i] == partner && i%4 == 0){
+	  play_suit = game.allCardsPlayed[i]->get_suit();
+	}
+	else{
+	  //My parter has not led yet, have I?
+	  if(game.allWhoPlayed[i] == id && i%4 == 0){
+	    //I have led, so no need to invite.
+	    for(int hand_card = 0; hand_card < game.get_handLen(id); ++hand_card){
+
+	    }
+	  }
+	  //else
+	}
+      }
+    }
   }
 
   /* INTERMEDIATE DIFFICULTY */

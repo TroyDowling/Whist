@@ -25,6 +25,7 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 #include "Gamestate.h"
 #include "texture.h"
 #include "hand.h"
+#include "AI.h"
 using namespace std;
 //End Imported Libraries(tm)
 
@@ -80,6 +81,18 @@ double buttonPos[] = { 300, 150,   150, 60 };  // upper left, width, height
 //button2
 bool button2IsPressed = false, overButton2 = false;
 double buttonPos2[] = { 300, 230,   150, 60 };
+
+
+/* SETS UP AI - Use ai.set_diff(int) to change difficulty
+
+AI nameofAI(game, handid, difficulty) difficulty is 0 - 3
+
+*/
+
+//Difficulty is 0 - 3
+AI ai1(game, 1, 0);
+AI ai2(game, 2, 0);
+AI ai3(game, 3, 0);
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -252,7 +265,6 @@ void drawCards(int over = -1){
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
   drawTexture(bkg, 0,0, game_Width, game_Height, 1, 0);
-
   if(DisplayState == 0){
     // draw the button
     if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
@@ -271,9 +283,8 @@ void drawWindow(){
   }
   else if(DisplayState == 2){
     drawCards();
-    for(int i = 0; i < 13; ++i){
-      if(game.get_card(0,i)->mouse_over(mouseX, mouseY))
-		drawCards(i);
+    for(int i = 0; i < game.get_handLen(0); ++i){
+      if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
     }
   }
   glutSwapBuffers();

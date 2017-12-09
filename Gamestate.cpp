@@ -4,7 +4,7 @@ using namespace std;
 Gamestate::Gamestate()
 {
   score[0] = score[1] = 0;
-  turn = p1;
+  turn = 0;
   for(int i = 0; i < 52; ++i){
     cards[i] = 0;
   }
