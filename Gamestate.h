@@ -60,7 +60,9 @@ class Gamestate
 
 	//Returns the current turn.
 	int getTurn(){ return turn; }
-       
+
+	//Increments the turn, or if it is == 3, reset it.
+	void nextTurn(){ if(turn != 3) turn++; else turn = 0;}       
 	
 	//Is this play a legal move?
 	bool isLegal(Card c,int s);

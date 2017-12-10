@@ -262,6 +262,17 @@ void drawCards(int over = -1){
   }
 }
 
+//Turns are entirely linear, taken in a counterclockwise fashion.
+//This is where the AIs will make their plays, and their cards will be assigned to / removed from
+//  the relevant places. Does not function currently.
+void AIgameplay(){
+  //switch(game.getTurn()){
+  //case 1:
+  //cout<< "It is the RIGHT AI's turn." << endl;
+  //game.cards_played[1] = ai1.makePlay(game);
+  //}
+}
+
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
   drawTexture(bkg, 0,0, game_Width, game_Height, 1, 0);
@@ -286,6 +297,7 @@ void drawWindow(){
     for(int i = 0; i < game.get_handLen(0); ++i){
       if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
     }
+    AIgameplay();
   }
   glutSwapBuffers();
 }
@@ -305,8 +317,6 @@ void keyboard(unsigned char c, int x, int y){
   glutPostRedisplay();
 }
 
-//I don't want to mess with resizing textures and mipmaps, if at all possible.
-//This likely only delays the inevitable ;_;
 void reshape(int w, int h){
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
    game_Width = w;  game_Height = h;
@@ -314,6 +324,8 @@ void reshape(int w, int h){
    glLoadIdentity();
    glOrtho(0.,game_Width -1, game_Height-1, 0., -1.0, 1.0);
 
+  //I don't want to mess with resizing textures and mipmaps, if at all possible.
+  //This likely only delays the inevitable ;_;
   //glutReshapeWindow(game_Width,game_Height);
 }
 
@@ -339,13 +351,16 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
-	for(int i = 0; i < 13; i++){
-	  if(game.get_card(0,i)->mouse_over(x,y)){
-	    cardMatch = i;
-	    cout << "Card Removed." << cardMatch << endl;
-	    //}
+	if(game.getTurn() == 0){
+	  for(int i = 0; i < 13; i++){
+	    if(game.get_card(0,i)->mouse_over(x,y)){
+	      cardMatch = i;
+	      cout << "Card Removed. " << cardMatch << endl;
+	      game.nextTurn();
+	      //}
+	    }
+	    //else{ cout << "Card not removed (Conditions not met)." << endl; }
 	  }
-	  //else{ cout << "Card not removed (Conditions not met)." << endl; }
 	}
       }
       else if(DisplayState==0){

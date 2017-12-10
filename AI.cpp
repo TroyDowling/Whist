@@ -126,7 +126,7 @@ Card * AI::makePlay(Gamestate & game)
 	}
 	//Now I'm going to play that card
 	for(int i = 0; i < handlen; ++i){
-	  if(game.get_card(id,i)->get_val == min_val && game.get(id,i)->get_suit() == play_suit){
+	  if(game.get_card(id,i)->get_val() == min_val && game.get_card(id,i)->get_suit() == play_suit){
 	    return game.get_card(id,i);
 	  }
 	}
@@ -141,13 +141,13 @@ Card * AI::makePlay(Gamestate & game)
 	  //What is the lowest card of this suit that I have?
 	  for(int cardplay = 0; cardplay < handlen; ++cardplay){
 	    if(game.get_card(id,cardplay)->get_val() <= min_val){
-	      min_val = game.get_card(id,cardplay);
+	      min_val = game.get_card(id,cardplay)->get_val();
 	    }
 	  }
 	  //Play the lowest card I have in the suit my partner invited in
 	  for(int cardplay = 0; cardplay < handlen; ++cardplay){
 	    play_card = game.get_card(id,0);
-	    if(play_card->get_suit == play_suit && play_card->get_val() == min_val){
+	    if(play_card->get_suit() == play_suit && play_card->get_val() == min_val){
 	      return play_card;
 	    }
 	  }
@@ -155,7 +155,7 @@ Card * AI::makePlay(Gamestate & game)
       }
       //Looks like my partner has not invited yet, or I can't play that suit let's do this!
       for(int hand_card = 0; hand_card < handlen; ++hand_card){
-
+      }
     }
     //This AI is not going first this round
     else{
