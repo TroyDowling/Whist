@@ -233,7 +233,7 @@ void drawCards(int over = -1){
 
   //Draw PLAYED cards
   for(int k = 0; k < 4; k++){
-    if(game.cards_played[k] != NULL){
+    if(playedText[k] != 0){
       //Draw the Player's Card
       if(k == 0){
 	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
@@ -323,10 +323,6 @@ void reshape(int w, int h){
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    glOrtho(0.,game_Width -1, game_Height-1, 0., -1.0, 1.0);
-
-  //I don't want to mess with resizing textures and mipmaps, if at all possible.
-  //This likely only delays the inevitable ;_;
-  //glutReshapeWindow(game_Width,game_Height);
 }
 
 // the following function tests whether a point at position x,y is inside
@@ -357,7 +353,6 @@ void mouse(int button, int state, int x, int y){
 	      cardMatch = i;
 	      cout << "Card Removed. " << cardMatch << endl;
 	      game.nextTurn();
-	      //}
 	    }
 	    //else{ cout << "Card not removed (Conditions not met)." << endl; }
 	  }
