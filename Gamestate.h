@@ -83,7 +83,7 @@ class Gamestate
 	bool isLegal(Card c,int s);
 	
 	//return a requested card in a requested hand
-	//0 = user, 1 = ai1, etc;
+	//0 = user, 1 = ai1, etc; <- for int h
 	Hand * get_hand(int h){return hands[h];}
 	Card * get_card(int h, int c){return hands[h]->getCard(c);}
 	int get_handLen(int h){return hands[h]->getLen();}
