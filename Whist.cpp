@@ -274,10 +274,12 @@ void AIgameplay(){
     break;
   case 2:
     cout<<"It is the PARTNER AI's turn." << endl;
+    game.set_cards_played(game.getTurn(), ai2.makePlay(game));
     game.nextTurn();
     break;
   case 3:
     cout<<"It is the RIGHT AI's turn." << endl;
+    game.set_cards_played(game.getTurn(), ai3.makePlay(game));
     game.nextTurn();
     break;
   default:
@@ -363,7 +365,7 @@ void mouse(int button, int state, int x, int y){
 	  for(int i = 0; i < 13; i++){
 	    if(game.get_card(0,i)->mouse_over(x,y)){
 	      cardMatch = i;
-	      cout << "Card Removed. " << cardMatch << endl;
+	      game.set_cards_played(game.getTurn(),game.get_card(0,i));
 	      game.nextTurn();
 	    }
 	    //else{ cout << "Card not removed (Conditions not met)." << endl; }
