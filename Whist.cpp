@@ -108,6 +108,7 @@ double HPos[] = {300,240,150,60};
 bool Back2BISPressed = false, overButton11 = false;
 double Back2Pos[] = {505,318,90,62};
 
+//Sets up AI - Use ai.set_diff(int) to change difficulty later
 AI ai1(game,1,0);
 AI ai2(game,2,0);
 AI ai3(game,3,0);
@@ -409,8 +410,11 @@ else if (DisplayState ==1){
   drawOption();
 }
 else if(DisplayState == 2){
-    drawCards();
+  drawCards();
+  for(int i = 0; i < game.get_handLen(0); ++i){
+    if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
   }
+ }
 else if (DisplayState ==3){
     int win = glutGetWindow();
     glutDestroyWindow(win);
@@ -471,12 +475,16 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
-	     for(int i = 0; i < 13; i++){
-	      if(game.get_hand(0)->getCard(i)->mouse_over(x,y)){
-	         game.get_hand(0)->removeCard(i);
-	         cout << "Card Removed." << endl;
-		       }
-	       }
+	if(game.getTurn() == 0){
+	  for(int i = 0; i < 13; i++){
+	    if(game.get_card(0,i)->mouse_over(x,y)){
+	      cardMatch = i;
+	      game.set_cards_played(game.getTurn(),game.get_card(0,i));
+	      game.nextTurn();
+	    }
+	    //else{ cout << "Card not removed (Conditions not met)." << endl; }
+	  }
+	}
       }
     else if (DisplayState == 0){
 	   if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
@@ -579,6 +587,10 @@ void mouse(int button, int state, int x, int y){
       }
       Back2BISPressed = false;
 
+      if(game.get_card(0,cardMatch)->mouse_over(x,y)){
+	game.cards_played[0] = game.get_card(0,cardMatch);
+	game.get_hand(0)->removeCard(cardMatch);
+      }
     }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
