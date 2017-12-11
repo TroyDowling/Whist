@@ -282,8 +282,6 @@ void AIgameplay(){
     break;
   }
 }
-
-void detWinner(){
   
 
 void drawWindow(){
