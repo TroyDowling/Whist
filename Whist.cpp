@@ -268,8 +268,8 @@ void drawCards(int over = -1){
 void AIgameplay(){
   switch(game.getTurn()){
   case 1:
-    cout<< "It is the RIGHT AI's turn." << endl;
-  //game.cards_played[1] = ai1.makePlay(game);
+    cout<< "It is the LEFT AI's turn." << endl;
+    game.set_cards_played(game.getTurn(), ai1.makePlay(game));
     game.nextTurn();
     break;
   case 2:
@@ -277,7 +277,7 @@ void AIgameplay(){
     game.nextTurn();
     break;
   case 3:
-    cout<<"It is the LEFT AI's turn." << endl;
+    cout<<"It is the RIGHT AI's turn." << endl;
     game.nextTurn();
     break;
   default:
