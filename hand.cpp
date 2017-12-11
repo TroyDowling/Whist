@@ -31,4 +31,13 @@ Hand & Hand::operator=(const Hand & h)
   for(int i = 0; i < length; ++i){
     hand[i] = h.hand[i];
   }
+  return *this;
+}
+
+void Hand::removeCard(int c)
+{
+    for(int curr = c; curr < 12; ++curr){
+      hand[curr] = hand[curr+1];
+    }
+  --length;
 }

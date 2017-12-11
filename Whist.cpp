@@ -26,6 +26,7 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 #include "Gamestate.h"
 #include "texture.h"
 #include "hand.h"
+#include "AI.h"
 using namespace std;
 //End Imported Libraries(tm)
 
@@ -38,6 +39,12 @@ int whistT,w2T,w3T,oT,eT,dT,bT,mT; //texture IDs
 int deT, dmT, dhT; //difficulty buttons
 double PI = 3.14159264;
 
+int cardMatch = 0;
+
+int mouseX = 0, mouseY = 0;
+
+//texture for game background
+int bkg;
 //texture for card back
 int bg;
 //textures for hearts
@@ -52,6 +59,9 @@ int dText[13];
 int userHandLen, ai1HandLen, ai2HandLen, ai3HandLen;
 int userText[13];
 int aiText[13];
+
+//textures for the played cards of each trick
+int playedText[4];
 
 //Card parameters (sizes)
 int card_Height = game_Height/7;
@@ -117,6 +127,11 @@ void drawBox(double *pos)
   drawBox(pos[0], pos[1], pos[2], pos[3]);
  } 
 
+void mouse_update(int x, int y)
+{
+  mouseX = x; mouseY = y;
+  glutPostRedisplay();
+}
 
 void loadUserText()
 {
@@ -156,17 +171,50 @@ void loadUserText()
 	
 }
 
+void loadPlayedText(){
+  Card* cardsPlayed[4];
+  for(int i = 0; i < 4; i++){
+    cardsPlayed[i] = game.cards_played[i];
+  }
+  for(int l = 0; l < 4; l++){
+    if(cardsPlayed[l] != NULL){
+      //clubs
+      if(cardsPlayed[l]->get_suit() == 1){
+	playedText[l] = cText[cardsPlayed[l]->get_val()];
+      }
+      //hearts
+      else if(cardsPlayed[l]->get_suit() == 2){
+	playedText[l] = hText[cardsPlayed[l]->get_val()];
+      }
+      //spades
+      else if(cardsPlayed[l]->get_suit() == 3){
+	playedText[l] = sText[cardsPlayed[l]->get_val()];
+      }
+      //diamonds
+      else if(cardsPlayed[l]->get_suit() == 4){
+	playedText[l] = dText[cardsPlayed[l]->get_val()];
+      }
+    }
+  }
+}
 
-void drawCards(){
+
+void drawCards(int over = -1){
   //Updated to 13 cards per row
   //Displays all hand zones.
 
   card_Height = game_Height/7;
   card_Width = card_Height * .618;
-  ai1HandLen = ai2HandLen = ai3HandLen = 13;
+  ai3HandLen = game.get_handLen(3);
+  ai2HandLen = game.get_handLen(2);
+  ai1HandLen = game.get_handLen(1);
+  userHandLen = game.get_handLen(0);
+  loadUserText();
+  loadPlayedText();
 
   //spacing to align cards in center of screen
-  double wspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
+  double uwspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
+  double wspacing = (game_Width/2) - (card_Width/2)*((ai1HandLen/2)+1);
   double hspacing = (game_Height/2) - (card_Width/2)*((ai3HandLen/2)+2);
 
   //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
@@ -185,9 +233,77 @@ void drawCards(){
   }
   //Draw user cards
   for(int l= 0; l < userHandLen; l++){
-    drawTexture(userText[l], wspacing+(l*(card_Width/2)), game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
+    //if(game.get_card(0,l)->mouse_over(mouseX,mouseY)) {
+    if(l == over){
+      drawTexture(userText[l], uwspacing+(l*(card_Width/2)),
+		  game_Height - (card_Height*1.1 + 10), card_Width*1.1, card_Height*1.1, 1, 0);
+      game.get_card(0,l)->set_pos((uwspacing+(l*(card_Width/2))),
+				  (game_Height - (card_Height + 10)), card_Width, card_Height);
+    }
+    else{
+      drawTexture(userText[l], uwspacing+(l*(card_Width/2)),
+		  game_Height - (card_Height + 10), card_Width, card_Height, 1, 0);
+      game.get_card(0,l)->set_pos((uwspacing+(l*(card_Width/2))),
+				  (game_Height - (card_Height + 10)), card_Width, card_Height);
+    }
+  }
+
+  //Draw PLAYED cards
+  for(int k = 0; k < 4; k++){
+    if(playedText[k] != 0){
+      //Draw the Player's Card
+      if(k == 0){
+	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
+		    (((game_Height/2) - (card_Height/2))+card_Height),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[1]'s Card (RIGHT)
+      else if(k == 1){
+	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))+card_Width),
+		    ((game_Height/2) - (card_Height/2)),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[2]'s Card (TOP)
+      else if(k ==2){
+	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
+		    (((game_Height/2) - (card_Height/2))-card_Height),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[3]'s Card (LEFT)
+      else if (k == 3){
+	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))-card_Width),
+		    ((game_Height/2) - (card_Height/2)),
+		    card_Width, card_Height, 1, 0);
+      }
+    }
   }
 }
+
+
+//This is where the AIs will make their plays, and their cards will be assigned to / removed from
+//  the relevant places. Does not function currently.
+void AIgameplay(){
+  switch(game.getTurn()){
+  case 1:
+    cout<< "It is the LEFT AI's turn." << endl;
+    game.set_cards_played(game.getTurn(), ai1.makePlay(game));
+    game.nextTurn();
+    break;
+  case 2:
+    cout<<"It is the PARTNER AI's turn." << endl;
+    game.set_cards_played(game.getTurn(), ai2.makePlay(game));
+    game.nextTurn();
+    break;
+  case 3:
+    cout<<"It is the RIGHT AI's turn." << endl;
+    game.set_cards_played(game.getTurn(), ai3.makePlay(game));
+    game.nextTurn();
+    break;
+  default:
+    break;
+  }
+}
+  
 
 void drawOption() {
    cout <<DisplayState<<endl;
@@ -335,16 +451,12 @@ void keyboard(unsigned char c, int x, int y){
   glutPostRedisplay();
 }
 
-//I don't want to mess with resizing textures and mipmaps, if at all possible.
-//This likely only delays the inevitable ;_;
 void reshape(int w, int h){
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
    game_Width = w;  game_Height = h;
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    glOrtho(0.,game_Width -1, game_Height-1, 0., -1.0, 1.0);
-
-  //glutReshapeWindow(game_Width,game_Height);
 }
 
 // the following function tests whether a point at position x,y is inside
@@ -474,6 +586,7 @@ void mouse(int button, int state, int x, int y){
     }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
+  mouseX = x; mouseY = y;
   glutPostRedisplay();
 }
 //}
@@ -482,9 +595,8 @@ void mouse(int button, int state, int x, int y){
 // the mouse_motion function is called when the mouse is being dragged,
 //   and gives the current location of the mouse
 void mouse_motion(int x, int y){
-  //The mouse is moving?!?! Will be integrated in time.
-
-
+  //The mouse is moving and a button is down?!?! Will likely not be integrated.
+  mouseX = x, mouseY = y;
   glutPostRedisplay();
 }
 
@@ -501,15 +613,17 @@ void init(void){
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
 
-  cout << "Welcome to " << programName << "." << endl;
-  cout << "A Functional demo!" << endl;
+  cout << "Welcome to " << programName << "!" << endl;
+  //No longer a demo, and yet is nothing more...
+  //cout << "A Functional demo!" << endl;
   cout << "Shuffles the deck, and deals out four hands." << endl;
 }
 
 //Loads all textures, 
 void loadAllTextures(){
 	bg = loadTexture("imgs/cardback.pam");
-	
+	bkg = loadTexture("imgs/gameback.pam");
+
 	//load textures for clubs
 	for(int i = 0; i < 9; ++i)
 	{
@@ -606,6 +720,7 @@ void init_gl_window(){
   glutKeyboardFunc(keyboard);
   glutMouseFunc(mouse);
   glutMotionFunc(mouse_motion);
+  glutPassiveMotionFunc(mouse_update);
   glutMainLoop();
 }
 

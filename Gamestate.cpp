@@ -4,7 +4,7 @@ using namespace std;
 Gamestate::Gamestate()
 {
   score[0] = score[1] = 0;
-  turn = p1;
+  turn = 0;
   for(int i = 0; i < 52; ++i){
     cards[i] = 0;
   }
@@ -126,3 +126,22 @@ void Gamestate::deal()
 	  hands[3]->addCard(cards[i]);
 	}
 }
+
+void Gamestate::chkWinner(){
+  int ledSuit = cards_played[0]->get_suit();
+  int highVal = 0;
+  int highPlayer = 0;
+  for(int i = 0; i < 4; i++){
+    if(cards_played[i]->get_suit() == ledSuit){
+      if(cards_played[i]->get_val() >= highVal){
+	highVal = cards_played[i]->get_val();
+	highPlayer = i;
+      }
+    }
+  }
+  if(highPlayer == 0 || highPlayer == 2){
+    score[0]++;
+  }
+  else score[1]++;
+}
+      

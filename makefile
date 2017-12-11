@@ -1,6 +1,7 @@
 FMOD_DIR = /usr/local/dept/apps/fmod
 FMOD_INCLUDE = -I$(FMOD_DIR)/api/inc -I$(FMOD_DIR)/examples/common
 FMOD_LIB = $(FMOD_DIR)/api/lib/libfmodex64.so
+TARBALL_FILES = README.md makefile $(wildcard *.cpp *.h *.pam imgs)
 
 # Compiler option setup and library stuff
 OPTS = -Wall -g -std=c++11
@@ -12,6 +13,9 @@ else
  LIBS = -I/usr/common/include -I/usr/include/GL -L/System/Library/Frameworks/OpenGL.framework/Libraries -framework GLUT -framework OpenGL -lGL -lm -lobjc -lstdc++
 
 endif
+AI.o: AI.cpp AI.h
+	g++ $(OPTS) $(MACOSX_DEFINE) -c AI.cpp
+
 Card.o:	Card.cpp Card.h
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Card.cpp
 
@@ -38,3 +42,6 @@ Whist.o:	Whist.cpp texture.h
 
 texture.o:	texture.cpp texture.h
 	g++ $(OPTS) $(MACOSX_DEFINE) -c texture.cpp
+
+tarball: $(TARBALL_FILES)
+	tar cfz Whist.tar.gz $(TARBALL_FILES)
