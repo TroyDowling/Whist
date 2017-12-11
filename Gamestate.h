@@ -73,7 +73,8 @@ class Gamestate
 	    turn = 0;
 	    if(numTurns != 3) numTurns++;
 	    else numTurns = 0;
-	  }       
+	  }
+	}
 	
 	//Is this play a legal move?
 	bool isLegal(Card c,int s);
