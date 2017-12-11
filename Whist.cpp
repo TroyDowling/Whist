@@ -25,6 +25,7 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 #include "Gamestate.h"
 #include "texture.h"
 #include "hand.h"
+#include "AI.h"
 using namespace std;
 //End Imported Libraries(tm)
 
@@ -80,6 +81,18 @@ double buttonPos[] = { 300, 150,   150, 60 };  // upper left, width, height
 //button2
 bool button2IsPressed = false, overButton2 = false;
 double buttonPos2[] = { 300, 230,   150, 60 };
+
+
+/* SETS UP AI - Use ai.set_diff(int) to change difficulty
+
+AI nameofAI(game, handid, difficulty) difficulty is 0 - 3
+
+*/
+
+//Difficulty is 0 - 3
+AI ai1(game, 1, 0);
+AI ai2(game, 2, 0);
+AI ai3(game, 3, 0);
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -220,7 +233,7 @@ void drawCards(int over = -1){
 
   //Draw PLAYED cards
   for(int k = 0; k < 4; k++){
-    if(game.cards_played[k] != NULL){
+    if(playedText[k] != 0){
       //Draw the Player's Card
       if(k == 0){
 	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
@@ -249,10 +262,20 @@ void drawCards(int over = -1){
   }
 }
 
+//Turns are entirely linear, taken in a counterclockwise fashion.
+//This is where the AIs will make their plays, and their cards will be assigned to / removed from
+//  the relevant places. Does not function currently.
+void AIgameplay(){
+  //switch(game.getTurn()){
+  //case 1:
+  //cout<< "It is the RIGHT AI's turn." << endl;
+  //game.cards_played[1] = ai1.makePlay(game);
+  //}
+}
+
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
   drawTexture(bkg, 0,0, game_Width, game_Height, 1, 0);
-
   if(DisplayState == 0){
     // draw the button
     if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
@@ -271,10 +294,10 @@ void drawWindow(){
   }
   else if(DisplayState == 2){
     drawCards();
-    for(int i = 0; i < 13; ++i){
-      if(game.get_card(0,i)->mouse_over(mouseX, mouseY))
-		drawCards(i);
+    for(int i = 0; i < game.get_handLen(0); ++i){
+      if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
     }
+    AIgameplay();
   }
   glutSwapBuffers();
 }
@@ -294,16 +317,12 @@ void keyboard(unsigned char c, int x, int y){
   glutPostRedisplay();
 }
 
-//I don't want to mess with resizing textures and mipmaps, if at all possible.
-//This likely only delays the inevitable ;_;
 void reshape(int w, int h){
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
    game_Width = w;  game_Height = h;
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    glOrtho(0.,game_Width -1, game_Height-1, 0., -1.0, 1.0);
-
-  //glutReshapeWindow(game_Width,game_Height);
 }
 
 // the following function tests whether a point at position x,y is inside
@@ -328,13 +347,15 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
-	for(int i = 0; i < 13; i++){
-	  if(game.get_card(0,i)->mouse_over(x,y)){
-	    cardMatch = i;
-	    cout << "Card Removed." << cardMatch << endl;
-	    //}
+	if(game.getTurn() == 0){
+	  for(int i = 0; i < 13; i++){
+	    if(game.get_card(0,i)->mouse_over(x,y)){
+	      cardMatch = i;
+	      cout << "Card Removed. " << cardMatch << endl;
+	      game.nextTurn();
+	    }
+	    //else{ cout << "Card not removed (Conditions not met)." << endl; }
 	  }
-	  //else{ cout << "Card not removed (Conditions not met)." << endl; }
 	}
       }
       else if(DisplayState==0){
@@ -348,10 +369,10 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = false;
     	// the user just let go the mouse-- do something
       if ( onButton(x,y) && buttonIsPressed ){
-	DisplayState = 2;
 	game.deal();
 	loadUserText();
         cout << "Play Game" << endl;
+	DisplayState = 2;
       }
       buttonIsPressed = false;
       if ( onButton2(x,y) && button2IsPressed ){
