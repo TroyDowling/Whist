@@ -34,8 +34,8 @@ hand.o: hand.h hand.cpp
 Deck.o: Deck.h Deck.cpp
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Deck.cpp
 
-whist:	Whist.o texture.o Gamestate.o Deck.o Card.o hand.o Button.o
-	g++ $(OPTS) -o Whist Whist.o texture.o Card.o Gamestate.o hand.o Deck.o Button.o $(LIBS)
+whist:	Whist.o texture.o Gamestate.o Deck.o Card.o hand.o Button.o AI.o
+	g++ $(OPTS) -o Whist Whist.o texture.o Card.o Gamestate.o hand.o Deck.o Button.o AI.o $(LIBS)
 
 Whist.o:	Whist.cpp texture.h
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Whist.cpp

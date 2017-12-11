@@ -108,6 +108,9 @@ double HPos[] = {300,240,150,60};
 bool Back2BISPressed = false, overButton11 = false;
 double Back2Pos[] = {505,318,90,62};
 
+AI ai1(game,1,0);
+AI ai2(game,2,0);
+AI ai3(game,3,0);
 
 
 
@@ -306,10 +309,8 @@ void AIgameplay(){
   
 
 void drawOption() {
-   cout <<DisplayState<<endl;
 if (DisplayState == 0){
 // draw the button
-  cout <<DisplayState<<endl;
   Button Playgame;
   if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
   else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
@@ -408,7 +409,6 @@ else if (DisplayState ==1){
   drawOption();
 }
 else if(DisplayState == 2){
-  cout <<DisplayState<<endl;
     drawCards();
   }
 else if (DisplayState ==3){
@@ -418,18 +418,14 @@ else if (DisplayState ==3){
     glutPostRedisplay();
 }
 else if(DisplayState == 7){
-
-  cout <<DisplayState<<endl;
   DisplayState=0;
   drawWindow();
   }
 else if(DisplayState == 8){
-  cout <<DisplayState<<endl;
   DisplayState = 1;
     drawOption();
   }
 else if(DisplayState == 4){
-  cout <<DisplayState<<endl;
     drawOption();
 }
 glutSwapBuffers();
