@@ -307,7 +307,9 @@ void drawWindow(){
     for(int i = 0; i < game.get_handLen(0); ++i){
       if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
     }
-    AIgameplay();
+    if(game.getTurn() <= 3 && game.getTurn() >= 1){
+      AIgameplay();
+    }
   }
   glutSwapBuffers();
 }
