@@ -25,14 +25,17 @@ Gamestate.o: Gamestate.cpp Gamestate.h
 Gamestate: Gamestate.o Card.o Deck.o
 	g++ $(OPTS) $(MACOSX_DEFINE) -o Gamestate Gamestate.o Deck.o Card.o
 
+Button.o: Button.cpp Button.h
+	g++ $(OPTS) $(MACOSX_DEFINE) -c Button.cpp
+
 hand.o: hand.h hand.cpp
 	g++ $(OPTS) $(MACOSX_DEFINE) -c hand.cpp
 
 Deck.o: Deck.h Deck.cpp
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Deck.cpp
 
-whist:  texture.o Gamestate.o Deck.o Card.o hand.o Whist.o AI.o
-	g++ $(OPTS) -o Whist Whist.o texture.o Card.o Gamestate.o hand.o Deck.o AI.o $(LIBS)
+whist:	Whist.o texture.o Gamestate.o Deck.o Card.o hand.o Button.o
+	g++ $(OPTS) -o Whist Whist.o texture.o Card.o Gamestate.o hand.o Deck.o Button.o $(LIBS)
 
 Whist.o:	Whist.cpp texture.h
 	g++ $(OPTS) $(MACOSX_DEFINE) -c Whist.cpp
