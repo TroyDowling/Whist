@@ -128,13 +128,13 @@ void Gamestate::deal()
 }
 
 void Gamestate::chkWinner(){
-  int ledSuit = cardsPlayed[0]->get_suit();
+  int ledSuit = cards_played[0]->get_suit();
   int highVal = 0;
   int highPlayer = 0;
   for(int i = 0; i < 4; i++){
-    if(cardsPlayed[i]->get_suit() == ledSuit){
-      if(cardsPlayed[i]->get_val() >= highVal){
-	highVal = cardsPlayed[i]->getVal;
+    if(cards_played[i]->get_suit() == ledSuit){
+      if(cards_played[i]->get_val() >= highVal){
+	highVal = cards_played[i]->get_val();
 	highPlayer = i;
       }
     }
