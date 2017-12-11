@@ -126,3 +126,22 @@ void Gamestate::deal()
 	  hands[3]->addCard(cards[i]);
 	}
 }
+
+void Gamestate::chkWinner(){
+  int ledSuit = cardsPlayed[0]->get_suit();
+  int highVal = 0;
+  int highPlayer = 0;
+  for(int i = 0; i < 4; i++){
+    if(cardsPlayed[i]->get_suit() == ledSuit){
+      if(cardsPlayed[i]->get_val() >= highVal){
+	highVal = cardsPlayed[i]->getVal;
+	highPlayer = i;
+      }
+    }
+  }
+  if(highPlayer == 0 || highPlayer == 2){
+    score[0]++;
+  }
+  else score[1]++;
+}
+      

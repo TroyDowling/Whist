@@ -75,6 +75,9 @@ class Gamestate
 	    else numTurns = 0;
 	  }
 	}
+
+	//Finds the winner of the trick and adds score
+	void chkWinner();
 	
 	//Is this play a legal move?
 	bool isLegal(Card c,int s);
