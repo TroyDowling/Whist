@@ -44,6 +44,7 @@ class Gamestate
 	void set_allWhoPlayed(int i, int v){allWhoPlayed[i]=v;}
 
 	//This trick (renamed slightly for convenience)
+	int numTurns = 0;
 	Card * cards_played[4]; 
 	int who_played[4];
 	void set_cards_played(int i, Card* c){cards_played[i] = c;}
@@ -62,7 +63,17 @@ class Gamestate
 	int getTurn(){ return turn; }
 
 	//Increments the turn, or if it is == 3, reset it.
-	void nextTurn(){ if(turn != 3) turn++; else turn = 0;}       
+	void nextTurn(){
+	  if(turn != 3){
+	    turn++;
+	    if(numTurns != 3) numTurns++;
+	    else numTurns = 0;
+	  }
+	  else{
+	    turn = 0;
+	    if(numTurns != 3) numTurns++;
+	    else numTurns = 0;
+	  }       
 	
 	//Is this play a legal move?
 	bool isLegal(Card c,int s);
