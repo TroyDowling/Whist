@@ -45,3 +45,6 @@ texture.o:	texture.cpp texture.h
 
 tarball: $(TARBALL_FILES)
 	tar cfz Whist.tar.gz $(TARBALL_FILES)
+
+clear:
+	rm *.o
