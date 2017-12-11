@@ -283,6 +283,9 @@ void AIgameplay(){
   }
 }
 
+void detWinner(){
+  
+
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
   drawTexture(bkg, 0,0, game_Width, game_Height, 1, 0);
