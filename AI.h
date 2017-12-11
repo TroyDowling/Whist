@@ -2,13 +2,12 @@
 #define _AI_H_
 #include "Gamestate.h"
 #include "Card.h"
-#include "Hand.h"
+#include "hand.h"
 
 class AI
 {
-        //This is the array of cards in the AI hand
-	Card * handarr[13];
-	int len;
+	int len, id, partner;
+	bool invited = false;
 
 	/* There will be different algorithms in
 	 * makePlay that correspond to difficulty
@@ -17,14 +16,10 @@ class AI
 	short difficulty;
 
 	public:
-	AI(){hand = 0; difficulty = 0;}
 	//gamestate reference, hand ID, diff
-	AI(Gamestate, int, short);
-	AI(Card**, short);
-	AI(Hand, short);
+	AI(const Gamestate&, int, short);
 	
-	Card * makePlay(int suitLed, Card ** cardsPlayed);
-}
-
+	Card * makePlay(Gamestate&);
+};
 
 #endif //_AI_H_

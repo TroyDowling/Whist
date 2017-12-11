@@ -20,7 +20,7 @@ class Gamestate
 	int score[2];
 
 	//makes code easier to read
-	enum players {p1=0, p2, p3, p4} turn;
+        int turn;
 
 	//Deck class
 	Deck deck;
@@ -39,13 +39,15 @@ class Gamestate
 	
 	//Entire round
 	Card * allCardsPlayed[52];
-	int allWhoPlayed[52]; // use enum turn
+	int allWhoPlayed[52];
+	void set_allCardPlayed(int i, Card* c){allCardsPlayed[i]=c;}
+	void set_allWhoPlayed(int i, int v){allWhoPlayed[i]=v;}
 
 	//This trick (renamed slightly for convenience)
-	//Card * handCardsPlayed[4];
-	//int handWhoPlayed[4];
 	Card * cards_played[4]; 
-	int who_played[4]; // use enum turn
+	int who_played[4];
+	void set_cards_played(int i, Card* c){cards_played[i] = c;}
+	void set_who_played(int i, int v){who_played[i] = v;}
 
 	//Needs to record the score, and the hands
 	void save_game(int);
@@ -58,7 +60,9 @@ class Gamestate
 
 	//Returns the current turn.
 	int getTurn(){ return turn; }
-       
+
+	//Increments the turn, or if it is == 3, reset it.
+	void nextTurn(){ if(turn != 3) turn++; else turn = 0;}       
 	
 	//Is this play a legal move?
 	bool isLegal(Card c,int s);
