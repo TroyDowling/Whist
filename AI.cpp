@@ -1,4 +1,5 @@
 #include "AI.h"
+using namespace std;
 
 AI::AI(const Gamestate & game, int handid, short diff)
 {

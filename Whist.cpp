@@ -88,10 +88,11 @@ double buttonPos2[] = { 300, 230,   150, 60 };
 AI nameofAI(game, handid, difficulty) difficulty is 0 - 3
 
 */
+
 //Difficulty is 0 - 3
-AI ai1(game, 1, 0); // Right(?) AI
+AI ai1(game, 1, 0); // Left(?) AI
 AI ai2(game, 2, 0); // Partner AI
-AI ai3(game, 3, 0); // Left(?) AI
+AI ai3(game, 3, 0); // Right(?) AI
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -261,21 +262,24 @@ void drawCards(int over = -1){
   }
 }
 
+
 //This is where the AIs will make their plays, and their cards will be assigned to / removed from
 //  the relevant places. Does not function currently.
 void AIgameplay(){
   switch(game.getTurn()){
   case 1:
-    cout<< "It is the Left AI's turn." << endl;
+    cout<< "It is the LEFT AI's turn." << endl;
     game.set_cards_played(game.getTurn(), ai1.makePlay(game));
     game.nextTurn();
     break;
   case 2:
     cout<<"It is the PARTNER AI's turn." << endl;
+    game.set_cards_played(game.getTurn(), ai2.makePlay(game));
     game.nextTurn();
     break;
   case 3:
-    cout<<"It is the Right AI's turn." << endl;
+    cout<<"It is the RIGHT AI's turn." << endl;
+    game.set_cards_played(game.getTurn(), ai3.makePlay(game));
     game.nextTurn();
     break;
   default:
@@ -364,7 +368,7 @@ void mouse(int button, int state, int x, int y){
 	  for(int i = 0; i < 13; i++){
 	    if(game.get_card(0,i)->mouse_over(x,y)){
 	      cardMatch = i;
-	      cout << "Card Removed. " << cardMatch << endl;
+	      game.set_cards_played(game.getTurn(),game.get_card(0,i));
 	      game.nextTurn();
 	    }
 	    //else{ cout << "Card not removed (Conditions not met)." << endl; }
