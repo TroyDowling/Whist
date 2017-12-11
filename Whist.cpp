@@ -90,9 +90,9 @@ AI nameofAI(game, handid, difficulty) difficulty is 0 - 3
 */
 
 //Difficulty is 0 - 3
-AI ai1(game, 1, 0);
-AI ai2(game, 2, 0);
-AI ai3(game, 3, 0);
+AI ai1(game, 1, 0); // Left(?) AI
+AI ai2(game, 2, 0); // Partner AI
+AI ai3(game, 3, 0); // Right(?) AI
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -262,15 +262,27 @@ void drawCards(int over = -1){
   }
 }
 
-//Turns are entirely linear, taken in a counterclockwise fashion.
+
 //This is where the AIs will make their plays, and their cards will be assigned to / removed from
 //  the relevant places. Does not function currently.
 void AIgameplay(){
-  //switch(game.getTurn()){
-  //case 1:
-  //cout<< "It is the RIGHT AI's turn." << endl;
+  switch(game.getTurn()){
+  case 1:
+    cout<< "It is the RIGHT AI's turn." << endl;
   //game.cards_played[1] = ai1.makePlay(game);
-  //}
+    game.nextTurn();
+    break;
+  case 2:
+    cout<<"It is the PARTNER AI's turn." << endl;
+    game.nextTurn();
+    break;
+  case 3:
+    cout<<"It is the LEFT AI's turn." << endl;
+    game.nextTurn();
+    break;
+  default:
+    break;
+  }
 }
 
 void drawWindow(){
@@ -394,7 +406,7 @@ void mouse(int button, int state, int x, int y){
 // the mouse_motion function is called when the mouse is being dragged,
 //   and gives the current location of the mouse
 void mouse_motion(int x, int y){
-  //The mouse is moving and a button is down?!?! Will be integrated in time.
+  //The mouse is moving and a button is down?!?! Will likely not be integrated.
   mouseX = x, mouseY = y;
   glutPostRedisplay();
 }
