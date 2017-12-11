@@ -17,6 +17,7 @@ class AI
 
 	public:
 	//gamestate reference, hand ID, diff
+
 	AI(const Gamestate&, int, short);
 	
 	Card * makePlay(Gamestate&);
