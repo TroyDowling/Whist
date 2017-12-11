@@ -287,20 +287,27 @@ void drawCards(int over = -1){
 //This is where the AIs will make their plays, and their cards will be assigned to / removed from
 //  the relevant places. Does not function currently.
 void AIgameplay(){
+  Card * playedCard;
   switch(game.getTurn()){
   case 1:
-    cout<< "It is the LEFT AI's turn." << endl;
-    game.set_cards_played(game.getTurn(), ai1.makePlay(game));
+    //cout<< "It is the LEFT AI's turn." << endl;
+    playedCard = ai1.makePlay(game);
+    game.set_cards_played(game.getTurn(), playedCard);
+    game.get_hand(1)->removeCard(playedCard);
     game.nextTurn();
     break;
   case 2:
-    cout<<"It is the PARTNER AI's turn." << endl;
-    game.set_cards_played(game.getTurn(), ai2.makePlay(game));
+    //cout<<"It is the PARTNER AI's turn." << endl;
+    playedCard = ai2.makePlay(game);
+    game.set_cards_played(game.getTurn(), playedCard);
+    game.get_hand(2)->removeCard(playedCard);
     game.nextTurn();
     break;
   case 3:
-    cout<<"It is the RIGHT AI's turn." << endl;
-    game.set_cards_played(game.getTurn(), ai3.makePlay(game));
+    //cout<<"It is the RIGHT AI's turn." << endl;
+    playedCard = ai3.makePlay(game);
+    game.set_cards_played(game.getTurn(), playedCard);
+    game.get_hand(3)->removeCard(playedCard);
     game.nextTurn();
     break;
   default:
@@ -403,35 +410,37 @@ else if (DisplayState ==4){
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
-if(DisplayState == 0){
+  if(DisplayState == 0){
        drawOption();
-}
-else if (DisplayState ==1){
-  drawOption();
-}
-else if(DisplayState == 2){
-  drawCards();
-  for(int i = 0; i < game.get_handLen(0); ++i){
-    if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
   }
- }
-else if (DisplayState ==3){
+  else if (DisplayState ==1){
+    drawOption();
+  }
+  else if(DisplayState == 2){
+    drawTexture(bkg,0,0,game_Width, game_Height, 1, 0);
+    drawCards();
+    for(int i = 0; i < game.get_handLen(0); ++i){
+      if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
+    }
+    AIgameplay();
+  }
+  else if (DisplayState ==3){
     int win = glutGetWindow();
     glutDestroyWindow(win);
     exit(0);
     glutPostRedisplay();
-}
-else if(DisplayState == 7){
-  DisplayState=0;
-  drawWindow();
   }
-else if(DisplayState == 8){
-  DisplayState = 1;
+  else if(DisplayState == 7){
+    DisplayState=0;
+    drawWindow();
+  }
+  else if(DisplayState == 8){
+    DisplayState = 1;
     drawOption();
   }
-else if(DisplayState == 4){
+  else if(DisplayState == 4){
     drawOption();
-}
+  }
 glutSwapBuffers();
 
 }

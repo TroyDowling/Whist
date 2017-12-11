@@ -41,3 +41,14 @@ void Hand::removeCard(int c)
     }
   --length;
 }
+
+void Hand::removeCard(Card * c)
+{
+  int index;
+  for(int i = 0; i < length; ++i){
+    if(c->get_val() == hand[i]->get_val() && c->get_suit() == hand[i]->get_suit()){
+      index = i;
+    }
+  }
+  removeCard(index);
+}

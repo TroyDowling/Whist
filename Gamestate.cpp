@@ -145,3 +145,15 @@ void Gamestate::chkWinner(){
   else score[1]++;
 }
       
+void Gamestate::nextTurn(){
+  if(turn != 3){
+    turn++;
+    if(numTurns != 3) numTurns++;
+    else numTurns = 0;
+  }
+  else{
+    turn = 0;
+    if(numTurns != 3) numTurns++;
+    else numTurns = 0;
+  }
+}

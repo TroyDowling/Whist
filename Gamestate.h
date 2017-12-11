@@ -63,18 +63,7 @@ class Gamestate
 	int getTurn(){ return turn; }
 
 	//Increments the turn, or if it is == 3, reset it.
-	void nextTurn(){
-	  if(turn != 3){
-	    turn++;
-	    if(numTurns != 3) numTurns++;
-	    else numTurns = 0;
-	  }
-	  else{
-	    turn = 0;
-	    if(numTurns != 3) numTurns++;
-	    else numTurns = 0;
-	  }
-	}
+	void nextTurn();
 
 	//Finds the winner of the trick and adds score
 	void chkWinner();
