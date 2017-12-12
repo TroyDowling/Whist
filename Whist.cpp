@@ -616,7 +616,7 @@ void mouse(int button, int state, int x, int y){
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
   mouseX = x; mouseY = y;
-  if(userTurn) glutPostRedisplay();
+  glutPostRedisplay();
 }
 //}
 
