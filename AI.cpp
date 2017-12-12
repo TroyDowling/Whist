@@ -15,6 +15,7 @@ Card * AI::makePlay(Gamestate & game)
   int play_suit = 0, max_val = 0, min_val = 0, handlen = 0;
   handlen = game.get_handLen(id);
   Card * play_card;
+  bool can_win; //If there 
   /* 
    * Using the reference to our Gamestate
    * makes this part a lot easier.
@@ -156,6 +157,12 @@ Card * AI::makePlay(Gamestate & game)
       }
       //Looks like my partner has not invited yet, or I can't play that suit let's do this!
       for(int hand_card = 0; hand_card < handlen; ++hand_card){
+	play_card = game.get_card(id, hand_card);
+	//I have an ace, and I'm going to play it
+	if(play_card->get_val() == 12){
+	  return play_card;
+	}
+	
       }
     }
     //This AI is not going first this round
