@@ -317,93 +317,94 @@ void AIgameplay(){
   
 
 void drawOption() {
-if (DisplayState == 0){
-// draw the button
-  Button Playgame;
-  if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Playgame.drawButton(PlaygamePos);
-//draw button2
-  Button Option;
-  if ( button2IsPressed ) glColor3f(1., 0., 0.);  // make it green
-  else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(.0, .70, .1);  // white
-  Option.drawButton(OptionPos);
-  //Button funtion
-  Button Exit;
-  if ( button3IsPressed) glColor3f(1., 0., 0.);
-  else if (overButton3) glColor3f(.75, .75, .75);
-  else glColor3f(0., .65, 0.1);
-  Exit.drawButton(ExitPos); 
-  //draw stuff
-  drawTexture(whistT,  94,30,    400, 150, .9); // texID,   x,y,    width, height
-  drawTexture(w2T,  500,210,    300, 200, .45);
-//main menu buttons textures
-  drawTexture(w3T,  290,115,    170, 70 );
-  drawTexture(oT,  302, 203,    145, 50 );
-  drawTexture(eT,  300, 285,    152, 50 ); 
-}
-if (DisplayState == 1){
-  Button Sound;
-  if ( SouBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Sound.drawButton(SouPos);
+  if (DisplayState == 0){
+    // draw the button
+    Button Playgame;
+    if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Playgame.drawButton(PlaygamePos);
+    //draw button2
+    Button Option;
+    if ( button2IsPressed ) glColor3f(1., 0., 0.);  // make it green
+    else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(.0, .70, .1);  // white
+    Option.drawButton(OptionPos);
+    //Button funtion
+    Button Exit;
+    if ( button3IsPressed) glColor3f(1., 0., 0.);
+    else if (overButton3) glColor3f(.75, .75, .75);
+    else glColor3f(0., .65, 0.1);
+    Exit.drawButton(ExitPos); 
+    //draw stuff
+    drawTexture(whistT,  94,30,    400, 150, .9); // texID,   x,y,    width, height
+    drawTexture(w2T,  500,210,    300, 200, .45);
+    //main menu buttons textures
+    drawTexture(w3T,  290,115,    170, 70 );
+    drawTexture(oT,  302, 203,    145, 50 );
+    drawTexture(eT,  300, 285,    152, 50 ); 
+  }
+  if (DisplayState == 1){
+    cout << "HERE" << endl;
+    Button Sound;
+    if ( SouBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Sound.drawButton(SouPos);
+    cout << "HERE" << endl;
+    Button Ai;
+    if ( AiBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Ai.drawButton(AiPos);
+    
+    Button Con;
+    if ( ConBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Con.drawButton(ConPos);
+    
+    Button Back;
+    if ( BackBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Back.drawButton(BackPos);
+    //button texture
+    drawTexture(dT,  305, 85, 142, 50);
+    drawTexture(mT,  305, 165, 142, 50);
+    drawTexture(bT,  509, 324,  82, 50 );
+  }
 
-  Button Ai;
-  if ( AiBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Ai.drawButton(AiPos);
-
-  Button Con;
-  if ( ConBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Con.drawButton(ConPos);
-
-  Button Back;
-  if ( BackBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Back.drawButton(BackPos);
-  //button texture
-  drawTexture(dT,  305, 85, 142, 50);
-  drawTexture(mT,  305, 165, 142, 50);
-  drawTexture(bT,  509, 324,  82, 50 );
-}
-
-else if (DisplayState ==4){
-  Button Easy;
-  if ( EBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Easy.drawButton(EPos);
-
-  Button Medium;
-  if ( MBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Medium.drawButton(MPos);
-
-  Button Hard;
-  if ( HBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Hard.drawButton(HPos);
-
-  Button Back2;
-  if ( Back2BISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Back2.drawButton(Back2Pos);
-  //button textures
-  drawTexture(deT,  305, 85, 142, 50);
-  drawTexture(dmT,  305, 165,  142, 50 );
-  drawTexture(dhT,  305, 245, 142, 50);
-  drawTexture(bT,  509, 324,  82, 50 );
-}
+  else if (DisplayState ==4){
+    Button Easy;
+    if ( EBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Easy.drawButton(EPos);
+    
+    Button Medium;
+    if ( MBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Medium.drawButton(MPos);
+    
+    Button Hard;
+    if ( HBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Hard.drawButton(HPos);
+    
+    Button Back2;
+    if ( Back2BISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Back2.drawButton(Back2Pos);
+    //button textures
+    drawTexture(deT,  305, 85, 142, 50);
+    drawTexture(dmT,  305, 165,  142, 50 );
+    drawTexture(dhT,  305, 245, 142, 50);
+    drawTexture(bT,  509, 324,  82, 50 );
+  }
 }
     
 
@@ -495,112 +496,113 @@ void mouse(int button, int state, int x, int y){
 	  }
 	}
       }
-    else if (DisplayState == 0){
-	   if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
-      else buttonIsPressed = false;
-      if ( onButton(x,y, OptionPos) ) button2IsPressed = true;
-      else button2IsPressed = false;
-      if ( onButton(x,y, ExitPos) ) button3IsPressed = true;
-      else button3IsPressed = false;
-        }
-
-    else if (DisplayState == 1){
-      if ( onButton(x,y, SouPos) ) SouBISPressed = true;
-      else  SouBISPressed = false;
-      if ( onButton(x,y, AiPos) ) AiBISPressed = true;
-      else AiBISPressed = false; 
-      if ( onButton(x,y, ConPos) ) ConBISPressed = true;
-      else ConBISPressed = false; 
-      if ( onButton(x,y, BackPos) ) BackBISPressed = true;
-      else BackBISPressed = false; 
-    }
+      else if (DisplayState == 0){
+	if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
+	else buttonIsPressed = false;
+	if ( onButton(x,y, OptionPos) ) button2IsPressed = true;
+	else button2IsPressed = false;
+	if ( onButton(x,y, ExitPos) ) button3IsPressed = true;
+	else button3IsPressed = false;
+      }
+      
+      else if (DisplayState == 1){
+	if ( onButton(x,y, SouPos) ) SouBISPressed = true;
+	else  SouBISPressed = false;
+	if ( onButton(x,y, AiPos) ) AiBISPressed = true;
+	else AiBISPressed = false; 
+	if ( onButton(x,y, ConPos) ) ConBISPressed = true;
+	else ConBISPressed = false; 
+	if ( onButton(x,y, BackPos) ) BackBISPressed = true;
+	else BackBISPressed = false; 
+      }
       else if (DisplayState == 4){
-      if ( onButton(x,y, EPos) ) EBISPressed = true;
-      else  EBISPressed = false;
-      if ( onButton(x,y, MPos) ) MBISPressed = true;
-      else MBISPressed = false; 
-      if ( onButton(x,y, HPos) ) HBISPressed = true;
-      else HBISPressed = false; 
-      if ( onButton(x,y, Back2Pos) ) Back2BISPressed = true;
-      else Back2BISPressed = false; 
-    
-
+	if ( onButton(x,y, EPos) ) EBISPressed = true;
+	else  EBISPressed = false;
+	if ( onButton(x,y, MPos) ) MBISPressed = true;
+	else MBISPressed = false; 
+	if ( onButton(x,y, HPos) ) HBISPressed = true;
+	else HBISPressed = false; 
+	if ( onButton(x,y, Back2Pos) ) Back2BISPressed = true;
+	else Back2BISPressed = false; 
+	
+	
+      }
     }
-  }
     else{
       //mouseIsDragging = false;
-    	// the user just let go the mouse-- do something
-      if ( onButton(x,y, PlaygamePos) && buttonIsPressed ){
+      // the user just let go the mouse-- do something
+      if ( onButton(x,y, PlaygamePos) && buttonIsPressed){
         DisplayState=2;
         game.deal();
         loadUserText();
-          cout << "PlayGame Button press." << endl;
+	cout << "PlayGame Button press." << endl;
       }
       buttonIsPressed = false;
-
+      
       if ( onButton(x,y,OptionPos) && button2IsPressed ){
         DisplayState=1;
         cout << "Options Button press." << endl;
       }
       button2IsPressed = false;
-
+      
       if ( onButton(x,y,ExitPos) && button3IsPressed ){
         DisplayState=3;
         cout << "Exit Button press." << endl;
       }
       button3IsPressed = false;
-
+      
       if ( onButton(x,y,SouPos) && SouBISPressed ){
-          cout << "Sound Button press." << endl;
+	cout << "Sound Button press." << endl;
       }
       SouBISPressed = false;
-
+      
       if ( onButton(x,y,AiPos) && AiBISPressed ){
         DisplayState = 4;
-          cout << "Ai Button press." << endl;
-          cout <<DisplayState<<endl;
+	cout << "Ai Button press." << endl;
+	cout <<DisplayState<<endl;
       }
       AiBISPressed = false;
-
+      
       if ( onButton(x,y,ConPos) && ConBISPressed ){
-          cout << "Control Button press." << endl;
+	cout << "Control Button press." << endl;
       }
       ConBISPressed = false;
-
+      
       if ( onButton(x,y,BackPos) && BackBISPressed ){
         DisplayState=7;
-          cout << "Back Button press." << endl;
+	cout << "Back Button press." << endl;
       }
       BackBISPressed = false;
-
+      
       //difficulty button
       if ( onButton(x,y,EPos) && EBISPressed ){
-          cout << "Easy Difficulty Button press." << endl;
+	cout << "Easy Difficulty Button press." << endl;
       }
       EBISPressed = false;
-
+      
       if ( onButton(x,y,MPos) && MBISPressed ){
-          cout << "Medium difficulty Button press." << endl;
+	cout << "Medium difficulty Button press." << endl;
       }
       MBISPressed = false;
-
+      
       if ( onButton(x,y,HPos) && HBISPressed ){
-          cout << "Hard difficulty Button press." << endl;
-          cout <<DisplayState<<endl;
+	cout << "Hard difficulty Button press." << endl;
+	cout <<DisplayState<<endl;
       }
       HBISPressed = false;
-
+      
       if ( onButton(x,y,Back2Pos) && Back2BISPressed ){
         DisplayState=8;
-          cout << "Back2 Button press." << endl;
+	cout << "Back2 Button press." << endl;
       }
       Back2BISPressed = false;
-
-      if(game.get_card(0,cardMatch)->mouse_over(x,y)){
+      
+      if(game.get_card(0,cardMatch)->mouse_over(x,y) && DisplayState == 2){
 	game.cards_played[0] = game.get_card(0,cardMatch);
 	game.get_hand(0)->removeCard(cardMatch);
       }
     }
+    cout << "HERE" << endl;
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
   mouseX = x; mouseY = y;
