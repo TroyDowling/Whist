@@ -27,6 +27,7 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 #include "texture.h"
 #include "hand.h"
 #include "AI.h"
+#include <time.h>
 using namespace std;
 //End Imported Libraries(tm)
 
@@ -113,6 +114,7 @@ AI ai1(game,1,0);
 AI ai2(game,2,0);
 AI ai3(game,3,0);
 
+int animationSpeed = 1000; //in milliseconds
 
 
 //A wonderful "borrowed" helper funtion.
@@ -290,23 +292,26 @@ void AIgameplay(){
   Card * playedCard;
   switch(game.getTurn()){
   case 1:
-    //cout<< "It is the LEFT AI's turn." << endl;
+    cout<< "It is the LEFT AI's turn." << endl;
     playedCard = ai1.makePlay(game);
     game.set_cards_played(game.getTurn(), playedCard);
+    cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
     game.get_hand(1)->removeCard(playedCard);
     game.nextTurn();
     break;
   case 2:
-    //cout<<"It is the PARTNER AI's turn." << endl;
+    cout<<"It is the PARTNER AI's turn." << endl;
     playedCard = ai2.makePlay(game);
     game.set_cards_played(game.getTurn(), playedCard);
+    cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
     game.get_hand(2)->removeCard(playedCard);
     game.nextTurn();
     break;
   case 3:
-    //cout<<"It is the RIGHT AI's turn." << endl;
+    cout<<"It is the RIGHT AI's turn." << endl;
     playedCard = ai3.makePlay(game);
     game.set_cards_played(game.getTurn(), playedCard);
+    cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
     game.get_hand(3)->removeCard(playedCard);
     game.nextTurn();
     break;
@@ -345,13 +350,11 @@ void drawOption() {
     drawTexture(eT,  300, 285,    152, 50 ); 
   }
   if (DisplayState == 1){
-    cout << "HERE" << endl;
     Button Sound;
     if ( SouBISPressed ) glColor3f(1., 0., 0.);  // make it red
     else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
     else glColor3f(0.0, .65, .1);  // gray
     Sound.drawButton(SouPos);
-    cout << "HERE" << endl;
     Button Ai;
     if ( AiBISPressed ) glColor3f(1., 0., 0.);  // make it red
     else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
@@ -462,7 +465,7 @@ void keyboard(unsigned char c, int x, int y){
 }
 
 void reshape(int w, int h){
-	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+  glViewport(0, 0, (GLsizei) w, (GLsizei) h);
    game_Width = w;  game_Height = h;
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
@@ -489,10 +492,7 @@ void mouse(int button, int state, int x, int y){
 	  for(int i = 0; i < 13; i++){
 	    if(game.get_card(0,i)->mouse_over(x,y)){
 	      cardMatch = i;
-	      game.set_cards_played(game.getTurn(),game.get_card(0,i));
-	      game.nextTurn();
 	    }
-	    //else{ cout << "Card not removed (Conditions not met)." << endl; }
 	  }
 	}
       }
@@ -531,6 +531,14 @@ void mouse(int button, int state, int x, int y){
     else{
       //mouseIsDragging = false;
       // the user just let go the mouse-- do something
+      if(DisplayState == 2){
+	if(game.get_card(0,cardMatch)->mouse_over(x,y)){
+	  game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
+	  game.cards_played[0] = game.get_card(0,cardMatch);
+	  game.get_hand(0)->removeCard(cardMatch);
+	  game.nextTurn();
+	}
+      }
       if ( onButton(x,y, PlaygamePos) && buttonIsPressed){
         DisplayState=2;
         game.deal();
@@ -559,7 +567,6 @@ void mouse(int button, int state, int x, int y){
       if ( onButton(x,y,AiPos) && AiBISPressed ){
         DisplayState = 4;
 	cout << "Ai Button press." << endl;
-	cout <<DisplayState<<endl;
       }
       AiBISPressed = false;
       
@@ -576,18 +583,26 @@ void mouse(int button, int state, int x, int y){
       
       //difficulty button
       if ( onButton(x,y,EPos) && EBISPressed ){
+	ai1.set_diff(0);
+	ai2.set_diff(0);
+	ai3.set_diff(0);
 	cout << "Easy Difficulty Button press." << endl;
       }
       EBISPressed = false;
       
       if ( onButton(x,y,MPos) && MBISPressed ){
+	ai1.set_diff(1);
+	ai2.set_diff(1);
+	ai3.set_diff(1);
 	cout << "Medium difficulty Button press." << endl;
       }
       MBISPressed = false;
       
       if ( onButton(x,y,HPos) && HBISPressed ){
+	ai1.set_diff(2);
+	ai2.set_diff(2);
+	ai3.set_diff(2);
 	cout << "Hard difficulty Button press." << endl;
-	cout <<DisplayState<<endl;
       }
       HBISPressed = false;
       
@@ -596,17 +611,11 @@ void mouse(int button, int state, int x, int y){
 	cout << "Back2 Button press." << endl;
       }
       Back2BISPressed = false;
-      
-      if(game.get_card(0,cardMatch)->mouse_over(x,y) && DisplayState == 2){
-	game.cards_played[0] = game.get_card(0,cardMatch);
-	game.get_hand(0)->removeCard(cardMatch);
-      }
     }
-    cout << "HERE" << endl;
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
   mouseX = x; mouseY = y;
-  glutPostRedisplay();
+  //glutPostRedisplay();
 }
 //}
 
