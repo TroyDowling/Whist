@@ -27,11 +27,11 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 #include "texture.h"
 #include "hand.h"
 #include "AI.h"
-#include <time.h>
+#include <unistd.h>
 using namespace std;
 //End Imported Libraries(tm)
 
-bool mouseIsDragging = false;
+bool mouseIsDragging = false, userTurn = true;
 
 int game_Width = 720;
 int game_Height = 405;
@@ -113,9 +113,6 @@ double Back2Pos[] = {505,318,90,62};
 AI ai1(game,1,0);
 AI ai2(game,2,0);
 AI ai3(game,3,0);
-
-int animationSpeed = 1000; //in milliseconds
-
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -290,6 +287,7 @@ void drawCards(int over = -1){
 //  the relevant places. Does not function currently.
 void AIgameplay(){
   Card * playedCard;
+  userTurn = false;
   switch(game.getTurn()){
   case 1:
     cout<< "It is the LEFT AI's turn." << endl;
@@ -298,6 +296,7 @@ void AIgameplay(){
     cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
     game.get_hand(1)->removeCard(playedCard);
     game.nextTurn();
+    AIgameplay();
     break;
   case 2:
     cout<<"It is the PARTNER AI's turn." << endl;
@@ -306,6 +305,7 @@ void AIgameplay(){
     cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
     game.get_hand(2)->removeCard(playedCard);
     game.nextTurn();
+    AIgameplay();
     break;
   case 3:
     cout<<"It is the RIGHT AI's turn." << endl;
@@ -318,6 +318,7 @@ void AIgameplay(){
   default:
     break;
   }
+  cout << "==========================" << endl;
 }
   
 
@@ -426,7 +427,6 @@ void drawWindow(){
     for(int i = 0; i < game.get_handLen(0); ++i){
       if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
     }
-    AIgameplay();
   }
   else if (DisplayState ==3){
     int win = glutGetWindow();
@@ -537,6 +537,7 @@ void mouse(int button, int state, int x, int y){
 	  game.cards_played[0] = game.get_card(0,cardMatch);
 	  game.get_hand(0)->removeCard(cardMatch);
 	  game.nextTurn();
+	  AIgameplay();
 	}
       }
       if ( onButton(x,y, PlaygamePos) && buttonIsPressed){
@@ -615,7 +616,7 @@ void mouse(int button, int state, int x, int y){
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
   mouseX = x; mouseY = y;
-  //glutPostRedisplay();
+  if(userTurn) glutPostRedisplay();
 }
 //}
 
@@ -625,7 +626,7 @@ void mouse(int button, int state, int x, int y){
 void mouse_motion(int x, int y){
   //The mouse is moving and a button is down?!?! Will likely not be integrated.
   mouseX = x, mouseY = y;
-  glutPostRedisplay();
+  if(userTurn) glutPostRedisplay();
 }
 
 //This function is important, I think.
