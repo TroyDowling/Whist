@@ -17,7 +17,9 @@ class Gamestate
 	protected:
 
         //self explanatory
+        int playTo = 5;
 	int score[2];
+	int overall_score[2];
 
 	//makes code easier to read
         int turn;
@@ -38,6 +40,7 @@ class Gamestate
 	//Constructor (if needed)
 	
 	//Entire round
+	int tricksPlayed = 0;
 	Card * allCardsPlayed[52];
 	int allWhoPlayed[52];
 	void set_allCardPlayed(int i, Card* c){allCardsPlayed[i]=c;}
@@ -67,6 +70,9 @@ class Gamestate
 
 	//Finds the winner of the trick and adds score
 	void chkWinner();
+
+	//Finds the winner of the whole hand, and resets the game, if applicable.
+	void chkWinnerH();
 	
 	//Is this play a legal move?
 	bool isLegal(Card c,int s);
