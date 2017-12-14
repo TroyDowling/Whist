@@ -36,7 +36,7 @@ bool mouseIsDragging = false, userTurn = true;
 int game_Width = 720;
 int game_Height = 405;
 char programName[] = "Whist";
-int whistT,w2T,w3T,oT,eT,dT,bT,mT; //texture IDs
+int whistT,w2T,w3T,oT,eT,dT,bT,mT,gear; //texture IDs
 int deT, dmT, dhT; //difficulty buttons
 double PI = 3.14159264;
 
@@ -44,10 +44,14 @@ int cardMatch = 0;
 
 int mouseX = 0, mouseY = 0;
 
+//0 = stolaf cards, 1 = black, 2 = blue, 3 = red
+int whichcb = 0;
+
 //texture for game background
 int bkg;
 //texture for card back
-int bg;
+//use bg in code, set bg# to bg
+int bg, bg2, bg3, bg4, bg5;
 //textures for hearts
 int hText[13];
 //textures for spades
@@ -328,19 +332,19 @@ void drawOption() {
     Button Playgame;
     if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
     else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
-    else glColor3f(0.0, .65, .1);  // gray
+    else glColor3f(0.0, 0.0, 0.0);  // gray
     Playgame.drawButton(PlaygamePos);
     //draw button2
     Button Option;
     if ( button2IsPressed ) glColor3f(1., 0., 0.);  // make it green
     else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
-    else glColor3f(.0, .70, .1);  // white
+    else glColor3f(.0, 0.0, 0.0);  // white
     Option.drawButton(OptionPos);
     //Button funtion
     Button Exit;
     if ( button3IsPressed) glColor3f(1., 0., 0.);
     else if (overButton3) glColor3f(.75, .75, .75);
-    else glColor3f(0., .65, 0.1);
+    else glColor3f(0.0, 0.0, 0.0);
     Exit.drawButton(ExitPos); 
     //draw stuff
     drawTexture(whistT,  94,30,    400, 150, .9); // texID,   x,y,    width, height
@@ -376,6 +380,7 @@ void drawOption() {
     //button texture
     drawTexture(dT,  305, 85, 142, 50);
     drawTexture(mT,  305, 165, 142, 50);
+    drawTexture(bg,  305, 245, 142, 50);
     drawTexture(bT,  509, 324,  82, 50 );
   }
 
@@ -577,7 +582,16 @@ void mouse(int button, int state, int x, int y){
       AiBISPressed = false;
       
       if ( onButton(x,y,ConPos) && ConBISPressed ){
-	cout << "Control Button press." << endl;
+	if(whichcb < 3){
+	  ++whichcb;
+	}
+	else whichcb = 0;
+	if(whichcb == 0) bg = bg5; //cardback = stolaf
+	else if(whichcb == 1) bg = bg2; //cardback = black
+	else if(whichcb == 2) bg = bg3; //cardback = blue
+	else if(whichcb == 3) bg = bg4; //cardback = red
+	else bg = bg5; //default to ole
+	cout << "Cardback Button press." << endl;
       }
       ConBISPressed = false;
       
@@ -656,7 +670,12 @@ void init(void){
 //Loads all textures, 
 void loadAllTextures(){
 	bg = loadTexture("imgs/cardback.pam");
+	bg2 = loadTexture("imgs/cbblack.pam");
+	bg3 = loadTexture("imgs/cbblue.pam");
+	bg4 = loadTexture("imgs/cbred.pam");
+	bg5 = loadTexture("imgs/cardback.pam");
 	bkg = loadTexture("imgs/gameback.pam");
+	gear = loadTexture("imgs/settings.pam");
 
 	//load textures for clubs
 	for(int i = 0; i < 9; ++i)
