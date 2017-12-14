@@ -27,10 +27,11 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 #include "texture.h"
 #include "hand.h"
 #include "AI.h"
+#include <unistd.h>
 using namespace std;
 //End Imported Libraries(tm)
 
-bool mouseIsDragging = false;
+bool mouseIsDragging = false, userTurn = true;
 
 int game_Width = 720;
 int game_Height = 405;
@@ -108,11 +109,10 @@ double HPos[] = {300,240,150,60};
 bool Back2BISPressed = false, overButton11 = false;
 double Back2Pos[] = {505,318,90,62};
 
+//Sets up AI - Use ai.set_diff(int) to change difficulty later
 AI ai1(game,1,0);
 AI ai2(game,2,0);
 AI ai3(game,3,0);
-
-
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -286,148 +286,165 @@ void drawCards(int over = -1){
 //This is where the AIs will make their plays, and their cards will be assigned to / removed from
 //  the relevant places. Does not function currently.
 void AIgameplay(){
+  Card * playedCard;
+  userTurn = false;
   switch(game.getTurn()){
   case 1:
     cout<< "It is the LEFT AI's turn." << endl;
-    game.set_cards_played(game.getTurn(), ai1.makePlay(game));
+    playedCard = ai1.makePlay(game);
+    game.set_cards_played(game.getTurn(), playedCard);
+    cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+    game.get_hand(1)->removeCard(playedCard);
     game.nextTurn();
+    AIgameplay();
     break;
   case 2:
     cout<<"It is the PARTNER AI's turn." << endl;
-    game.set_cards_played(game.getTurn(), ai2.makePlay(game));
+    playedCard = ai2.makePlay(game);
+    game.set_cards_played(game.getTurn(), playedCard);
+    cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+    game.get_hand(2)->removeCard(playedCard);
     game.nextTurn();
+    AIgameplay();
     break;
   case 3:
     cout<<"It is the RIGHT AI's turn." << endl;
-    game.set_cards_played(game.getTurn(), ai3.makePlay(game));
+    playedCard = ai3.makePlay(game);
+    game.set_cards_played(game.getTurn(), playedCard);
+    cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+    game.get_hand(3)->removeCard(playedCard);
     game.nextTurn();
     break;
   default:
     break;
   }
+  cout << "==========================" << endl;
 }
   
 
 void drawOption() {
-if (DisplayState == 0){
-// draw the button
-  Button Playgame;
-  if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Playgame.drawButton(PlaygamePos);
-//draw button2
-  Button Option;
-  if ( button2IsPressed ) glColor3f(1., 0., 0.);  // make it green
-  else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(.0, .70, .1);  // white
-  Option.drawButton(OptionPos);
-  //Button funtion
-  Button Exit;
-  if ( button3IsPressed) glColor3f(1., 0., 0.);
-  else if (overButton3) glColor3f(.75, .75, .75);
-  else glColor3f(0., .65, 0.1);
-  Exit.drawButton(ExitPos); 
-  //draw stuff
-  drawTexture(whistT,  94,30,    400, 150, .9); // texID,   x,y,    width, height
-  drawTexture(w2T,  500,210,    300, 200, .45);
-//main menu buttons textures
-  drawTexture(w3T,  290,115,    170, 70 );
-  drawTexture(oT,  302, 203,    145, 50 );
-  drawTexture(eT,  300, 285,    152, 50 ); 
-}
-if (DisplayState == 1){
-  Button Sound;
-  if ( SouBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Sound.drawButton(SouPos);
+  if (DisplayState == 0){
+    // draw the button
+    Button Playgame;
+    if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Playgame.drawButton(PlaygamePos);
+    //draw button2
+    Button Option;
+    if ( button2IsPressed ) glColor3f(1., 0., 0.);  // make it green
+    else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(.0, .70, .1);  // white
+    Option.drawButton(OptionPos);
+    //Button funtion
+    Button Exit;
+    if ( button3IsPressed) glColor3f(1., 0., 0.);
+    else if (overButton3) glColor3f(.75, .75, .75);
+    else glColor3f(0., .65, 0.1);
+    Exit.drawButton(ExitPos); 
+    //draw stuff
+    drawTexture(whistT,  94,30,    400, 150, .9); // texID,   x,y,    width, height
+    drawTexture(w2T,  500,210,    300, 200, .45);
+    //main menu buttons textures
+    drawTexture(w3T,  290,115,    170, 70 );
+    drawTexture(oT,  302, 203,    145, 50 );
+    drawTexture(eT,  300, 285,    152, 50 ); 
+  }
+  if (DisplayState == 1){
+    Button Sound;
+    if ( SouBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Sound.drawButton(SouPos);
+    Button Ai;
+    if ( AiBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Ai.drawButton(AiPos);
+    
+    Button Con;
+    if ( ConBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Con.drawButton(ConPos);
+    
+    Button Back;
+    if ( BackBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Back.drawButton(BackPos);
+    //button texture
+    drawTexture(dT,  305, 85, 142, 50);
+    drawTexture(mT,  305, 165, 142, 50);
+    drawTexture(bT,  509, 324,  82, 50 );
+  }
 
-  Button Ai;
-  if ( AiBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Ai.drawButton(AiPos);
-
-  Button Con;
-  if ( ConBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Con.drawButton(ConPos);
-
-  Button Back;
-  if ( BackBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Back.drawButton(BackPos);
-  //button texture
-  drawTexture(dT,  305, 85, 142, 50);
-  drawTexture(mT,  305, 165, 142, 50);
-  drawTexture(bT,  509, 324,  82, 50 );
-}
-
-else if (DisplayState ==4){
-  Button Easy;
-  if ( EBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Easy.drawButton(EPos);
-
-  Button Medium;
-  if ( MBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Medium.drawButton(MPos);
-
-  Button Hard;
-  if ( HBISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Hard.drawButton(HPos);
-
-  Button Back2;
-  if ( Back2BISPressed ) glColor3f(1., 0., 0.);  // make it red
-  else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
-  else glColor3f(0.0, .65, .1);  // gray
-  Back2.drawButton(Back2Pos);
-  //button textures
-  drawTexture(deT,  305, 85, 142, 50);
-  drawTexture(dmT,  305, 165,  142, 50 );
-  drawTexture(dhT,  305, 245, 142, 50);
-  drawTexture(bT,  509, 324,  82, 50 );
-}
+  else if (DisplayState ==4){
+    Button Easy;
+    if ( EBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Easy.drawButton(EPos);
+    
+    Button Medium;
+    if ( MBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Medium.drawButton(MPos);
+    
+    Button Hard;
+    if ( HBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Hard.drawButton(HPos);
+    
+    Button Back2;
+    if ( Back2BISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Back2.drawButton(Back2Pos);
+    //button textures
+    drawTexture(deT,  305, 85, 142, 50);
+    drawTexture(dmT,  305, 165,  142, 50 );
+    drawTexture(dhT,  305, 245, 142, 50);
+    drawTexture(bT,  509, 324,  82, 50 );
+  }
 }
     
 
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);
-if(DisplayState == 0){
+  if(DisplayState == 0){
        drawOption();
-}
-else if (DisplayState ==1){
-  drawOption();
-}
-else if(DisplayState == 2){
-    drawCards();
   }
-else if (DisplayState ==3){
+  else if (DisplayState ==1){
+    drawOption();
+  }
+  else if(DisplayState == 2){
+    drawTexture(bkg,0,0,game_Width, game_Height, 1, 0);
+    drawCards();
+    for(int i = 0; i < game.get_handLen(0); ++i){
+      if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
+    }
+  }
+  else if (DisplayState ==3){
     int win = glutGetWindow();
     glutDestroyWindow(win);
     exit(0);
     glutPostRedisplay();
-}
-else if(DisplayState == 7){
-  DisplayState=0;
-  drawWindow();
   }
-else if(DisplayState == 8){
-  DisplayState = 1;
+  else if(DisplayState == 7){
+    DisplayState=0;
+    drawWindow();
+  }
+  else if(DisplayState == 8){
+    DisplayState = 1;
     drawOption();
   }
-else if(DisplayState == 4){
+  else if(DisplayState == 4){
     drawOption();
-}
+  }
 glutSwapBuffers();
 
 }
@@ -448,7 +465,7 @@ void keyboard(unsigned char c, int x, int y){
 }
 
 void reshape(int w, int h){
-	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+  glViewport(0, 0, (GLsizei) w, (GLsizei) h);
    game_Width = w;  game_Height = h;
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
@@ -471,114 +488,130 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
-	     for(int i = 0; i < 13; i++){
-	      if(game.get_hand(0)->getCard(i)->mouse_over(x,y)){
-	         game.get_hand(0)->removeCard(i);
-	         cout << "Card Removed." << endl;
-		       }
-	       }
+	if(game.getTurn() == 0){
+	  for(int i = 0; i < 13; i++){
+	    if(game.get_card(0,i)->mouse_over(x,y)){
+	      cardMatch = i;
+	    }
+	  }
+	}
       }
-    else if (DisplayState == 0){
-	   if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
-      else buttonIsPressed = false;
-      if ( onButton(x,y, OptionPos) ) button2IsPressed = true;
-      else button2IsPressed = false;
-      if ( onButton(x,y, ExitPos) ) button3IsPressed = true;
-      else button3IsPressed = false;
-        }
-
-    else if (DisplayState == 1){
-      if ( onButton(x,y, SouPos) ) SouBISPressed = true;
-      else  SouBISPressed = false;
-      if ( onButton(x,y, AiPos) ) AiBISPressed = true;
-      else AiBISPressed = false; 
-      if ( onButton(x,y, ConPos) ) ConBISPressed = true;
-      else ConBISPressed = false; 
-      if ( onButton(x,y, BackPos) ) BackBISPressed = true;
-      else BackBISPressed = false; 
-    }
+      else if (DisplayState == 0){
+	if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
+	else buttonIsPressed = false;
+	if ( onButton(x,y, OptionPos) ) button2IsPressed = true;
+	else button2IsPressed = false;
+	if ( onButton(x,y, ExitPos) ) button3IsPressed = true;
+	else button3IsPressed = false;
+      }
+      
+      else if (DisplayState == 1){
+	if ( onButton(x,y, SouPos) ) SouBISPressed = true;
+	else  SouBISPressed = false;
+	if ( onButton(x,y, AiPos) ) AiBISPressed = true;
+	else AiBISPressed = false; 
+	if ( onButton(x,y, ConPos) ) ConBISPressed = true;
+	else ConBISPressed = false; 
+	if ( onButton(x,y, BackPos) ) BackBISPressed = true;
+	else BackBISPressed = false; 
+      }
       else if (DisplayState == 4){
-      if ( onButton(x,y, EPos) ) EBISPressed = true;
-      else  EBISPressed = false;
-      if ( onButton(x,y, MPos) ) MBISPressed = true;
-      else MBISPressed = false; 
-      if ( onButton(x,y, HPos) ) HBISPressed = true;
-      else HBISPressed = false; 
-      if ( onButton(x,y, Back2Pos) ) Back2BISPressed = true;
-      else Back2BISPressed = false; 
-    
-
+	if ( onButton(x,y, EPos) ) EBISPressed = true;
+	else  EBISPressed = false;
+	if ( onButton(x,y, MPos) ) MBISPressed = true;
+	else MBISPressed = false; 
+	if ( onButton(x,y, HPos) ) HBISPressed = true;
+	else HBISPressed = false; 
+	if ( onButton(x,y, Back2Pos) ) Back2BISPressed = true;
+	else Back2BISPressed = false; 
+	
+	
+      }
     }
-  }
     else{
       //mouseIsDragging = false;
-    	// the user just let go the mouse-- do something
-      if ( onButton(x,y, PlaygamePos) && buttonIsPressed ){
+      // the user just let go the mouse-- do something
+      if(DisplayState == 2){
+	if(game.get_card(0,cardMatch)->mouse_over(x,y)){
+	  game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
+	  game.cards_played[0] = game.get_card(0,cardMatch);
+	  game.get_hand(0)->removeCard(cardMatch);
+	  game.nextTurn();
+	  AIgameplay();
+	}
+      }
+      if ( onButton(x,y, PlaygamePos) && buttonIsPressed){
         DisplayState=2;
         game.deal();
         loadUserText();
-          cout << "PlayGame Button press." << endl;
+	cout << "PlayGame Button press." << endl;
       }
       buttonIsPressed = false;
-
+      
       if ( onButton(x,y,OptionPos) && button2IsPressed ){
         DisplayState=1;
         cout << "Options Button press." << endl;
       }
       button2IsPressed = false;
-
+      
       if ( onButton(x,y,ExitPos) && button3IsPressed ){
         DisplayState=3;
         cout << "Exit Button press." << endl;
       }
       button3IsPressed = false;
-
+      
       if ( onButton(x,y,SouPos) && SouBISPressed ){
-          cout << "Sound Button press." << endl;
+	cout << "Sound Button press." << endl;
       }
       SouBISPressed = false;
-
+      
       if ( onButton(x,y,AiPos) && AiBISPressed ){
         DisplayState = 4;
-          cout << "Ai Button press." << endl;
-          cout <<DisplayState<<endl;
+	cout << "Ai Button press." << endl;
       }
       AiBISPressed = false;
-
+      
       if ( onButton(x,y,ConPos) && ConBISPressed ){
-          cout << "Control Button press." << endl;
+	cout << "Control Button press." << endl;
       }
       ConBISPressed = false;
-
+      
       if ( onButton(x,y,BackPos) && BackBISPressed ){
         DisplayState=7;
-          cout << "Back Button press." << endl;
+	cout << "Back Button press." << endl;
       }
       BackBISPressed = false;
-
+      
       //difficulty button
       if ( onButton(x,y,EPos) && EBISPressed ){
-          cout << "Easy Difficulty Button press." << endl;
+	ai1.set_diff(0);
+	ai2.set_diff(0);
+	ai3.set_diff(0);
+	cout << "Easy Difficulty Button press." << endl;
       }
       EBISPressed = false;
-
+      
       if ( onButton(x,y,MPos) && MBISPressed ){
-          cout << "Medium difficulty Button press." << endl;
+	ai1.set_diff(1);
+	ai2.set_diff(1);
+	ai3.set_diff(1);
+	cout << "Medium difficulty Button press." << endl;
       }
       MBISPressed = false;
-
+      
       if ( onButton(x,y,HPos) && HBISPressed ){
-          cout << "Hard difficulty Button press." << endl;
-          cout <<DisplayState<<endl;
+	ai1.set_diff(2);
+	ai2.set_diff(2);
+	ai3.set_diff(2);
+	cout << "Hard difficulty Button press." << endl;
       }
       HBISPressed = false;
-
+      
       if ( onButton(x,y,Back2Pos) && Back2BISPressed ){
         DisplayState=8;
-          cout << "Back2 Button press." << endl;
+	cout << "Back2 Button press." << endl;
       }
       Back2BISPressed = false;
-
     }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
@@ -593,7 +626,7 @@ void mouse(int button, int state, int x, int y){
 void mouse_motion(int x, int y){
   //The mouse is moving and a button is down?!?! Will likely not be integrated.
   mouseX = x, mouseY = y;
-  glutPostRedisplay();
+  if(userTurn) glutPostRedisplay();
 }
 
 //This function is important, I think.

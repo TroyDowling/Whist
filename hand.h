@@ -17,6 +17,7 @@ class Hand{
   void addCard(Card * c);
 	
   void removeCard(int c);
+  void removeCard(Card * c);
 
   Card * getCard(int c){return hand[c];}
 	

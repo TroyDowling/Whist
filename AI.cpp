@@ -15,6 +15,7 @@ Card * AI::makePlay(Gamestate & game)
   int play_suit = 0, max_val = 0, min_val = 0, handlen = 0;
   handlen = game.get_handLen(id);
   Card * play_card;
+  bool can_win; //If there 
   /* 
    * Using the reference to our Gamestate
    * makes this part a lot easier.
@@ -147,7 +148,7 @@ Card * AI::makePlay(Gamestate & game)
 	  }
 	  //Play the lowest card I have in the suit my partner invited in
 	  for(int cardplay = 0; cardplay < handlen; ++cardplay){
-	    play_card = game.get_card(id,0);
+	    play_card = game.get_card(id,cardplay);
 	    if(play_card->get_suit() == play_suit && play_card->get_val() == min_val){
 	      return play_card;
 	    }
@@ -156,16 +157,29 @@ Card * AI::makePlay(Gamestate & game)
       }
       //Looks like my partner has not invited yet, or I can't play that suit let's do this!
       for(int hand_card = 0; hand_card < handlen; ++hand_card){
+	play_card = game.get_card(id, hand_card);
+	//I have an ace, and I'm going to play it
+	if(play_card->get_val() == 12){
+	  return play_card;
+	}
+	//I have a king, if I remember someone playing an ace
+	//then I'll play it. Otherwise I need to guess.
+	else if(play_card->get_val() == 11){
+	  for(int memcard = 0; memcard < 52; ++memcard){
+	    //Someone has played the ace from this suit
+	    if(game.allCardsPlayed[memcard]->get_suit() == play_card->get_suit() && game.allCardsPlayed[memcard]->get_val() == 12){
+	      return play_card;
+	    }
+	  }
+	}
       }
+      //I don't have any kings or aces, so I'm going to just randomly play and hope this works out
+      return game.get_card(id,0);
     }
     //This AI is not going first this round
     else{
       play_suit = game.cards_played[0]->get_suit();
-      for(int i = 0; i < handlen; ++i){
-	if(game.get_card(id,i)->get_suit() == play_suit){
-	  return game.get_card(id,i);
-	}
-      }
+      
     }
   }
 
