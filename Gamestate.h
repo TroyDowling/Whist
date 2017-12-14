@@ -74,6 +74,9 @@ class Gamestate
 	//Finds the winner of the whole hand, and resets the game, if applicable.
 	void chkWinnerH();
 	
+	//Empties all hands
+	void emptyHands();
+
 	//Is this play a legal move?
 	bool isLegal(Card c,int s);
 	

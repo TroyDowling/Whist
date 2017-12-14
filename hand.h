@@ -10,8 +10,8 @@ class Hand{
    * of cards in this hand.
    *
    */
-  Card* hand[13];
  public:
+  Card* hand[13];
   Hand();
 
   void addCard(Card * c);
