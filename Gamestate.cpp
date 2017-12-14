@@ -141,10 +141,52 @@ void Gamestate::chkWinner(){
   }
   if(highPlayer == 0 || highPlayer == 2){
     score[0]++;
+    cout << "Team PLAYER takes the trick! Their score: " << score[0] << endl;
+    if(tricksPlayed < 13) tricksPlayed++;
+    else tricksPlayed = 0;
   }
-  else score[1]++;
+  else{
+    score[1]++;
+    cout << "Team AI takes the trick! Their score: " << score[1] << endl;
+    if(tricksPlayed < 13) tricksPlayed++;
+    else tricksPlayed = 0;
+  }
 }
-      
+
+void Gamestate::chkWinnerH(){
+  if(overall_score[0] < playTo && overall_score[1] < playTo){
+    if(score[0] < score[1]){
+      overall_score[1]++;
+      cout << "Team AI wins the hand! Congratulations!" << endl;
+      cout << "Their overall score is now: " << overall_score[1] << endl;
+      deck.shuffle();
+      cout << "deck shuffled" << endl;
+      deal();
+      cout << "deck dealt" << endl;
+    }
+    else{
+      overall_score[0]++;
+      cout << "Team PLAYER wins the hand! Congratulations!" << endl;
+      cout << "Their overall score is now: " << overall_score[0] << endl;
+      deck.shuffle();
+      cout << "deck shuffled" << endl;
+      deal();
+      cout << "deck dealt" << endl;
+    }
+  }
+  else{
+    if(overall_score[0] == 5){
+      cout << "Team PLAYER wins the game! GG!" << endl;
+    }
+    else if(overall_score[1] == 5){
+      cout << "Team AI wins the game! GG!" << endl;
+    }
+    cout << "Final score: " << endl;
+    cout << "Team PLAYER: " << overall_score[0] << endl;
+    cout << "Team AI: " << overall_score[1] << endl;
+  }    
+}
+ 
 void Gamestate::nextTurn(){
   if(turn != 3){
     turn++;

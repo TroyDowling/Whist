@@ -284,7 +284,7 @@ void drawCards(int over = -1){
 
 
 //This is where the AIs will make their plays, and their cards will be assigned to / removed from
-//  the relevant places. Does not function currently.
+//  the relevant places.
 void AIgameplay(){
   Card * playedCard;
   userTurn = false;
@@ -538,6 +538,11 @@ void mouse(int button, int state, int x, int y){
 	  game.get_hand(0)->removeCard(cardMatch);
 	  game.nextTurn();
 	  AIgameplay();
+	  game.chkWinner();
+	  cout << "Tricks played so far: " << game.tricksPlayed << endl;
+	  if(game.tricksPlayed == 13){
+	    game.chkWinnerH();
+	  }
 	}
       }
       if ( onButton(x,y, PlaygamePos) && buttonIsPressed){
@@ -726,7 +731,7 @@ void init_gl_window(){
   glutCreateWindow(programName);
   init();
  
-  whistT= loadTexture("imgs/whist1.pam"); // key to textures:  load them!
+  //whistT= loadTexture("imgs/whist1.pam"); // key to textures:  load them!
   w2T= loadTexture("imgs/w2.pam");
 
   w3T= loadTexture("imgs/p1.pam");
