@@ -158,6 +158,7 @@ void Gamestate::emptyHands(){
     for(int j = 0; j < 13; j++){
       hands[i]->hand[j] = 0;
     }
+    hands[i]->setLen(13);
   }
 }
 

@@ -416,7 +416,7 @@ void drawOption() {
   }
 }
     
-
+void loadAllTextures();
 
 void drawWindow(){
   glClear(GL_COLOR_BUFFER_BIT);

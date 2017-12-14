@@ -22,6 +22,7 @@ class Hand{
   Card * getCard(int c){return hand[c];}
 	
   int getLen(){return length;}
+  void setLen(int l){length = l;}
   Card ** getHand(){return hand;}
   Hand & operator= (const Hand&);
 };
