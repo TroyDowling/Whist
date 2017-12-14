@@ -153,6 +153,14 @@ void Gamestate::chkWinner(){
   }
 }
 
+void Gamestate::emptyHands(){
+  for(int i = 0; i < 4; i++){
+    for(int j = 0; j < 13; j++){
+      hands[i]->hand[j] = 0;
+    }
+  }
+}
+
 void Gamestate::chkWinnerH(){
   if(overall_score[0] < playTo && overall_score[1] < playTo){
     if(score[0] < score[1]){
@@ -161,6 +169,7 @@ void Gamestate::chkWinnerH(){
       cout << "Their overall score is now: " << overall_score[1] << endl;
       deck.shuffle();
       cout << "deck shuffled" << endl;
+      emptyHands();
       deal();
       cout << "deck dealt" << endl;
     }
@@ -170,6 +179,7 @@ void Gamestate::chkWinnerH(){
       cout << "Their overall score is now: " << overall_score[0] << endl;
       deck.shuffle();
       cout << "deck shuffled" << endl;
+      emptyHands();
       deal();
       cout << "deck dealt" << endl;
     }
