@@ -14,6 +14,8 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 //Include all imports, including relevant OpenGL libraries.
 #include <iostream>
 #include <fstream>
+#include <ctime>
+#include <cstdlib>
 #ifdef MACOSX
 #include <GL/glut.h>
 #else
@@ -120,6 +122,21 @@ Card * drawcards[4];
 AI ai1(game,1,0);
 AI ai2(game,2,0);
 AI ai3(game,3,0);
+
+//Runs a timer for delaying the change in tricks
+void timer(double arg){
+  clock_t startTime = clock();
+  double secondsPassed;
+  double secondsToDelay = arg;
+  bool running = true;
+  while(running){
+    secondsPassed = (clock() - startTime) / (CLOCKS_PER_SEC/10);
+    if(secondsPassed >= secondsToDelay){
+      cout << "Erasing playedText[], game.playedCards[]" << endl;
+      running = false;
+    }
+  }
+}
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -529,6 +546,14 @@ void drawWindow(){
       if(game.tricksPlayed == 13){
 	game.chkWinnerH();
       }
+      drawWindow();
+      timer(30);
+      for(int i = 0; i < 4; i++){
+	drawWindow();
+	timer(0.3);
+	playedText[i] = 0;
+	game.cards_played[i] = 0;
+      }
       AIgameplay();
     }
   }
@@ -662,6 +687,9 @@ void mouse(int button, int state, int x, int y){
 	    drawPlayedCards();
 	    AIgameplay();
 	  }
+	}
+	for(int i = 0; i < 4; i++){
+	  playedText[i] = 0;
 	}
       }
       if ( onButton(x,y, PlaygamePos) && buttonIsPressed){
