@@ -81,7 +81,7 @@ class Gamestate
 	void newRound();
 
 	//Is this play a legal move?
-	bool isLegal(Card c,int s);
+	bool isLegal(Card * c,int s, int h);
 	
 	//return a requested card in a requested hand
 	//0 = user, 1 = ai1, etc;

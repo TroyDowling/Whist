@@ -137,13 +137,15 @@ void Gamestate::deal()
 
 void Gamestate::chkWinner(){
   int ledSuit = cards_played[0]->get_suit();
+  cout << ledSuit << ": led suit" << endl;
   int highVal = 0;
   int highPlayer = 0;
   for(int i = 0; i < 4; i++){
     if(cards_played[i]->get_suit() == ledSuit){
-      if(cards_played[i]->get_val() >= highVal){
+      if(cards_played[i]->get_val() > highVal){
 	highVal = cards_played[i]->get_val();
-	highPlayer = i;
+	cout << highVal <<": winning number" << endl;
+	highPlayer = who_played[i];
       }
     }
   }
@@ -228,4 +230,15 @@ void Gamestate::newRound(){
   cout << "deck shuffled" << endl;
   deal();
   cout << "deck dealt" << endl;
+}
+
+bool Gamestate::isLegal(Card * c, int s, int h){
+  bool hasSuit = false;
+  for(int i = 0; i < get_handLen(h); ++i){
+    if(get_card(h, i)->get_suit() == s) hasSuit = true;
+  }
+  if(c->get_suit() == s) return true;
+  else if(hasSuit == false)
+    return true;
+  else return false;
 }

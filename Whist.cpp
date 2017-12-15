@@ -210,6 +210,7 @@ void loadPlayedText(){
 
 void AIgameplay();
 void drawPlayedCards(){
+  loadPlayedText();
   for(int k = 0; k < 4; k++){
     if(playedText[k] != 0){
       //Draw the Player's Card
@@ -238,7 +239,6 @@ void drawPlayedCards(){
       }
     }
   }
-  sleep(1);
 }
 
 void drawCards(int over = -1){
@@ -262,7 +262,7 @@ void drawCards(int over = -1){
 
   //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
 
-  drawTexture(bkg, 0, 0, game_Width, game_Height, 1, 0);
+  //drawTexture(bkg, 0, 0, game_Width, game_Height, 1, 0);
 
   //Draw top cards
   for(int i = 0; i < ai2HandLen; i++){
@@ -356,6 +356,7 @@ void AIgameplay(){
       drawcards[1] = playedCard;
       game.get_hand(1)->removeCard(playedCard);
       game.nextTurn();
+      drawPlayedCards();
       AIgameplay();
       break;
     case 2:
@@ -375,6 +376,7 @@ void AIgameplay(){
       drawcards[2] = playedCard;
       game.get_hand(2)->removeCard(playedCard);
       game.nextTurn();
+      drawPlayedCards();
       AIgameplay();
       break;
     case 3:
@@ -394,6 +396,8 @@ void AIgameplay(){
       drawcards[3] = playedCard;
       game.get_hand(3)->removeCard(playedCard);
       game.nextTurn();
+      drawPlayedCards();
+      AIgameplay();
       break;
     default:
       break;
@@ -575,6 +579,7 @@ bool onButton(int x, int y, double* buttonPos)
          y <= buttonPos[1] + buttonPos[3];
 }
 
+int play_suit = 0;
 // the mouse function is called when a mouse button is pressed down or released
 void mouse(int button, int state, int x, int y){
   if(GLUT_LEFT_BUTTON == button){
@@ -582,6 +587,8 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
+	if(game.cards_played[0] != 0) play_suit = game.cards_played[0]->get_suit();
+	else play_suit = 0;
 	if(game.getTurn() == 0){
 	  for(int i = 0; i < 13; i++){
 	    if(game.get_card(0,i)->mouse_over(x,y)){
@@ -627,24 +634,28 @@ void mouse(int button, int state, int x, int y){
       // the user just let go the mouse-- do something
       if(DisplayState == 2){
 	if(game.get_card(0,cardMatch)->mouse_over(x,y) && game.getTurn() == 0){
-	  for(int i = 0; i < 4; ++i){
-	    if(game.who_played[i] == -1){
-	      game.set_who_played(i, 0);
-	      break;
+	  if(game.isLegal(game.get_card(0, cardMatch), play_suit, 0) || play_suit == 0){
+	    for(int i = 0; i < 4; ++i){
+	      if(game.who_played[i] == -1){
+		game.set_who_played(i, 0);
+		break;
+	      }
 	    }
-	  }
-	  game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
-	  for(int i = 0; i < 4; ++i){
-	    if(game.cards_played[i] == 0){
-	      game.cards_played[i] = game.get_card(i,cardMatch);
-	      break;
+	  
+	    //game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
+	    for(int i = 0; i < 4; ++i){
+	      if(game.cards_played[i] == 0){
+		game.set_cards_played(i,game.get_card(i,cardMatch));
+		break;
+	      }
 	    }
+	    drawcards[0] = game.get_card(0,cardMatch);
+	    game.get_hand(0)->removeCard(cardMatch);
+	    game.nextTurn();	  
+	    //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+	    drawPlayedCards();
+	    AIgameplay();
 	  }
-	  drawcards[0] = game.get_card(0,cardMatch);
-	  game.get_hand(0)->removeCard(cardMatch);
-	  game.nextTurn();	  
-	  //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
-	  AIgameplay();
 	}
       }
       if ( onButton(x,y, PlaygamePos) && buttonIsPressed){
