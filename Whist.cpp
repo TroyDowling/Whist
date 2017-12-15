@@ -211,6 +211,11 @@ void loadPlayedText(){
 void AIgameplay();
 void drawPlayedCards(){
   loadPlayedText();
+  int count = 0;
+  for(int i = 0; i < 4; ++i){
+    if(playedText[i] == 0) ++count;
+  }
+  if(count == 4) return;
   for(int k = 0; k < 4; k++){
     if(playedText[k] != 0){
       //Draw the Player's Card
@@ -252,7 +257,6 @@ void drawCards(int over = -1){
   ai1HandLen = game.get_handLen(1);
   userHandLen = game.get_handLen(0);
   loadUserText();
-  loadPlayedText();
   //AIgameplay();
 
   //spacing to align cards in center of screen
@@ -262,7 +266,8 @@ void drawCards(int over = -1){
 
   //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
 
-  //drawTexture(bkg, 0, 0, game_Width, game_Height, 1, 0);
+  drawTexture(bkg, 0, 0, game_Width, game_Height, 1, 0);
+  drawPlayedCards();
 
   //Draw top cards
   for(int i = 0; i < ai2HandLen; i++){
@@ -519,6 +524,7 @@ void drawWindow(){
     }
     if(j == 4){
       game.chkWinner();
+      for(int i = 0; i < 4; ++i) drawcards[i] = 0;
       cout << "Tricks played so far: " << game.tricksPlayed << endl;
       if(game.tricksPlayed == 13){
 	game.chkWinnerH();
