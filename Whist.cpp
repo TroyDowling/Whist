@@ -209,6 +209,37 @@ void loadPlayedText(){
 }
 
 void AIgameplay();
+void drawPlayedCards(){
+  for(int k = 0; k < 4; k++){
+    if(playedText[k] != 0){
+      //Draw the Player's Card
+      if(k == 0){
+	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
+		    (((game_Height/2) - (card_Height/2))+card_Height),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[1]'s Card (RIGHT)
+      else if(k == 3){
+	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))+card_Width),
+		    ((game_Height/2) - (card_Height/2)),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[2]'s Card (TOP)
+      else if(k ==2){
+	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
+		    (((game_Height/2) - (card_Height/2))-card_Height),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[3]'s Card (LEFT)
+      else if (k == 1){
+	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))-card_Width),
+		    ((game_Height/2) - (card_Height/2)),
+		    card_Width, card_Height, 1, 0);
+      }
+    }
+  }
+  sleep(1);
+}
 
 void drawCards(int over = -1){
   //Updated to 13 cards per row
@@ -230,6 +261,8 @@ void drawCards(int over = -1){
   double hspacing = (game_Height/2) - (card_Width/2)*((ai3HandLen/2)+2);
 
   //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
+
+  drawTexture(bkg, 0, 0, game_Width, game_Height, 1, 0);
 
   //Draw top cards
   for(int i = 0; i < ai2HandLen; i++){
@@ -259,7 +292,7 @@ void drawCards(int over = -1){
 				  (game_Height - (card_Height + 10)), card_Width, card_Height);
     }
   }
-
+  /*
   //Draw PLAYED cards
   for(int k = 0; k < 4; k++){
     if(playedText[k] != 0){
@@ -288,7 +321,7 @@ void drawCards(int over = -1){
 		    card_Width, card_Height, 1, 0);
       }
     }
-  }
+  }*/
 }
 
 

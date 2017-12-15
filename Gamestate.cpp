@@ -151,13 +151,13 @@ void Gamestate::chkWinner(){
     score[0]++;
     cout << "Team PLAYER takes the trick! Their score: " << score[0] << endl;
     if(tricksPlayed < 13) tricksPlayed++;
-    else tricksPlayed = 0;
+    else tricksPlayed = 1;
   }
   else{
     score[1]++;
     cout << "Team AI takes the trick! Their score: " << score[1] << endl;
     if(tricksPlayed < 13) tricksPlayed++;
-    else tricksPlayed = 0;
+    else tricksPlayed = 1;
   }
   for(int i = 0; i < 4; ++i){
     //cout << who_played[i]<<" ";
@@ -165,7 +165,7 @@ void Gamestate::chkWinner(){
     cards_played[i] = 0;
   }
   turn = highPlayer;
-  cout << "turn: " << turn << endl;
+  //cout << "turn: " << turn << endl;
 }
 
 void Gamestate::emptyHands(){
