@@ -3,6 +3,14 @@ using namespace std;
 
 Gamestate::Gamestate()
 {
+  for(int i = 0; i < 52; ++i){
+    allWhoPlayed[i] = -1;
+    allCardsPlayed[i] = 0;
+  }
+  for(int i = 0; i < 4; ++i){
+    who_played[i] = -1;
+    cards_played[i] = 0;
+  }
   score[0] = score[1] = 0;
   turn = 0;
   for(int i = 0; i < 52; ++i){
@@ -151,6 +159,13 @@ void Gamestate::chkWinner(){
     if(tricksPlayed < 13) tricksPlayed++;
     else tricksPlayed = 0;
   }
+  for(int i = 0; i < 4; ++i){
+    //cout << who_played[i]<<" ";
+    who_played[i] = -1;
+    cards_played[i] = 0;
+  }
+  turn = highPlayer;
+  cout << "turn: " << turn << endl;
 }
 
 void Gamestate::emptyHands(){
@@ -168,21 +183,13 @@ void Gamestate::chkWinnerH(){
       overall_score[1]++;
       cout << "Team AI wins the hand! Congratulations!" << endl;
       cout << "Their overall score is now: " << overall_score[1] << endl;
-      deck.shuffle();
-      cout << "deck shuffled" << endl;
-      emptyHands();
-      deal();
-      cout << "deck dealt" << endl;
+      newRound();
     }
     else{
       overall_score[0]++;
       cout << "Team PLAYER wins the hand! Congratulations!" << endl;
       cout << "Their overall score is now: " << overall_score[0] << endl;
-      deck.shuffle();
-      cout << "deck shuffled" << endl;
-      emptyHands();
-      deal();
-      cout << "deck dealt" << endl;
+      newRound();
     }
   }
   else{
@@ -209,4 +216,16 @@ void Gamestate::nextTurn(){
     if(numTurns != 3) numTurns++;
     else numTurns = 0;
   }
+}
+
+void Gamestate::newRound(){
+  for(int i = 0; i < 4; ++i){
+    cards_played[i] = 0;
+    who_played[i] = -1;
+  }
+  emptyHands();
+  deck.shuffle();
+  cout << "deck shuffled" << endl;
+  deal();
+  cout << "deck dealt" << endl;
 }

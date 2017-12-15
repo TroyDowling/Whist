@@ -77,6 +77,9 @@ class Gamestate
 	//Empties all hands
 	void emptyHands();
 
+	//sets up a new round
+	void newRound();
+
 	//Is this play a legal move?
 	bool isLegal(Card c,int s);
 	

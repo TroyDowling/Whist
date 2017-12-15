@@ -113,6 +113,9 @@ double HPos[] = {300,240,150,60};
 bool Back2BISPressed = false, overButton11 = false;
 double Back2Pos[] = {505,318,90,62};
 
+//Cards to be drawn in order:
+Card * drawcards[4];
+
 //Sets up AI - Use ai.set_diff(int) to change difficulty later
 AI ai1(game,1,0);
 AI ai2(game,2,0);
@@ -181,10 +184,10 @@ void loadUserText()
 void loadPlayedText(){
   Card* cardsPlayed[4];
   for(int i = 0; i < 4; i++){
-    cardsPlayed[i] = game.cards_played[i];
+    cardsPlayed[i] = drawcards[i];
   }
   for(int l = 0; l < 4; l++){
-    if(cardsPlayed[l] != NULL){
+    if(cardsPlayed[l] != 0 && cardsPlayed[l] != NULL){
       //clubs
       if(cardsPlayed[l]->get_suit() == 1){
 	playedText[l] = cText[cardsPlayed[l]->get_val()];
@@ -205,6 +208,7 @@ void loadPlayedText(){
   }
 }
 
+void AIgameplay();
 
 void drawCards(int over = -1){
   //Updated to 13 cards per row
@@ -218,6 +222,7 @@ void drawCards(int over = -1){
   userHandLen = game.get_handLen(0);
   loadUserText();
   loadPlayedText();
+  //AIgameplay();
 
   //spacing to align cards in center of screen
   double uwspacing = (game_Width/2) - (card_Width/2)*((userHandLen/2)+1);
@@ -265,7 +270,7 @@ void drawCards(int over = -1){
 		    card_Width, card_Height, 1, 0);
       }
       //Draw AI[1]'s Card (RIGHT)
-      else if(k == 1){
+      else if(k == 3){
 	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))+card_Width),
 		    ((game_Height/2) - (card_Height/2)),
 		    card_Width, card_Height, 1, 0);
@@ -277,7 +282,7 @@ void drawCards(int over = -1){
 		    card_Width, card_Height, 1, 0);
       }
       //Draw AI[3]'s Card (LEFT)
-      else if (k == 3){
+      else if (k == 1){
 	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))-card_Width),
 		    ((game_Height/2) - (card_Height/2)),
 		    card_Width, card_Height, 1, 0);
@@ -290,39 +295,78 @@ void drawCards(int over = -1){
 //This is where the AIs will make their plays, and their cards will be assigned to / removed from
 //  the relevant places.
 void AIgameplay(){
+  int j = 0;
   Card * playedCard;
   userTurn = false;
-  switch(game.getTurn()){
-  case 1:
-    cout<< "It is the LEFT AI's turn." << endl;
-    playedCard = ai1.makePlay(game);
-    game.set_cards_played(game.getTurn(), playedCard);
-    cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
-    game.get_hand(1)->removeCard(playedCard);
-    game.nextTurn();
-    AIgameplay();
-    break;
-  case 2:
-    cout<<"It is the PARTNER AI's turn." << endl;
-    playedCard = ai2.makePlay(game);
-    game.set_cards_played(game.getTurn(), playedCard);
-    cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
-    game.get_hand(2)->removeCard(playedCard);
-    game.nextTurn();
-    AIgameplay();
-    break;
-  case 3:
-    cout<<"It is the RIGHT AI's turn." << endl;
-    playedCard = ai3.makePlay(game);
-    game.set_cards_played(game.getTurn(), playedCard);
-    cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
-    game.get_hand(3)->removeCard(playedCard);
-    game.nextTurn();
-    break;
-  default:
-    break;
+  for(int count = 0; count < 4; ++count){
+    if(game.who_played[count] != -1) ++j;
   }
-  cout << "==========================" << endl;
+  if(j != 4){
+    switch(game.getTurn()){
+    case 0:
+      cout << "Your turn!" << endl;
+      break;
+    case 1:
+      //sleep(1);
+      cout<< "It is the LEFT AI's turn." << endl;
+      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      //cout << "break1" << endl;
+      playedCard = ai1.makePlay(game);
+      //cout << "made play" << endl;
+      for(int i = 0; i < 4; ++i){
+	if(game.cards_played[i] == 0){
+	  game.set_cards_played(i, playedCard);
+	  break;
+	}
+      }
+      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      drawcards[1] = playedCard;
+      game.get_hand(1)->removeCard(playedCard);
+      game.nextTurn();
+      AIgameplay();
+      break;
+    case 2:
+      //sleep(1);
+      cout<<"It is the PARTNER AI's turn." << endl;
+      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      //cout << "break1" << endl;
+      playedCard = ai2.makePlay(game);
+      //cout << "made play" << endl;
+      for(int i = 0; i < 4; ++i){
+	if(game.cards_played[i] == 0){
+	  game.set_cards_played(i, playedCard);
+	  break;
+	}
+      }
+      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      drawcards[2] = playedCard;
+      game.get_hand(2)->removeCard(playedCard);
+      game.nextTurn();
+      AIgameplay();
+      break;
+    case 3:
+      //sleep(1);
+      cout<<"It is the RIGHT AI's turn." << endl;
+      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      //cout << "break1" << endl;
+      playedCard = ai3.makePlay(game);
+      //cout << "made play" << endl;
+      for(int i = 0; i < 4; ++i){
+	if(game.cards_played[i] == 0){
+	  game.set_cards_played(i, playedCard);
+	  break;
+	}
+      }
+      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      drawcards[3] = playedCard;
+      game.get_hand(3)->removeCard(playedCard);
+      game.nextTurn();
+      break;
+    default:
+      break;
+    }
+    cout << "==========================" << endl;
+  }
 }
   
 
@@ -419,6 +463,7 @@ void drawOption() {
 void loadAllTextures();
 
 void drawWindow(){
+  int j = 0;
   glClear(GL_COLOR_BUFFER_BIT);
   if(DisplayState == 0){
        drawOption();
@@ -431,6 +476,17 @@ void drawWindow(){
     drawCards();
     for(int i = 0; i < game.get_handLen(0); ++i){
       if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
+    }
+    for(int i = 0; i < 4; ++i){
+      if(game.who_played[i] != -1) ++j;
+    }
+    if(j == 4){
+      game.chkWinner();
+      cout << "Tricks played so far: " << game.tricksPlayed << endl;
+      if(game.tricksPlayed == 13){
+	game.chkWinnerH();
+      }
+      AIgameplay();
     }
   }
   else if (DisplayState ==3){
@@ -537,17 +593,25 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = false;
       // the user just let go the mouse-- do something
       if(DisplayState == 2){
-	if(game.get_card(0,cardMatch)->mouse_over(x,y)){
-	  game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
-	  game.cards_played[0] = game.get_card(0,cardMatch);
-	  game.get_hand(0)->removeCard(cardMatch);
-	  game.nextTurn();
-	  AIgameplay();
-	  game.chkWinner();
-	  cout << "Tricks played so far: " << game.tricksPlayed << endl;
-	  if(game.tricksPlayed == 13){
-	    game.chkWinnerH();
+	if(game.get_card(0,cardMatch)->mouse_over(x,y) && game.getTurn() == 0){
+	  for(int i = 0; i < 4; ++i){
+	    if(game.who_played[i] == -1){
+	      game.set_who_played(i, 0);
+	      break;
+	    }
 	  }
+	  game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
+	  for(int i = 0; i < 4; ++i){
+	    if(game.cards_played[i] == 0){
+	      game.cards_played[i] = game.get_card(i,cardMatch);
+	      break;
+	    }
+	  }
+	  drawcards[0] = game.get_card(0,cardMatch);
+	  game.get_hand(0)->removeCard(cardMatch);
+	  game.nextTurn();	  
+	  //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+	  AIgameplay();
 	}
       }
       if ( onButton(x,y, PlaygamePos) && buttonIsPressed){

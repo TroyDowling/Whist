@@ -51,6 +51,7 @@ Card * AI::makePlay(Gamestate & game)
       //If I have not invited, I will do so.
       if(!invited){
 	invited = true;
+	cout << "invite: " << id << endl;
 	return game.get_card(id,0);
       }
 
@@ -84,7 +85,15 @@ Card * AI::makePlay(Gamestate & game)
     }
     //This AI is not going first this round
     else{
+      for(int i = 0; i < 4; ++i){
+	if(game.who_played[i] == -1){
+	  game.set_who_played(i, id);
+	  break;
+	}
+      }
+      cout << "about to make a play" << endl;
       play_suit = game.cards_played[0]->get_suit();
+      cout << "found the first card played" << endl;
       for(int i = 0; i < handlen; ++i){
 	if(game.get_card(id,i)->get_suit() == play_suit){
 	  return game.get_card(id,i);
@@ -178,6 +187,12 @@ Card * AI::makePlay(Gamestate & game)
     }
     //This AI is not going first this round
     else{
+      for(int i = 0; i < 4; ++i){
+	if(game.who_played[i] == -1){
+	  game.set_who_played(i, id);
+	  break;
+	}
+      }
       play_suit = game.cards_played[0]->get_suit();
       //What is the highest card on the table right now?
       for(int i = 0; i < 4; ++i){
