@@ -51,6 +51,7 @@ Card * AI::makePlay(Gamestate & game)
       //If I have not invited, I will do so.
       if(!invited){
 	invited = true;
+	cout << "invite: " << id << endl;
 	return game.get_card(id,0);
       }
 
@@ -84,7 +85,15 @@ Card * AI::makePlay(Gamestate & game)
     }
     //This AI is not going first this round
     else{
+      for(int i = 0; i < 4; ++i){
+	if(game.who_played[i] == -1){
+	  game.set_who_played(i, id);
+	  break;
+	}
+      }
+      cout << "about to make a play" << endl;
       play_suit = game.cards_played[0]->get_suit();
+      cout << "found the first card played" << endl;
       for(int i = 0; i < handlen; ++i){
 	if(game.get_card(id,i)->get_suit() == play_suit){
 	  return game.get_card(id,i);
@@ -178,8 +187,54 @@ Card * AI::makePlay(Gamestate & game)
     }
     //This AI is not going first this round
     else{
+      for(int i = 0; i < 4; ++i){
+	if(game.who_played[i] == -1){
+	  game.set_who_played(i, id);
+	  break;
+	}
+      }
       play_suit = game.cards_played[0]->get_suit();
-      
+      //What is the highest card on the table right now?
+      for(int i = 0; i < 4; ++i){
+	if(game.cards_played[i]->get_val() > max_val){
+	  max_val = game.cards_played[i]->get_val();
+	}
+      }
+      //I am going to play a card that will beat the high card on the table
+      for(int i = 0; i < handlen; ++i){
+	play_card = game.get_card(id,i);
+	if(play_card->get_suit() == play_suit && play_card->get_val() >= max_val){
+	  return play_card;
+	}
+      }
+      //If I can't beat the cards out there, I will play the lowest card in that suit
+      for(int i = 0; i < handlen; ++i){
+	play_card = game.get_card(id,i);
+	if(play_card->get_suit() == play_suit && play_card->get_val() < min_val){
+	  min_val = play_card->get_val();
+	}
+      }
+      //Now time to find that card again and play it
+      for(int i = 0; i < handlen; ++i){
+	play_card = game.get_card(id,i);
+	if(play_card->get_suit() == play_suit && play_card->get_val() == min_val){
+	  return play_card;
+	}
+      }
+      //I must not have any cards of this suit, I'll just play the lowest card I have
+      for(int i = 0; i < handlen; ++i){
+	play_card = game.get_card(id,i);
+	if(play_card->get_val() < min_val){
+	  min_val = play_card->get_val();
+	}
+      }
+      //Here's that lowest card in my hand I was talking about
+      for(int i = 0; i < handlen; ++i){
+	play_card = game.get_card(id,i);
+	if(play_card->get_val() == min_val){
+	  return play_card;
+	}
+      }
     }
   }
 
@@ -192,97 +247,6 @@ Card * AI::makePlay(Gamestate & game)
    *
    */
   if(difficulty == 2){
-    //This AI goes first
-    if(game.who_played[0] == -1){
-      game.set_who_played(0,id);
-      //If I have not invited, I will do so.
-      if(!invited){
-	invited = true;
-	return game.get_card(id,0);
-      }
-
-      //Check for an invite from partner
-      //(i%4 == 0 returns the first card from each trick played so far)
-      for(int i = 0; i < 52; ++i){
-	if(game.allWhoPlayed[i] == partner && i%4 == 0){
-	  //My partner has invited, I will play as such
-	  play_suit = game.allCardsPlayed[i]->get_suit();
-	  for(int cardplay = 0; cardplay < handlen; ++cardplay){
-	    if(game.get_card(id,cardplay)->get_suit() == play_suit){
-	      return game.get_card(id,cardplay);
-	    }
-	  }
-	}
-      }
-      //Looks like my partner has not invited yet, let's do this!
-      for(int hand_card = 0; hand_card < handlen; ++hand_card){
-	//I am going to find the highest card in my hand, and play that one
-	if(max_val <= game.get_card(id,hand_card)->get_val()){
-	  max_val = game.get_card(id,hand_card)->get_val();
-	}
-      }
-      for(int i = 0; i < handlen; ++i){
-	if(game.get_card(id,i)->get_val() == max_val){
-	  return game.get_card(id,i);
-	}
-      }
-    }
-    //This AI is not going first this round
-    else{
-      play_suit = game.cards_played[0]->get_suit();
-      for(int i = 0; i < handlen; ++i){
-	if(game.get_card(id,i)->get_suit() == play_suit){
-	  return game.get_card(id,i);
-	}
-      }
-    }
-  }
-
-  /* IMPOSSIBLE DIFFICULTY */
-  if(difficulty == 3){
-    //This AI goes first
-    if(game.who_played[0] == -1){
-      game.set_who_played(0,id);
-      //If I have not invited, I will do so.
-      if(!invited){
-	invited = true;
-	return game.get_card(id,0);
-      }
-
-      //Check for an invite from partner
-      //(i%4 == 0 returns the first card from each trick played so far)
-      for(int i = 0; i < 52; ++i){
-	if(game.allWhoPlayed[i] == partner && i%4 == 0){
-	  //My partner has invited, I will play as such
-	  play_suit = game.allCardsPlayed[i]->get_suit();
-	  for(int cardplay = 0; cardplay < handlen; ++cardplay){
-	    if(game.get_card(id,cardplay)->get_suit() == play_suit){
-	      return game.get_card(id,cardplay);
-	    }
-	  }
-	}
-      }
-      //Looks like my partner has not invited yet, let's do this!
-      for(int hand_card = 0; hand_card < handlen; ++hand_card){
-	//I am going to find the highest card in my hand, and play that one
-	if(max_val <= game.get_card(id,hand_card)->get_val()){
-	  max_val = game.get_card(id,hand_card)->get_val();
-	}
-      }
-      for(int i = 0; i < handlen; ++i){
-	if(game.get_card(id,i)->get_val() == max_val){
-	  return game.get_card(id,i);
-	}
-      }
-    }
-    //This AI is not going first this round
-    else{
-      play_suit = game.cards_played[0]->get_suit();
-      for(int i = 0; i < handlen; ++i){
-	if(game.get_card(id,i)->get_suit() == play_suit){
-	  return game.get_card(id,i);
-	}
-      }
-    }
+    //Will look similar to intermediate difficulty
   }
 }

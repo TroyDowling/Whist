@@ -3,6 +3,14 @@ using namespace std;
 
 Gamestate::Gamestate()
 {
+  for(int i = 0; i < 52; ++i){
+    allWhoPlayed[i] = -1;
+    allCardsPlayed[i] = 0;
+  }
+  for(int i = 0; i < 4; ++i){
+    who_played[i] = -1;
+    cards_played[i] = 0;
+  }
   score[0] = score[1] = 0;
   turn = 0;
   for(int i = 0; i < 52; ++i){
@@ -129,22 +137,76 @@ void Gamestate::deal()
 
 void Gamestate::chkWinner(){
   int ledSuit = cards_played[0]->get_suit();
+  cout << ledSuit << ": led suit" << endl;
   int highVal = 0;
   int highPlayer = 0;
   for(int i = 0; i < 4; i++){
     if(cards_played[i]->get_suit() == ledSuit){
-      if(cards_played[i]->get_val() >= highVal){
+      if(cards_played[i]->get_val() > highVal){
 	highVal = cards_played[i]->get_val();
-	highPlayer = i;
+	cout << highVal <<": winning number" << endl;
+	highPlayer = who_played[i];
       }
     }
   }
   if(highPlayer == 0 || highPlayer == 2){
     score[0]++;
+    cout << "Team PLAYER takes the trick! Their score: " << score[0] << endl;
+    if(tricksPlayed < 13) tricksPlayed++;
+    else tricksPlayed = 1;
   }
-  else score[1]++;
+  else{
+    score[1]++;
+    cout << "Team AI takes the trick! Their score: " << score[1] << endl;
+    if(tricksPlayed < 13) tricksPlayed++;
+    else tricksPlayed = 1;
+  }
+  for(int i = 0; i < 4; ++i){
+    //cout << who_played[i]<<" ";
+    who_played[i] = -1;
+    cards_played[i] = 0;
+  }
+  turn = highPlayer;
+  //cout << "turn: " << turn << endl;
 }
-      
+
+void Gamestate::emptyHands(){
+  for(int i = 0; i < 4; i++){
+    for(int j = 0; j < 13; j++){
+      hands[i]->hand[j] = 0;
+    }
+    hands[i]->setLen(13);
+  }
+}
+
+void Gamestate::chkWinnerH(){
+  if(overall_score[0] < playTo && overall_score[1] < playTo){
+    if(score[0] < score[1]){
+      overall_score[1]++;
+      cout << "Team AI wins the hand! Congratulations!" << endl;
+      cout << "Their overall score is now: " << overall_score[1] << endl;
+      newRound();
+    }
+    else{
+      overall_score[0]++;
+      cout << "Team PLAYER wins the hand! Congratulations!" << endl;
+      cout << "Their overall score is now: " << overall_score[0] << endl;
+      newRound();
+    }
+  }
+  else{
+    if(overall_score[0] == 5){
+      cout << "Team PLAYER wins the game! GG!" << endl;
+    }
+    else if(overall_score[1] == 5){
+      cout << "Team AI wins the game! GG!" << endl;
+    }
+    cout << "Final score: " << endl;
+    cout << "Team PLAYER: " << overall_score[0] << endl;
+    cout << "Team AI: " << overall_score[1] << endl;
+  }    
+}
+ 
 void Gamestate::nextTurn(){
   if(turn != 3){
     turn++;
@@ -156,4 +218,27 @@ void Gamestate::nextTurn(){
     if(numTurns != 3) numTurns++;
     else numTurns = 0;
   }
+}
+
+void Gamestate::newRound(){
+  for(int i = 0; i < 4; ++i){
+    cards_played[i] = 0;
+    who_played[i] = -1;
+  }
+  emptyHands();
+  deck.shuffle();
+  cout << "deck shuffled" << endl;
+  deal();
+  cout << "deck dealt" << endl;
+}
+
+bool Gamestate::isLegal(Card * c, int s, int h){
+  bool hasSuit = false;
+  for(int i = 0; i < get_handLen(h); ++i){
+    if(get_card(h, i)->get_suit() == s) hasSuit = true;
+  }
+  if(c->get_suit() == s) return true;
+  else if(hasSuit == false)
+    return true;
+  else return false;
 }

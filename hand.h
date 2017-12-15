@@ -10,8 +10,8 @@ class Hand{
    * of cards in this hand.
    *
    */
-  Card* hand[13];
  public:
+  Card* hand[13];
   Hand();
 
   void addCard(Card * c);
@@ -22,6 +22,7 @@ class Hand{
   Card * getCard(int c){return hand[c];}
 	
   int getLen(){return length;}
+  void setLen(int l){length = l;}
   Card ** getHand(){return hand;}
   Hand & operator= (const Hand&);
 };
