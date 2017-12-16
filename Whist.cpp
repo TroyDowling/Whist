@@ -786,17 +786,17 @@ void mouse(int button, int state, int x, int y){
       EBISPressed = false;
       
       if ( onButton(x,y,MPos) && MBISPressed ){
-	ai1.set_diff(1);
-	ai2.set_diff(1);
-	ai3.set_diff(1);
+	ai1.set_diff(0);
+	ai2.set_diff(0);
+	ai3.set_diff(0);
 	cout << "Medium difficulty Button press." << endl;
       }
       MBISPressed = false;
       
       if ( onButton(x,y,HPos) && HBISPressed ){
-	ai1.set_diff(2);
-	ai2.set_diff(2);
-	ai3.set_diff(2);
+	ai1.set_diff(0);
+	ai2.set_diff(0);
+	ai3.set_diff(0);
 	cout << "Hard difficulty Button press." << endl;
       }
       HBISPressed = false;

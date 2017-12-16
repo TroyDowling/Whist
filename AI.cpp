@@ -15,7 +15,6 @@ Card * AI::makePlay(Gamestate & game)
   int play_suit = 0, max_val = 0, min_val = 0, handlen = 0;
   handlen = game.get_handLen(id);
   Card * play_card;
-  bool can_win; //If there 
   /* 
    * Using the reference to our Gamestate
    * makes this part a lot easier.
@@ -51,7 +50,7 @@ Card * AI::makePlay(Gamestate & game)
       //If I have not invited, I will do so.
       if(!invited){
 	invited = true;
-	//cout << "invite: " << id << endl;
+	cout << "invite: " << id << endl;
 	return game.get_card(id,0);
       }
 
@@ -91,9 +90,9 @@ Card * AI::makePlay(Gamestate & game)
 	  break;
 	}
       }
-      //cout << "about to make a play" << endl;
+      cout << "about to make a play" << endl;
       play_suit = game.cards_played[0]->get_suit();
-      //cout << "found the first card played" << endl;
+      cout << "found the first card played" << endl;
       for(int i = 0; i < handlen; ++i){
 	if(game.get_card(id,i)->get_suit() == play_suit){
 	  return game.get_card(id,i);
@@ -102,7 +101,6 @@ Card * AI::makePlay(Gamestate & game)
       return game.get_card(id,0);
     }
   }
-
   /* INTERMEDIATE DIFFICULTY
    *
    * This difficulty has very similar logic
@@ -111,6 +109,7 @@ Card * AI::makePlay(Gamestate & game)
    *
    */
   if(difficulty == 1){
+    cout << "Intermed";
     //This AI goes first
     if(game.who_played[0] == -1){
       game.set_who_played(0,id);
@@ -142,7 +141,7 @@ Card * AI::makePlay(Gamestate & game)
 	  }
 	}
       }
-
+      
       //Check for an invite from partner
       //(i%4 == 0 returns the first card from each trick played so far)
       for(int i = 0; i < 52; ++i){
@@ -195,49 +194,49 @@ Card * AI::makePlay(Gamestate & game)
       }
       play_suit = game.cards_played[0]->get_suit();
       //What is the highest card on the table right now?
-      for(int i = 0; i < 4; ++i){
-	if(game.cards_played[i]->get_val() > max_val){
-	  max_val = game.cards_played[i]->get_val();
+	for(int i = 0; i < 4; ++i){
+	  if(game.cards_played[i]->get_val() > max_val){
+	    max_val = game.cards_played[i]->get_val();
+	  }
 	}
-      }
-      //I am going to play a card that will beat the high card on the table
-      for(int i = 0; i < handlen; ++i){
-	play_card = game.get_card(id,i);
-	if(play_card->get_suit() == play_suit && play_card->get_val() >= max_val){
-	  return play_card;
+	//I am going to play a card that will beat the high card on the table
+	for(int i = 0; i < handlen; ++i){
+	  play_card = game.get_card(id,i);
+	  if(play_card->get_suit() == play_suit && play_card->get_val() >= max_val){
+	    return play_card;
+	  }
 	}
-      }
-      //If I can't beat the cards out there, I will play the lowest card in that suit
-      for(int i = 0; i < handlen; ++i){
-	play_card = game.get_card(id,i);
-	if(play_card->get_suit() == play_suit && play_card->get_val() < min_val){
-	  min_val = play_card->get_val();
+	//If I can't beat the cards out there, I will play the lowest card in that suit
+	for(int i = 0; i < handlen; ++i){
+	  play_card = game.get_card(id,i);
+	  if(play_card->get_suit() == play_suit && play_card->get_val() < min_val){
+	    min_val = play_card->get_val();
+	  }
 	}
-      }
-      //Now time to find that card again and play it
-      for(int i = 0; i < handlen; ++i){
-	play_card = game.get_card(id,i);
-	if(play_card->get_suit() == play_suit && play_card->get_val() == min_val){
-	  return play_card;
+	//Now time to find that card again and play it
+	for(int i = 0; i < handlen; ++i){
+	  play_card = game.get_card(id,i);
+	  if(play_card->get_suit() == play_suit && play_card->get_val() == min_val){
+	    return play_card;
+	  }
 	}
-      }
-      //I must not have any cards of this suit, I'll just play the lowest card I have
-      for(int i = 0; i < handlen; ++i){
-	play_card = game.get_card(id,i);
-	if(play_card->get_val() < min_val){
-	  min_val = play_card->get_val();
+	//I must not have any cards of this suit, I'll just play the lowest card I have
+	for(int i = 0; i < handlen; ++i){
+	  play_card = game.get_card(id,i);
+	  if(play_card->get_val() < min_val){
+	    min_val = play_card->get_val();
+	  }
 	}
-      }
-      //Here's that lowest card in my hand I was talking about
-      for(int i = 0; i < handlen; ++i){
-	play_card = game.get_card(id,i);
-	if(play_card->get_val() == min_val){
-	  return play_card;
+	//Here's that lowest card in my hand I was talking about
+	for(int i = 0; i < handlen; ++i){
+	  play_card = game.get_card(id,i);
+	  if(play_card->get_val() == min_val){
+	    return play_card;
+	  }
 	}
-      }
     }
   }
-
+}
   /* HARD DIFFICULTY 
    *
    * Ideally this difficulty level will be quite
@@ -245,10 +244,11 @@ Card * AI::makePlay(Gamestate & game)
    * look back at what has been played, and will
    * make its decision based upon this data.
    *
-   */
+   
 
   //First "invite" section copied from easy/intermediate
   if(difficulty == 2){
+    cout << "The right difficulty";
     //This AI goes first
     if(game.who_played[0] == -1){
       game.set_who_played(0,id);
@@ -434,3 +434,4 @@ Card * AI::makePlay(Gamestate & game)
     }
   }
 }
+*/
