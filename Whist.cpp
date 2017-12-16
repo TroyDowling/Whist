@@ -38,7 +38,7 @@ bool mouseIsDragging = false, userTurn = true;
 int game_Width = 720;
 int game_Height = 405;
 char programName[] = "Whist";
-int whistT,w2T,w3T,oT,eT,dT,bT,mT; //texture IDs
+int whistT,w2T,w3T,oT,eT,dT,bT,mT,gear, gpT,mbg, pwT; //texture IDs
 int deT, dmT, dhT; //difficulty buttons
 double PI = 3.14159264;
 
@@ -85,7 +85,7 @@ int DisplayState = 0;
 Gamestate game;
 
 // button in the Menu
-bool buttonIsPressed = false, overButton = false;
+bool PlayBIsPressed = false, overButton = false;
 double PlaygamePos[] = { 300, 120,   150, 60 };  // upper left, width, height
 //button2
 bool button2IsPressed = false, overButton2 = false;
@@ -114,7 +114,10 @@ bool HBISPressed = false, overButton10 = false;
 double HPos[] = {300,240,150,60};
 bool Back2BISPressed = false, overButton11 = false;
 double Back2Pos[] = {505,318,90,62};
+bool Back3BIsPressed = false, overButton12 = false;
+double Back3Pos[] = {70,20,90,62};
 
+bool z=false;
 //Cards to be drawn in order:
 Card * drawcards[4];
 
@@ -132,7 +135,7 @@ void timer(double arg){
   while(running){
     secondsPassed = (clock() - startTime) / (CLOCKS_PER_SEC/10);
     if(secondsPassed >= secondsToDelay){
-      //cout << "Erasing playedText[], game.playedCards[]" << endl;
+      cout << "Erasing playedText[], game.playedCards[]" << endl;
       running = false;
     }
   }
@@ -264,15 +267,17 @@ void drawPlayedCards(){
 }
 
 void drawCards(int over = -1){
+
+
   //Updated to 13 cards per row
   //Displays all hand zones.
-
   card_Height = game_Height/7;
   card_Width = card_Height * .618;
   ai3HandLen = game.get_handLen(3);
   ai2HandLen = game.get_handLen(2);
   ai1HandLen = game.get_handLen(1);
   userHandLen = game.get_handLen(0);
+  
   loadUserText();
   //AIgameplay();
 
@@ -285,6 +290,14 @@ void drawCards(int over = -1){
 
   drawTexture(bkg, 0, 0, game_Width, game_Height, 1, 0);
   drawPlayedCards();
+
+	//Button inside the playgame screen
+	Button Back3;
+    if ( Back3BIsPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, 0.0, 0.0);  // gray
+    Back3.drawButton(Back3Pos);
+drawTexture(gpT,  70, 20, 90, 62);
 
   //Draw top cards
   for(int i = 0; i < ai2HandLen; i++){
@@ -364,7 +377,7 @@ void AIgameplay(){
     case 1:
       //sleep(1);
       cout<< "It is the LEFT AI's turn." << endl;
-      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       //cout << "break1" << endl;
       playedCard = ai1.makePlay(game);
       //cout << "made play" << endl;
@@ -374,7 +387,7 @@ void AIgameplay(){
 	  break;
 	}
       }
-      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[1] = playedCard;
       game.get_hand(1)->removeCard(playedCard);
       game.nextTurn();
@@ -384,7 +397,7 @@ void AIgameplay(){
     case 2:
       //sleep(1);
       cout<<"It is the PARTNER AI's turn." << endl;
-      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       //cout << "break1" << endl;
       playedCard = ai2.makePlay(game);
       //cout << "made play" << endl;
@@ -394,7 +407,7 @@ void AIgameplay(){
 	  break;
 	}
       }
-      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[2] = playedCard;
       game.get_hand(2)->removeCard(playedCard);
       game.nextTurn();
@@ -404,7 +417,7 @@ void AIgameplay(){
     case 3:
       //sleep(1);
       cout<<"It is the RIGHT AI's turn." << endl;
-      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       //cout << "break1" << endl;
       playedCard = ai3.makePlay(game);
       //cout << "made play" << endl;
@@ -414,7 +427,7 @@ void AIgameplay(){
 	  break;
 	}
       }
-      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[3] = playedCard;
       game.get_hand(3)->removeCard(playedCard);
       game.nextTurn();
@@ -424,7 +437,7 @@ void AIgameplay(){
     default:
       break;
     }
-    //cout << "==========================" << endl;
+    cout << "==========================" << endl;
   }
 }
   
@@ -433,7 +446,7 @@ void drawOption() {
   if (DisplayState == 0){
     // draw the button
     Button Playgame;
-    if ( buttonIsPressed ) glColor3f(1., 0., 0.);  // make it red
+    if ( PlayBIsPressed ) glColor3f(1., 0., 0.);  // make it red
     else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
     else glColor3f(0.0, 0.0, 0.0);  // gray
     Playgame.drawButton(PlaygamePos);
@@ -442,7 +455,7 @@ void drawOption() {
     if ( button2IsPressed ) glColor3f(1., 0., 0.);  // make it green
     else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
     else glColor3f(.0, 0.0, 0.0);  // white
-    Option.drawButton(OptionPos);
+    Option.drawButton(OptionPos); 
     //Button funtion
     Button Exit;
     if ( button3IsPressed) glColor3f(1., 0., 0.);
@@ -450,8 +463,8 @@ void drawOption() {
     else glColor3f(0.0, 0.0, 0.0);
     Exit.drawButton(ExitPos); 
     //draw stuff
-    drawTexture(whistT,  94,30,    400, 150, .9); // texID,   x,y,    width, height
-    drawTexture(w2T,  500,210,    300, 200, .45);
+    drawTexture(whistT, 0, 30,   400, 150); // texID,   x,y,    width, height
+    drawTexture(w2T,  450,250,    300, 150, 1);
     //main menu buttons textures
     drawTexture(w3T,  290,115,    170, 70 );
     drawTexture(oT,  302, 203,    145, 50 );
@@ -485,6 +498,8 @@ void drawOption() {
     drawTexture(mT,  305, 165, 142, 50);
     drawTexture(bg,  305, 245, 142, 50);
     drawTexture(bT,  509, 324,  82, 50 );
+    drawTexture(pwT,  10, 205, 250, 200);
+
   }
 
   else if (DisplayState ==4){
@@ -512,6 +527,8 @@ void drawOption() {
     else glColor3f(0.0, .65, .1);  // gray
     Back2.drawButton(Back2Pos);
     //button textures
+    drawTexture(w2T,  10,250,    300, 150, 1);
+
     drawTexture(deT,  305, 85, 142, 50);
     drawTexture(dmT,  305, 165,  142, 50 );
     drawTexture(dhT,  305, 245, 142, 50);
@@ -564,13 +581,15 @@ void drawWindow(){
     glutPostRedisplay();
   }
   else if(DisplayState == 7){
+
     DisplayState=0;
     drawWindow();
   }
   else if(DisplayState == 8){
-    DisplayState = 1;
-    drawOption();
+  	drawOption();
+  	DisplayState=1;
   }
+  	
   else if(DisplayState == 4){
     drawOption();
   }
@@ -611,7 +630,6 @@ bool onButton(int x, int y, double* buttonPos)
 }
 
 int play_suit = 0;
-bool soundOn = false;
 // the mouse function is called when a mouse button is pressed down or released
 void mouse(int button, int state, int x, int y){
   if(GLUT_LEFT_BUTTON == button){
@@ -619,6 +637,11 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
+		if ( onButton(x,y, Back3Pos) ) Back3BIsPressed = true;
+		else  Back3BIsPressed = false;
+		z=true;
+
+
 	if(game.cards_played[0] != 0) play_suit = game.cards_played[0]->get_suit();
 	else play_suit = 0;
 	if(game.getTurn() == 0){
@@ -630,8 +653,8 @@ void mouse(int button, int state, int x, int y){
 	}
       }
       else if (DisplayState == 0){
-	if ( onButton(x,y, PlaygamePos) ) buttonIsPressed = true;
-	else buttonIsPressed = false;
+	if ( onButton(x,y, PlaygamePos) ) PlayBIsPressed = true;
+	else PlayBIsPressed = false;
 	if ( onButton(x,y, OptionPos) ) button2IsPressed = true;
 	else button2IsPressed = false;
 	if ( onButton(x,y, ExitPos) ) button3IsPressed = true;
@@ -657,9 +680,8 @@ void mouse(int button, int state, int x, int y){
 	else HBISPressed = false; 
 	if ( onButton(x,y, Back2Pos) ) Back2BISPressed = true;
 	else Back2BISPressed = false; 
-	
-	
-      }
+}
+      
     }
     else{
       //mouseIsDragging = false;
@@ -670,18 +692,17 @@ void mouse(int button, int state, int x, int y){
 	    for(int i = 0; i < 4; ++i){
 	      if(game.who_played[i] == -1){
 		game.set_who_played(i, 0);
-		game.set_cards_played(i,game.get_card(0,cardMatch));
 		break;
 	      }
 	    }
 	  
 	    //game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
-	    /*for(int i = 0; i < 4; ++i){
+	    for(int i = 0; i < 4; ++i){
 	      if(game.cards_played[i] == 0){
 		game.set_cards_played(i,game.get_card(i,cardMatch));
 		break;
 	      }
-	      }*/
+	    }
 	    drawcards[0] = game.get_card(0,cardMatch);
 	    game.get_hand(0)->removeCard(cardMatch);
 	    game.nextTurn();	  
@@ -694,39 +715,44 @@ void mouse(int button, int state, int x, int y){
 	  playedText[i] = 0;
 	}
       }
-      if ( onButton(x,y, PlaygamePos) && buttonIsPressed){
+
+      if ( onButton(x,y, PlaygamePos) && PlayBIsPressed){
         DisplayState=2;
         game.deal();
         loadUserText();
-	//cout << "PlayGame Button press." << endl;
+		cout << "PlayGame Button press." << endl;
       }
-      buttonIsPressed = false;
+      	PlayBIsPressed = false;
       
       if ( onButton(x,y,OptionPos) && button2IsPressed ){
         DisplayState=1;
-        //cout << "Options Button press." << endl;
+        cout << "Options Button press." << endl;
       }
       button2IsPressed = false;
       
       if ( onButton(x,y,ExitPos) && button3IsPressed ){
         DisplayState=3;
-        //cout << "Exit Button press." << endl;
+        cout << "Exit Button press." << endl;
       }
       button3IsPressed = false;
       
       if ( onButton(x,y,SouPos) && SouBISPressed ){
-	if(soundOn) system("^C");
-	else system("~cs251/mpg123 music/music.mp3");
 	cout << "Sound Button press." << endl;
       }
       SouBISPressed = false;
       
       if ( onButton(x,y,AiPos) && AiBISPressed ){
         DisplayState = 4;
-	//cout << "Ai Button press." << endl;
+	cout << "Ai Button press." << endl;
       }
       AiBISPressed = false;
-      
+
+      if ( onButton(x,y,Back3Pos) && Back3BIsPressed ){
+      	DisplayState=8;
+      		cout << "Back button in Playgame screen press." << endl;
+      }
+      Back3BIsPressed = false;
+
       if ( onButton(x,y,ConPos) && ConBISPressed ){
 	if(whichcb < 3){
 	  ++whichcb;
@@ -742,8 +768,11 @@ void mouse(int button, int state, int x, int y){
       ConBISPressed = false;
       
       if ( onButton(x,y,BackPos) && BackBISPressed ){
-        DisplayState=7;
-	//cout << "Back Button press." << endl;
+      	if (z==false){DisplayState=7;}
+      	else { 
+      		DisplayState=2;
+      		drawWindow();}
+	cout << "Back Button press." << endl;
       }
       BackBISPressed = false;
       
@@ -752,7 +781,7 @@ void mouse(int button, int state, int x, int y){
 	ai1.set_diff(0);
 	ai2.set_diff(0);
 	ai3.set_diff(0);
-	//cout << "Easy Difficulty Button press." << endl;
+	cout << "Easy Difficulty Button press." << endl;
       }
       EBISPressed = false;
       
@@ -760,7 +789,7 @@ void mouse(int button, int state, int x, int y){
 	ai1.set_diff(1);
 	ai2.set_diff(1);
 	ai3.set_diff(1);
-	//cout << "Medium difficulty Button press." << endl;
+	cout << "Medium difficulty Button press." << endl;
       }
       MBISPressed = false;
       
@@ -768,13 +797,13 @@ void mouse(int button, int state, int x, int y){
 	ai1.set_diff(2);
 	ai2.set_diff(2);
 	ai3.set_diff(2);
-	//cout << "Hard difficulty Button press." << endl;
+	cout << "Hard difficulty Button press." << endl;
       }
       HBISPressed = false;
       
       if ( onButton(x,y,Back2Pos) && Back2BISPressed ){
         DisplayState=8;
-	//cout << "Back2 Button press." << endl;
+	cout << "Back2 Button press." << endl;
       }
       Back2BISPressed = false;
     }
@@ -810,7 +839,7 @@ void init(void){
   cout << "Welcome to " << programName << "!" << endl;
   //No longer a demo, and yet is nothing more...
   //cout << "A Functional demo!" << endl;
-  cout << "Test your skills and have a good time!" << endl;
+  cout << "Shuffles the deck, and deals out four hands." << endl;
 }
 
 //Loads all textures, 
@@ -896,12 +925,14 @@ void init_gl_window(){
   glutCreateWindow(programName);
   init();
  
-  //whistT= loadTexture("imgs/whist1.pam"); // key to textures:  load them!
-  w2T= loadTexture("imgs/w2.pam");
+  whistT= loadTexture("imgs/whist1.pam"); // key to textures:  load them!
+  w2T= loadTexture("imgs/mo1.pam");
 
   w3T= loadTexture("imgs/p1.pam");
   oT= loadTexture("imgs/o1.pam");
   eT= loadTexture("imgs/e1.pam");
+  pwT= loadTexture("imgs/pw1.pam");
+
   //optinos
   dT= loadTexture("imgs/dd.pam");
   mT= loadTexture("imgs/m1.pam");
@@ -911,6 +942,8 @@ void init_gl_window(){
   dmT= loadTexture("imgs/dm1.pam");
   dhT= loadTexture("imgs/dh1.pam");
   bT= loadTexture("imgs/b1.pam");
+  //game play menu
+  gpT= loadTexture("imgs/gpm.pam");
    //LOAD ALL THE TEXTURES
   loadAllTextures();  
   //Draw stuff
@@ -923,8 +956,12 @@ void init_gl_window(){
   glutMainLoop();
 }
 
+
 //This stays like this.
 int main ()
 {
   init_gl_window();
 }
+
+	
+	
