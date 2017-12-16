@@ -21,6 +21,7 @@ class AI
   AI(const Gamestate&, int, short);
   
   Card * makePlay(Gamestate&);
+ 
   void set_diff(short d){difficulty = d;}
 };
 

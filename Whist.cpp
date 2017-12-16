@@ -1,15 +1,27 @@
 /* Whist.cpp --- Main project file for the Whist app
-This is where the main function is, and should also
-probably be where all or most of the OpenGL things are
-taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
+
+========================================================
+This file is where the 'int main()' function is.
+
+The layout for this code is as follows:
+
+- All #includes
+- All global variable definitions
+- Most drawing functions
+- AI
+- Input functions
+- Glut init functions
+- Main
+
+Admittedly, the layout above is not perfect, but it can
+be trusted to a reasonable degree.
+=========================================================
+
+ --- REV 1.0 12/15/2017 Anders Olson ---
 */
 
-//As of implementations at 10:00 PM 16 Nov '17,
-//this file (in addition to texture.cpp)
-//contains barely enough functional code to constitute a demo.
 
-//Turns out we're gonna be stuck with Texture.h/cpp
-//-Bennett
+
 
 //Include all imports, including relevant OpenGL libraries.
 #include <iostream>
@@ -31,7 +43,9 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 #include "AI.h"
 #include <unistd.h>
 using namespace std;
-//End Imported Libraries(tm)
+//End Imported Libraries
+
+//Begin global variables
 
 bool mouseIsDragging = false, userTurn = true;
 
@@ -118,10 +132,10 @@ bool Back3BIsPressed = false, overButton12 = false;
 double Back3Pos[] = {70,20,90,62};
 
 bool z=false;
-//Cards to be drawn in order:
+//Cards to be drawn in order they appear:
 Card * drawcards[4];
 
-//Sets up AI - Use ai.set_diff(int) to change difficulty later
+//Initializes AI - Use ai.set_diff(int) to change difficulty later
 AI ai1(game,1,0);
 AI ai2(game,2,0);
 AI ai3(game,3,0);
@@ -135,7 +149,7 @@ void timer(double arg){
   while(running){
     secondsPassed = (clock() - startTime) / (CLOCKS_PER_SEC/10);
     if(secondsPassed >= secondsToDelay){
-      cout << "Erasing playedText[], game.playedCards[]" << endl;
+      //cout << "Erasing playedText[], game.playedCards[]" << endl;
       running = false;
     }
   }
@@ -157,12 +171,20 @@ void drawBox(double *pos)
   drawBox(pos[0], pos[1], pos[2], pos[3]);
  } 
 
+
+/* Keeps track of the mouse at all times,
+ * uses the passive glut update cycle.
+ * (In other words, this will be called
+ * whenever the mouse moves, regardless
+ * of actual input.) 
+ */
 void mouse_update(int x, int y)
 {
   mouseX = x; mouseY = y;
   glutPostRedisplay();
 }
 
+//Loads the textures to be displayed as the user's hand
 void loadUserText()
 {
 	//The 0 stands for the user's hand
@@ -201,6 +223,7 @@ void loadUserText()
 	
 }
 
+//Loads the textures of cards that have been played (middle of screen)
 void loadPlayedText(){
   Card* cardsPlayed[4];
   for(int i = 0; i < 4; i++){
@@ -229,6 +252,8 @@ void loadPlayedText(){
 }
 
 void AIgameplay();
+
+//Draws the played cards in front of their respective hands
 void drawPlayedCards(){
   loadPlayedText();
   int count = 0;
@@ -266,6 +291,7 @@ void drawPlayedCards(){
   }
 }
 
+//Draws all cards on the screen
 void drawCards(int over = -1){
 
 
@@ -327,47 +353,17 @@ drawTexture(gpT,  70, 20, 90, 62);
 				  (game_Height - (card_Height + 10)), card_Width, card_Height);
     }
   }
-  /*
-  //Draw PLAYED cards
-  for(int k = 0; k < 4; k++){
-    if(playedText[k] != 0){
-      //Draw the Player's Card
-      if(k == 0){
-	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
-		    (((game_Height/2) - (card_Height/2))+card_Height),
-		    card_Width, card_Height, 1, 0);
-      }
-      //Draw AI[1]'s Card (RIGHT)
-      else if(k == 3){
-	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))+card_Width),
-		    ((game_Height/2) - (card_Height/2)),
-		    card_Width, card_Height, 1, 0);
-      }
-      //Draw AI[2]'s Card (TOP)
-      else if(k ==2){
-	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
-		    (((game_Height/2) - (card_Height/2))-card_Height),
-		    card_Width, card_Height, 1, 0);
-      }
-      //Draw AI[3]'s Card (LEFT)
-      else if (k == 1){
-	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))-card_Width),
-		    ((game_Height/2) - (card_Height/2)),
-		    card_Width, card_Height, 1, 0);
-      }
-    }
-  }*/
 }
 
 
 //This is where the AIs will make their plays, and their cards will be assigned to / removed from
-//  the relevant places.
+//  the relevant places. *For more details, see AI.cpp
 void AIgameplay(){
   int j = 0;
   Card * playedCard;
   userTurn = false;
   for(int count = 0; count < 4; ++count){
-    if(game.who_played[count] != -1) ++j;
+    if(game.who_played[count] != -1) ++j; //Has everyone played this hand?
   }
   if(j != 4){
     switch(game.getTurn()){
@@ -375,19 +371,16 @@ void AIgameplay(){
       cout << "Your turn!" << endl;
       break;
     case 1:
-      //sleep(1);
       cout<< "It is the LEFT AI's turn." << endl;
-      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
-      //cout << "break1" << endl;
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       playedCard = ai1.makePlay(game);
-      //cout << "made play" << endl;
       for(int i = 0; i < 4; ++i){
 	if(game.cards_played[i] == 0){
 	  game.set_cards_played(i, playedCard);
 	  break;
 	}
       }
-      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[1] = playedCard;
       game.get_hand(1)->removeCard(playedCard);
       game.nextTurn();
@@ -395,19 +388,16 @@ void AIgameplay(){
       AIgameplay();
       break;
     case 2:
-      //sleep(1);
       cout<<"It is the PARTNER AI's turn." << endl;
-      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
-      //cout << "break1" << endl;
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       playedCard = ai2.makePlay(game);
-      //cout << "made play" << endl;
       for(int i = 0; i < 4; ++i){
 	if(game.cards_played[i] == 0){
 	  game.set_cards_played(i, playedCard);
 	  break;
 	}
       }
-      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[2] = playedCard;
       game.get_hand(2)->removeCard(playedCard);
       game.nextTurn();
@@ -415,19 +405,16 @@ void AIgameplay(){
       AIgameplay();
       break;
     case 3:
-      //sleep(1);
       cout<<"It is the RIGHT AI's turn." << endl;
-      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
-      //cout << "break1" << endl;
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       playedCard = ai3.makePlay(game);
-      //cout << "made play" << endl;
       for(int i = 0; i < 4; ++i){
 	if(game.cards_played[i] == 0){
 	  game.set_cards_played(i, playedCard);
 	  break;
 	}
       }
-      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[3] = playedCard;
       game.get_hand(3)->removeCard(playedCard);
       game.nextTurn();
@@ -437,11 +424,11 @@ void AIgameplay(){
     default:
       break;
     }
-    cout << "==========================" << endl;
+    cout << "======================================" << endl; //Makes terminal pretty
   }
 }
   
-
+//Draws menus
 void drawOption() {
   if (DisplayState == 0){
     // draw the button
@@ -538,16 +525,17 @@ void drawOption() {
     
 void loadAllTextures();
 
+//Glut sees this, then it calls other functions
 void drawWindow(){
   int j = 0;
   glClear(GL_COLOR_BUFFER_BIT);
   if(DisplayState == 0){
-       drawOption();
+    drawOption(); //Draw the main menu
   }
   else if (DisplayState ==1){
-    drawOption();
+    drawOption(); //Draw the options menu
   }
-  else if(DisplayState == 2){
+  else if(DisplayState == 2){ //Drwa the game, run a few checks periodically
     drawTexture(bkg,0,0,game_Width, game_Height, 1, 0);
     drawCards();
     for(int i = 0; i < game.get_handLen(0); ++i){
@@ -597,6 +585,9 @@ glutSwapBuffers();
 
 }
 
+/*
+  If the user presses Q, quit the game and end all processes.
+*/
 void keyboard(unsigned char c, int x, int y){
   int win = glutGetWindow();
   switch(c){
@@ -612,6 +603,9 @@ void keyboard(unsigned char c, int x, int y){
   glutPostRedisplay();
 }
 
+/*
+  Borrowed from lab files, works very nicely.
+*/
 void reshape(int w, int h){
   glViewport(0, 0, (GLsizei) w, (GLsizei) h);
    game_Width = w;  game_Height = h;
@@ -629,7 +623,8 @@ bool onButton(int x, int y, double* buttonPos)
          y <= buttonPos[1] + buttonPos[3];
 }
 
-int play_suit = 0;
+int play_suit = 0; //GLOBAL - this one snuck down here somehow. Oh well.
+
 // the mouse function is called when a mouse button is pressed down or released
 void mouse(int button, int state, int x, int y){
   if(GLUT_LEFT_BUTTON == button){
@@ -687,26 +682,28 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = false;
       // the user just let go the mouse-- do something
       if(DisplayState == 2){
+	//If this is the same card that you just had your mouse over
 	if(game.get_card(0,cardMatch)->mouse_over(x,y) && game.getTurn() == 0){
+	  //If this is a legal play in the game
 	  if(game.isLegal(game.get_card(0, cardMatch), play_suit, 0) || play_suit == 0){
+	    //Tell the program you played this card
 	    for(int i = 0; i < 4; ++i){
 	      if(game.who_played[i] == -1){
 		game.set_who_played(i, 0);
 		break;
 	      }
 	    }
-	  
-	    //game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
+	    //Tell the program which card you played
 	    for(int i = 0; i < 4; ++i){
 	      if(game.cards_played[i] == 0){
-		game.set_cards_played(i,game.get_card(i,cardMatch));
+		game.set_cards_played(i,game.get_card(0,cardMatch)); //The user played this card
 		break;
 	      }
 	    }
+	    //Add the card to this array to be drawn later
 	    drawcards[0] = game.get_card(0,cardMatch);
 	    game.get_hand(0)->removeCard(cardMatch);
-	    game.nextTurn();	  
-	    //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+	    game.nextTurn();
 	    drawPlayedCards();
 	    AIgameplay();
 	  }
@@ -786,17 +783,17 @@ void mouse(int button, int state, int x, int y){
       EBISPressed = false;
       
       if ( onButton(x,y,MPos) && MBISPressed ){
-	ai1.set_diff(1);
-	ai2.set_diff(1);
-	ai3.set_diff(1);
+	ai1.set_diff(0);
+	ai2.set_diff(0);
+	ai3.set_diff(0);
 	cout << "Medium difficulty Button press." << endl;
       }
       MBISPressed = false;
       
       if ( onButton(x,y,HPos) && HBISPressed ){
-	ai1.set_diff(2);
-	ai2.set_diff(2);
-	ai3.set_diff(2);
+	ai1.set_diff(0);
+	ai2.set_diff(0);
+	ai3.set_diff(0);
 	cout << "Hard difficulty Button press." << endl;
       }
       HBISPressed = false;
@@ -839,7 +836,7 @@ void init(void){
   cout << "Welcome to " << programName << "!" << endl;
   //No longer a demo, and yet is nothing more...
   //cout << "A Functional demo!" << endl;
-  cout << "Shuffles the deck, and deals out four hands." << endl;
+  cout << "The deck is shuffled and the cards are layed! /n /t Let's Play!" << endl;
 }
 
 //Loads all textures, 
@@ -933,7 +930,7 @@ void init_gl_window(){
   eT= loadTexture("imgs/e1.pam");
   pwT= loadTexture("imgs/pw1.pam");
 
-  //optinos
+  //options
   dT= loadTexture("imgs/dd.pam");
   mT= loadTexture("imgs/m1.pam");
   bT= loadTexture("imgs/b1.pam");
