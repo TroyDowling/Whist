@@ -38,7 +38,7 @@ bool mouseIsDragging = false, userTurn = true;
 int game_Width = 720;
 int game_Height = 405;
 char programName[] = "Whist";
-int whistT,w2T,w3T,oT,eT,dT,bT,mT,gear; //texture IDs
+int whistT,w2T,w3T,oT,eT,dT,bT,mT; //texture IDs
 int deT, dmT, dhT; //difficulty buttons
 double PI = 3.14159264;
 
@@ -821,7 +821,7 @@ void loadAllTextures(){
 	bg4 = loadTexture("imgs/cbred.pam");
 	bg5 = loadTexture("imgs/cardback.pam");
 	bkg = loadTexture("imgs/gameback.pam");
-	gear = loadTexture("imgs/settings.pam");
+	//gear = loadTexture("imgs/settings.pam");
 
 	//load textures for clubs
 	for(int i = 0; i < 9; ++i)
