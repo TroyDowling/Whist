@@ -699,7 +699,7 @@ void mouse(int button, int state, int x, int y){
 	    //game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
 	    for(int i = 0; i < 4; ++i){
 	      if(game.cards_played[i] == 0){
-		game.set_cards_played(i,game.get_card(i,cardMatch));
+		game.set_cards_played(i,game.get_card(0,cardMatch));
 		break;
 	      }
 	    }
