@@ -113,39 +113,155 @@ void Gamestate::load_game(int num_load_game)
 
 void Gamestate::deal()
 {
-        deck.shuffle();
-	for(int i = 0; i < 52; ++i){
-	  cards[i] = deck.getCard(i);
+  Card *tempCard;
+  int index = 0;
+  Card* unsortedCards[13];
+  Card *clubs[13], *hearts[13], *spades[13], *diamonds[13];
+  deck.shuffle();
+  for(int i = 0; i < 52; ++i){
+    cards[i] = deck.getCard(i);
+  }
+  for(int i = 0; i < 13; ++i)
+    {
+      hands[0]->addCard(cards[i]);
+      /*unsortedCards[i] = cards[i];
+	clubs[i] = 0; hearts[i] = 0; spades[i] = 0; diamonds[i] = 0;*/
+    }
+  for(int i = 13; i < 26; ++i)
+    {
+      hands[1]->addCard(cards[i]);
+    }
+  for(int i = 26; i < 39; ++i)
+    {
+      hands[2]->addCard(cards[i]);
+    }
+  for(int i = 39; i < 52; ++i)
+    {
+      hands[3]->addCard(cards[i]);
+    }
+
+  /*/sort user hand
+  //find clubs
+  index = 0;
+  for(int i = 0; i < 13; ++i){
+    if(unsortedCards[i]->get_suit() == 1){
+      clubs[index] = unsortedCards[i];
+      cout << "c:" << clubs[index]->get_val();
+      ++index;
+    }
+  }
+  index = 0;
+  //find hearts
+  for(int i = 0; i < 13; ++i){
+    if(unsortedCards[i]->get_suit() == 2){
+      hearts[index] = unsortedCards[i];
+      cout << "h:" << hearts[index]->get_val();
+      ++index;
+    }
+  }
+  index = 0;
+  //find spades
+  for(int i = 0; i < 13; ++i){
+    if(unsortedCards[i]->get_suit() == 3){
+      spades[index] = unsortedCards[i];
+      cout << "s:" << spades[index]->get_val();
+      ++index;
+    }
+  }
+  index = 0;
+  //find diamonds
+  for(int i = 0; i < 13; ++i){
+    if(unsortedCards[i]->get_suit() == 4){
+      diamonds[index] = unsortedCards[i];
+      cout << "d:" << diamonds[index]->get_val();
+      ++index;
+    }
+  }
+  index = 0;
+  cout << " found all cards" << endl;
+  //sort clubs
+  for(int i = 0; i <= 13; ++i){
+    for(int j = 0; j <= 13; ++j){
+      if(clubs[j] != 0){
+	if(clubs[j] > clubs[j+1]){
+	  tempCard = clubs[j];
+	  clubs[j] = clubs[j+1];
+	  clubs[j+1] = tempCard;
 	}
-	for(int i = 0; i < 13; ++i)
-	{
-		hands[0]->addCard(cards[i]);
-	}
-	for(int i = 13; i < 26; ++i)
-	{
-		hands[1]->addCard(cards[i]);
-	}
-	for(int i = 26; i < 39; ++i)
-	{
-	  hands[2]->addCard(cards[i]);
-	}
-	for(int i = 39; i < 52; ++i)
-	{
-	  hands[3]->addCard(cards[i]);
-	}
+      }
+    }
+  }
+  cout << "sorted clubs" << endl;
+  //sort hearts
+  for(int i = 0; i <= 13; ++i){
+    for(int j = 0; j <= 13; ++j){
+      if(hearts[j] != 0 && hearts[j] > hearts[j+1]){
+	tempCard = hearts[j];
+        hearts[j] = hearts[j+1];
+        hearts[j+1] = tempCard;
+      }
+    }
+  }
+  cout << "sorted hearts" << endl;
+  //sort spades
+  for(int i = 0; i <= 13; ++i){
+    for(int j = 0; j <= 13; ++j){
+      if(spades[j] != 0 && spades[j] > spades[j+1]){
+	tempCard = spades[j];
+        spades[j] = spades[j+1];
+        spades[j+1] = tempCard;
+      }
+    }
+  }
+  cout << "sorted spades" << endl;
+  //sort diamonds
+  for(int i = 0; i <= 13; ++i){
+    for(int j = 0; j <= 13; ++j){
+      if(diamonds[j] != 0 && diamonds[j] > diamonds[j+1]){
+	tempCard = diamonds[j];
+        diamonds[j] = diamonds[j+1];
+        diamonds[j+1] = tempCard;
+      }
+    }
+  }
+  cout << "sorted diamonds" << endl;
+  //add all cards to user hand
+  for(int i = 0; i <= 13; ++i){
+    if(clubs[i] != 0) {hands[0]->addCard(clubs[i]); cout << "AC";}
+  }
+  cout << "added clubs" << endl;
+  for(int i = 0; i <= 13; ++i){
+    if(hearts[i] != 0) {hands[0]->addCard(hearts[i]); cout << "AH";}
+  }
+  cout << "added hearts" << endl;
+  for(int i = 0; i <= 13; ++i){
+    if(spades[i] != 0) {hands[0]->addCard(spades[i]); cout << "AS";}
+  }
+  cout << "added spades" << endl;
+  for(int i = 0; i <= 13; ++i){
+    if(diamonds[i] != 0) {hands[0]->addCard(diamonds[i]); cout << "AD";}
+  }
+  cout << "added diamonds" << endl;*/
+  
 }
 
 void Gamestate::chkWinner(){
   int ledSuit = cards_played[0]->get_suit();
-  cout << ledSuit << ": led suit" << endl;
+  //cout << ledSuit << ": led suit" << endl;
   int highVal = 0;
   int highPlayer = 0;
+  cout << "players: " << endl;
+  for(int i = 0; i < 4; ++i) cout << who_played[i] <<" ";
+  cout << endl << "suit:val " << endl;
+  for(int i = 0; i < 4; ++i) cout << cards_played[i]->get_suit() <<":" << cards_played[i]->get_val() << " ";
+  cout << endl;
   for(int i = 0; i < 4; i++){
     if(cards_played[i]->get_suit() == ledSuit){
       if(cards_played[i]->get_val() > highVal){
 	highVal = cards_played[i]->get_val();
-	cout << highVal <<": winning number" << endl;
+	//cout << highVal <<": winning number" << endl;
 	highPlayer = who_played[i];
+	//cout << highPlayer <<": high player here" << endl;
       }
     }
   }
@@ -226,10 +342,10 @@ void Gamestate::newRound(){
     who_played[i] = -1;
   }
   emptyHands();
-  deck.shuffle();
-  cout << "deck shuffled" << endl;
+  //deck.shuffle();
+  //cout << "deck shuffled" << endl;
   deal();
-  cout << "deck dealt" << endl;
+  //cout << "deck dealt" << endl;
 }
 
 bool Gamestate::isLegal(Card * c, int s, int h){

@@ -132,7 +132,7 @@ void timer(double arg){
   while(running){
     secondsPassed = (clock() - startTime) / (CLOCKS_PER_SEC/10);
     if(secondsPassed >= secondsToDelay){
-      cout << "Erasing playedText[], game.playedCards[]" << endl;
+      //cout << "Erasing playedText[], game.playedCards[]" << endl;
       running = false;
     }
   }
@@ -364,7 +364,7 @@ void AIgameplay(){
     case 1:
       //sleep(1);
       cout<< "It is the LEFT AI's turn." << endl;
-      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       //cout << "break1" << endl;
       playedCard = ai1.makePlay(game);
       //cout << "made play" << endl;
@@ -374,7 +374,7 @@ void AIgameplay(){
 	  break;
 	}
       }
-      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[1] = playedCard;
       game.get_hand(1)->removeCard(playedCard);
       game.nextTurn();
@@ -384,7 +384,7 @@ void AIgameplay(){
     case 2:
       //sleep(1);
       cout<<"It is the PARTNER AI's turn." << endl;
-      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       //cout << "break1" << endl;
       playedCard = ai2.makePlay(game);
       //cout << "made play" << endl;
@@ -394,7 +394,7 @@ void AIgameplay(){
 	  break;
 	}
       }
-      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[2] = playedCard;
       game.get_hand(2)->removeCard(playedCard);
       game.nextTurn();
@@ -404,7 +404,7 @@ void AIgameplay(){
     case 3:
       //sleep(1);
       cout<<"It is the RIGHT AI's turn." << endl;
-      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       //cout << "break1" << endl;
       playedCard = ai3.makePlay(game);
       //cout << "made play" << endl;
@@ -414,7 +414,7 @@ void AIgameplay(){
 	  break;
 	}
       }
-      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[3] = playedCard;
       game.get_hand(3)->removeCard(playedCard);
       game.nextTurn();
@@ -424,7 +424,7 @@ void AIgameplay(){
     default:
       break;
     }
-    cout << "==========================" << endl;
+    //cout << "==========================" << endl;
   }
 }
   
@@ -611,6 +611,7 @@ bool onButton(int x, int y, double* buttonPos)
 }
 
 int play_suit = 0;
+bool soundOn = false;
 // the mouse function is called when a mouse button is pressed down or released
 void mouse(int button, int state, int x, int y){
   if(GLUT_LEFT_BUTTON == button){
@@ -669,17 +670,18 @@ void mouse(int button, int state, int x, int y){
 	    for(int i = 0; i < 4; ++i){
 	      if(game.who_played[i] == -1){
 		game.set_who_played(i, 0);
+		game.set_cards_played(i,game.get_card(0,cardMatch));
 		break;
 	      }
 	    }
 	  
 	    //game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
-	    for(int i = 0; i < 4; ++i){
+	    /*for(int i = 0; i < 4; ++i){
 	      if(game.cards_played[i] == 0){
 		game.set_cards_played(i,game.get_card(i,cardMatch));
 		break;
 	      }
-	    }
+	      }*/
 	    drawcards[0] = game.get_card(0,cardMatch);
 	    game.get_hand(0)->removeCard(cardMatch);
 	    game.nextTurn();	  
@@ -696,30 +698,32 @@ void mouse(int button, int state, int x, int y){
         DisplayState=2;
         game.deal();
         loadUserText();
-	cout << "PlayGame Button press." << endl;
+	//cout << "PlayGame Button press." << endl;
       }
       buttonIsPressed = false;
       
       if ( onButton(x,y,OptionPos) && button2IsPressed ){
         DisplayState=1;
-        cout << "Options Button press." << endl;
+        //cout << "Options Button press." << endl;
       }
       button2IsPressed = false;
       
       if ( onButton(x,y,ExitPos) && button3IsPressed ){
         DisplayState=3;
-        cout << "Exit Button press." << endl;
+        //cout << "Exit Button press." << endl;
       }
       button3IsPressed = false;
       
       if ( onButton(x,y,SouPos) && SouBISPressed ){
+	if(soundOn) system("^C");
+	else system("~cs251/mpg123 music.mp3");
 	cout << "Sound Button press." << endl;
       }
       SouBISPressed = false;
       
       if ( onButton(x,y,AiPos) && AiBISPressed ){
         DisplayState = 4;
-	cout << "Ai Button press." << endl;
+	//cout << "Ai Button press." << endl;
       }
       AiBISPressed = false;
       
@@ -739,7 +743,7 @@ void mouse(int button, int state, int x, int y){
       
       if ( onButton(x,y,BackPos) && BackBISPressed ){
         DisplayState=7;
-	cout << "Back Button press." << endl;
+	//cout << "Back Button press." << endl;
       }
       BackBISPressed = false;
       
@@ -748,7 +752,7 @@ void mouse(int button, int state, int x, int y){
 	ai1.set_diff(0);
 	ai2.set_diff(0);
 	ai3.set_diff(0);
-	cout << "Easy Difficulty Button press." << endl;
+	//cout << "Easy Difficulty Button press." << endl;
       }
       EBISPressed = false;
       
@@ -756,7 +760,7 @@ void mouse(int button, int state, int x, int y){
 	ai1.set_diff(1);
 	ai2.set_diff(1);
 	ai3.set_diff(1);
-	cout << "Medium difficulty Button press." << endl;
+	//cout << "Medium difficulty Button press." << endl;
       }
       MBISPressed = false;
       
@@ -764,13 +768,13 @@ void mouse(int button, int state, int x, int y){
 	ai1.set_diff(2);
 	ai2.set_diff(2);
 	ai3.set_diff(2);
-	cout << "Hard difficulty Button press." << endl;
+	//cout << "Hard difficulty Button press." << endl;
       }
       HBISPressed = false;
       
       if ( onButton(x,y,Back2Pos) && Back2BISPressed ){
         DisplayState=8;
-	cout << "Back2 Button press." << endl;
+	//cout << "Back2 Button press." << endl;
       }
       Back2BISPressed = false;
     }
@@ -806,7 +810,7 @@ void init(void){
   cout << "Welcome to " << programName << "!" << endl;
   //No longer a demo, and yet is nothing more...
   //cout << "A Functional demo!" << endl;
-  cout << "Shuffles the deck, and deals out four hands." << endl;
+  cout << "Test your skills and have a good time!" << endl;
 }
 
 //Loads all textures, 
