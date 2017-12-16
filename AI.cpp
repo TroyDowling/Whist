@@ -110,7 +110,7 @@ Card * AI::makePlay(Gamestate & game)
    * slightly better value judgements.
    *
    */
-  if(difficulty == 1){
+  else if(difficulty == 1){
     //This AI goes first
     if(game.who_played[0] == -1){
       game.set_who_played(0,id);
@@ -246,7 +246,8 @@ Card * AI::makePlay(Gamestate & game)
    * make its decision based upon this data.
    *
    */
-  if(difficulty == 2){
+  else if(difficulty == 2){
     //Will look similar to intermediate difficulty
+    cout << "HARD" << endl;
   }
 }
