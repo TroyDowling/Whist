@@ -716,7 +716,7 @@ void mouse(int button, int state, int x, int y){
       
       if ( onButton(x,y,SouPos) && SouBISPressed ){
 	if(soundOn) system("^C");
-	else system("~cs251/mpg123 music.mp3");
+	else system("~cs251/mpg123 music/music.mp3");
 	cout << "Sound Button press." << endl;
       }
       SouBISPressed = false;
