@@ -50,7 +50,7 @@ Card * AI::makePlay(Gamestate & game)
       //If I have not invited, I will do so.
       if(!invited){
 	invited = true;
-	cout << "invite: " << id << endl;
+	//cout << "invite: " << id << endl;
 	return game.get_card(id,0);
       }
 
@@ -90,9 +90,9 @@ Card * AI::makePlay(Gamestate & game)
 	  break;
 	}
       }
-      cout << "about to make a play" << endl;
+      //cout << "about to make a play" << endl;
       play_suit = game.cards_played[0]->get_suit();
-      cout << "found the first card played" << endl;
+      //cout << "found the first card played" << endl;
       for(int i = 0; i < handlen; ++i){
 	if(game.get_card(id,i)->get_suit() == play_suit){
 	  return game.get_card(id,i);

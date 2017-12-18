@@ -250,10 +250,10 @@ void Gamestate::chkWinner(){
   //cout << ledSuit << ": led suit" << endl;
   int highVal = 0;
   int highPlayer = 0;
-  cout << "players: " << endl;
-  for(int i = 0; i < 4; ++i) cout << who_played[i] <<" ";
-  cout << endl << "suit:val " << endl;
-  for(int i = 0; i < 4; ++i) cout << cards_played[i]->get_suit() <<":" << cards_played[i]->get_val() << " ";
+  //cout << "players: " << endl;
+  //for(int i = 0; i < 4; ++i) cout << who_played[i] <<" ";
+  //cout << endl << "suit:val " << endl;
+  //for(int i = 0; i < 4; ++i) cout << cards_played[i]->get_suit() <<":" << cards_played[i]->get_val() << " ";
   cout << endl;
   for(int i = 0; i < 4; i++){
     if(cards_played[i]->get_suit() == ledSuit){
@@ -293,6 +293,7 @@ void Gamestate::emptyHands(){
     }
     hands[i]->setLen(13);
   }
+  score[0] = score[1] = 0;
 }
 
 void Gamestate::chkWinnerH(){

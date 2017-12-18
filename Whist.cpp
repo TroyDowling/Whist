@@ -135,7 +135,7 @@ void timer(double arg){
   while(running){
     secondsPassed = (clock() - startTime) / (CLOCKS_PER_SEC/10);
     if(secondsPassed >= secondsToDelay){
-      cout << "Erasing playedText[], game.playedCards[]" << endl;
+      //cout << "Erasing playedText[], game.playedCards[]" << endl;
       running = false;
     }
   }
@@ -377,7 +377,7 @@ void AIgameplay(){
     case 1:
       //sleep(1);
       cout<< "It is the LEFT AI's turn." << endl;
-      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       //cout << "break1" << endl;
       playedCard = ai1.makePlay(game);
       //cout << "made play" << endl;
@@ -387,7 +387,7 @@ void AIgameplay(){
 	  break;
 	}
       }
-      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[1] = playedCard;
       game.get_hand(1)->removeCard(playedCard);
       game.nextTurn();
@@ -397,7 +397,7 @@ void AIgameplay(){
     case 2:
       //sleep(1);
       cout<<"It is the PARTNER AI's turn." << endl;
-      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       //cout << "break1" << endl;
       playedCard = ai2.makePlay(game);
       //cout << "made play" << endl;
@@ -407,7 +407,7 @@ void AIgameplay(){
 	  break;
 	}
       }
-      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[2] = playedCard;
       game.get_hand(2)->removeCard(playedCard);
       game.nextTurn();
@@ -417,7 +417,7 @@ void AIgameplay(){
     case 3:
       //sleep(1);
       cout<<"It is the RIGHT AI's turn." << endl;
-      for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
       //cout << "break1" << endl;
       playedCard = ai3.makePlay(game);
       //cout << "made play" << endl;
@@ -427,7 +427,7 @@ void AIgameplay(){
 	  break;
 	}
       }
-      cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
       drawcards[3] = playedCard;
       game.get_hand(3)->removeCard(playedCard);
       game.nextTurn();
@@ -699,7 +699,7 @@ void mouse(int button, int state, int x, int y){
 	    //game.set_cards_played(game.getTurn(),game.get_card(0,cardMatch));
 	    for(int i = 0; i < 4; ++i){
 	      if(game.cards_played[i] == 0){
-		game.set_cards_played(i,game.get_card(i,cardMatch));
+		game.set_cards_played(i,game.get_card(0,cardMatch));
 		break;
 	      }
 	    }
