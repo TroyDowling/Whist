@@ -27,6 +27,10 @@ turn
 Hands (suit and value of cards separated by newlines)
 */
 
+/*
+ * This works!! If you can implement it, feel free to do so.
+ * It is easy to implement, it was simply never done.
+*/
 void Gamestate::save_game(int num_save_game)
 {
 	Card * cardInHand;
@@ -67,6 +71,7 @@ void Gamestate::save_game(int num_save_game)
 	}
 }
 
+//This works as well, but was never used. :(
 void Gamestate::load_game(int num_load_game)
 {
   //opens a file
@@ -139,6 +144,15 @@ void Gamestate::deal()
     {
       hands[3]->addCard(cards[i]);
     }
+
+  /*
+   * The issue that kept on occuring with sorting the hands was that
+   * the hand would sort just fine the first time through, but it
+   * wouldn't load all of the hearts - specifically hearts from what
+   * I (Anders) could find - the second time through. So when the game
+   * initializes, there is no issue. After one round, however, trouble.
+   *
+   */
 
   /*/sort user hand
   //find clubs
@@ -293,7 +307,7 @@ void Gamestate::emptyHands(){
     }
     hands[i]->setLen(13);
   }
-  score[0] = score[1] = 0;
+  score[0] = score[1] = 0; //resets the scores for the new hand to begin
 }
 
 void Gamestate::chkWinnerH(){
@@ -343,12 +357,13 @@ void Gamestate::newRound(){
     who_played[i] = -1;
   }
   emptyHands();
-  //deck.shuffle();
+  //deck.shuffle(); - handled elsewhere
   //cout << "deck shuffled" << endl;
   deal();
   //cout << "deck dealt" << endl;
 }
 
+//Makes sure the user clicked a playable card
 bool Gamestate::isLegal(Card * c, int s, int h){
   bool hasSuit = false;
   for(int i = 0; i < get_handLen(h); ++i){

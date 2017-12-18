@@ -111,7 +111,7 @@ Card * AI::makePlay(Gamestate & game)
   if(difficulty == 1){
     cout << "Intermed";
     //This AI goes first
-    if(game.who_played[0] == -1){
+    if(game.who_played[0] == -1){ //This line seg faults
       game.set_who_played(0,id);
       //If I have not invited, I will do so.
       if(!invited){
@@ -236,21 +236,20 @@ Card * AI::makePlay(Gamestate & game)
 	}
     }
   }
-}
   /* HARD DIFFICULTY 
    *
    * Ideally this difficulty level will be quite
    * the step up from the previous two. It will
    * look back at what has been played, and will
    * make its decision based upon this data.
-   *
+   */
    
 
   //First "invite" section copied from easy/intermediate
   if(difficulty == 2){
     cout << "The right difficulty";
     //This AI goes first
-    if(game.who_played[0] == -1){
+    if(game.who_played[0] == -1){ //This line seg faults
       game.set_who_played(0,id);
       //If I have not invited, I will do so.
       if(!invited){
@@ -429,9 +428,8 @@ Card * AI::makePlay(Gamestate & game)
 	play_card = game.get_card(id,i);
 	if(play_card->get_val() == min_val){
 	  return play_card;
+	  }
 	}
       }
-    }
-  }
 }
-*/
+
