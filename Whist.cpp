@@ -1,19 +1,33 @@
 /* Whist.cpp --- Main project file for the Whist app
-This is where the main function is, and should also
-probably be where all or most of the OpenGL things are
-taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
+
+========================================================
+This file is where the 'int main()' function is.
+
+The layout for this code is as follows:
+
+- All #includes
+- All global variable definitions
+- Most drawing functions
+- AI
+- Input functions
+- Glut init functions
+- Main
+
+Admittedly, the layout above is not perfect, but it can
+be trusted to a reasonable degree.
+=========================================================
+
+ --- REV 1.0 12/15/2017 Anders Olson ---
 */
 
-//As of implementations at 10:00 PM 16 Nov '17,
-//this file (in addition to texture.cpp)
-//contains barely enough functional code to constitute a demo.
 
-//Turns out we're gonna be stuck with Texture.h/cpp
-//-Bennett
+
 
 //Include all imports, including relevant OpenGL libraries.
 #include <iostream>
 #include <fstream>
+#include <ctime>
+#include <cstdlib>
 #ifdef MACOSX
 #include <GL/glut.h>
 #else
@@ -22,26 +36,52 @@ taken care of. --- REV 0.1 11/15/2017 Anders Olson ---
 #include <math.h>
 #include <stdlib.h>
 #include <string>
+#include "Button.h"
 #include "Gamestate.h"
 #include "texture.h"
 #include "hand.h"
+#include "AI.h"
+#include <unistd.h>
 using namespace std;
-//End Imported Libraries(tm)
+//End Imported Libraries
 
+<<<<<<< HEAD
 //mouse stuff
 bool mouseIsDragging = false;
+=======
+//Begin global variables
+
+bool mouseIsDragging = false, userTurn = true;
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
 
 //Window things
 int game_Width = 720;
 int game_Height = 405;
 char programName[] = "Whist";
+<<<<<<< HEAD
 int whistT,w2T,w3T; //texture IDs
 double PI = 3.14159264;
 
 int mouseX = 0, mouseY = 0;
 
+=======
+int whistT,w2T,w3T,oT,eT,dT,bT,mT,gear, gpT,mbg, pwT; //texture IDs
+int deT, dmT, dhT; //difficulty buttons
+double PI = 3.14159264;
+
+int cardMatch = 0;
+
+int mouseX = 0, mouseY = 0;
+
+//0 = stolaf cards, 1 = black, 2 = blue, 3 = red
+int whichcb = 0;
+
+//texture for game background
+int bkg;
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
 //texture for card back
-int bg;
+//use bg in code, set bg# to bg
+int bg, bg2, bg3, bg4, bg5;
 //textures for hearts
 int hText[13];
 //textures for spades
@@ -68,12 +108,18 @@ int sdummyWidth = 40, sdummyHeight = 30;
 int pDummyW = 40, pDummyH = 50;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //set up global classes
 =======
 //What should be displayed? 0 = main menu, 1 = options, 2 = playgame
 int DisplayState = 0;
 
 >>>>>>> 9bc896daae7f51eb102983969d7f14310a6b8be8
+=======
+//What should be displayed? 0 = main menu, 1 = options, 2 = playgame
+int DisplayState = 0;
+
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
 Gamestate game;
 AI ai1, ai2, ai3;
 
@@ -83,6 +129,63 @@ double buttonPos[] = { 300, 150,   150, 60 };  // upper left, width, height
 //button2
 bool button2IsPressed = false, overButton2 = false;
 double buttonPos2[] = { 300, 230,   150, 60 };
+
+// button in the Menu
+bool PlayBIsPressed = false, overButton = false;
+double PlaygamePos[] = { 300, 120,   150, 60 };  // upper left, width, height
+//button2
+bool button2IsPressed = false, overButton2 = false;
+double OptionPos[] = { 300, 200,   150, 60 };
+//button3
+bool button3IsPressed = false, overButton3 = false;
+double ExitPos[] = {300,280,150,60};
+
+
+//buttons for Option Screen
+bool AiBISPressed = false, overButton5 = false;
+double AiPos[] = {300,80,150,60};
+bool SouBISPressed = false, overButton4 = false;
+double SouPos[] = {300,160,150,60};
+bool ConBISPressed = false, overButton6 = false;
+double ConPos[] = {300,240,150,60};
+bool BackBISPressed = false, overButton7 = false;
+double BackPos[] = {505,318,90,62};
+
+//buttons for Difficulty screen
+bool EBISPressed = false, overButton8 = false;
+double EPos[] = {300,80,150,60};
+bool MBISPressed = false, overButton9 = false;
+double MPos[] = {300,160,150,60};
+bool HBISPressed = false, overButton10 = false;
+double HPos[] = {300,240,150,60};
+bool Back2BISPressed = false, overButton11 = false;
+double Back2Pos[] = {505,318,90,62};
+bool Back3BIsPressed = false, overButton12 = false;
+double Back3Pos[] = {70,20,90,62};
+
+bool z=false;
+//Cards to be drawn in order they appear:
+Card * drawcards[4];
+
+//Initializes AI - Use ai.set_diff(int) to change difficulty later
+AI ai1(game,1,0);
+AI ai2(game,2,0);
+AI ai3(game,3,0);
+
+//Runs a timer for delaying the change in tricks
+void timer(double arg){
+  clock_t startTime = clock();
+  double secondsPassed;
+  double secondsToDelay = arg;
+  bool running = true;
+  while(running){
+    secondsPassed = (clock() - startTime) / (CLOCKS_PER_SEC/10);
+    if(secondsPassed >= secondsToDelay){
+      //cout << "Erasing playedText[], game.playedCards[]" << endl;
+      running = false;
+    }
+  }
+}
 
 //A wonderful "borrowed" helper funtion.
 void drawBox(double x, double y, double width, double height)
@@ -100,12 +203,26 @@ void drawBox(double *pos)
   drawBox(pos[0], pos[1], pos[2], pos[3]);
  } 
 
+<<<<<<< HEAD
+=======
+
+/* Keeps track of the mouse at all times,
+ * uses the passive glut update cycle.
+ * (In other words, this will be called
+ * whenever the mouse moves, regardless
+ * of actual input.) 
+ */
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
 void mouse_update(int x, int y)
 {
   mouseX = x; mouseY = y;
   glutPostRedisplay();
 }
 
+<<<<<<< HEAD
+=======
+//Loads the textures to be displayed as the user's hand
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
 void loadUserText()
 {
 	//The 0 stands for the user's hand
@@ -144,6 +261,7 @@ void loadUserText()
 	
 }
 
+<<<<<<< HEAD
 void loadPlayedText(){
   Card* cardsPlayed[4];
   for(int i = 0; i < 4; i++){
@@ -151,6 +269,16 @@ void loadPlayedText(){
   }
   for(int l = 0; l < 4; l++){
     if(cardsPlayed[l] != NULL){
+=======
+//Loads the textures of cards that have been played (middle of screen)
+void loadPlayedText(){
+  Card* cardsPlayed[4];
+  for(int i = 0; i < 4; i++){
+    cardsPlayed[i] = drawcards[i];
+  }
+  for(int l = 0; l < 4; l++){
+    if(cardsPlayed[l] != 0 && cardsPlayed[l] != NULL){
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
       //clubs
       if(cardsPlayed[l]->get_suit() == 1){
 	playedText[l] = cText[cardsPlayed[l]->get_val()];
@@ -171,6 +299,7 @@ void loadPlayedText(){
   }
 }
 
+<<<<<<< HEAD
 
 void drawCards(int over = -1){
   //Updated to 13 cards per row
@@ -178,14 +307,68 @@ void drawCards(int over = -1){
 
 <<<<<<< HEAD
 =======
+=======
+void AIgameplay();
+
+//Draws the played cards in front of their respective hands
+void drawPlayedCards(){
+  loadPlayedText();
+  int count = 0;
+  for(int i = 0; i < 4; ++i){
+    if(playedText[i] == 0) ++count;
+  }
+  if(count == 4) return;
+  for(int k = 0; k < 4; k++){
+    if(playedText[k] != 0){
+      //Draw the Player's Card
+      if(k == 0){
+	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
+		    (((game_Height/2) - (card_Height/2))+card_Height),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[1]'s Card (RIGHT)
+      else if(k == 3){
+	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))+card_Width),
+		    ((game_Height/2) - (card_Height/2)),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[2]'s Card (TOP)
+      else if(k ==2){
+	drawTexture(playedText[k], ((game_Width/2)-(card_Width/2)),
+		    (((game_Height/2) - (card_Height/2))-card_Height),
+		    card_Width, card_Height, 1, 0);
+      }
+      //Draw AI[3]'s Card (LEFT)
+      else if (k == 1){
+	drawTexture(playedText[k], (((game_Width/2)-(card_Width/2))-card_Width),
+		    ((game_Height/2) - (card_Height/2)),
+		    card_Width, card_Height, 1, 0);
+      }
+    }
+  }
+}
+
+//Draws all cards on the screen
+void drawCards(int over = -1){
+
+
+  //Updated to 13 cards per row
+  //Displays all hand zones.
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
   card_Height = game_Height/7;
   card_Width = card_Height * .618;
   ai3HandLen = game.get_handLen(3);
   ai2HandLen = game.get_handLen(2);
   ai1HandLen = game.get_handLen(1);
   userHandLen = game.get_handLen(0);
+<<<<<<< HEAD
   loadUserText();
   loadPlayedText();
+=======
+  
+  loadUserText();
+  //AIgameplay();
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
 
 >>>>>>> 9bc896daae7f51eb102983969d7f14310a6b8be8
   //spacing to align cards in center of screen
@@ -194,6 +377,17 @@ void drawCards(int over = -1){
   double hspacing = (game_Height/2) - (card_Width/2)*((ai3HandLen/2)+2);
 
   //drawTexture(texture ID, x, y, width, height, alpha, angle -in radians- );
+
+  drawTexture(bkg, 0, 0, game_Width, game_Height, 1, 0);
+  drawPlayedCards();
+
+	//Button inside the playgame screen
+	Button Back3;
+    if ( Back3BIsPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, 0.0, 0.0);  // gray
+    Back3.drawButton(Back3Pos);
+drawTexture(gpT,  70, 20, 90, 62);
 
   //Draw top cards
   for(int i = 0; i < ai2HandLen; i++){
@@ -222,6 +416,7 @@ void drawCards(int over = -1){
       game.get_card(0,l)->set_pos((uwspacing+(l*(card_Width/2))),
 				  (game_Height - (card_Height + 10)), card_Width, card_Height);
     }
+<<<<<<< HEAD
   }
 
   //Draw PLAYED cards
@@ -252,11 +447,186 @@ void drawCards(int over = -1){
 		    card_Width, card_Height, 1, 0);
       }
     }
+=======
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
   }
 }
 
+
+//This is where the AIs will make their plays, and their cards will be assigned to / removed from
+//  the relevant places. *For more details, see AI.cpp
+void AIgameplay(){
+  int j = 0;
+  Card * playedCard;
+  userTurn = false;
+  for(int count = 0; count < 4; ++count){
+    if(game.who_played[count] != -1) ++j; //Has everyone played this hand?
+  }
+  if(j != 4){
+    switch(game.getTurn()){
+    case 0:
+      cout << "Your turn!" << endl;
+      break;
+    case 1:
+      cout<< "It is the LEFT AI's turn." << endl;
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      playedCard = ai1.makePlay(game);
+      for(int i = 0; i < 4; ++i){
+	if(game.cards_played[i] == 0){
+	  game.set_cards_played(i, playedCard);
+	  break;
+	}
+      }
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      drawcards[1] = playedCard;
+      game.get_hand(1)->removeCard(playedCard);
+      game.nextTurn();
+      drawPlayedCards();
+      AIgameplay();
+      break;
+    case 2:
+      cout<<"It is the PARTNER AI's turn." << endl;
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      playedCard = ai2.makePlay(game);
+      for(int i = 0; i < 4; ++i){
+	if(game.cards_played[i] == 0){
+	  game.set_cards_played(i, playedCard);
+	  break;
+	}
+      }
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      drawcards[2] = playedCard;
+      game.get_hand(2)->removeCard(playedCard);
+      game.nextTurn();
+      drawPlayedCards();
+      AIgameplay();
+      break;
+    case 3:
+      cout<<"It is the RIGHT AI's turn." << endl;
+      //for(int i = 0; i < 4; ++i) cout << game.who_played[i] <<" ";
+      playedCard = ai3.makePlay(game);
+      for(int i = 0; i < 4; ++i){
+	if(game.cards_played[i] == 0){
+	  game.set_cards_played(i, playedCard);
+	  break;
+	}
+      }
+      //cout << playedCard->get_suit() <<" "<< playedCard->get_val()+2 << endl;
+      drawcards[3] = playedCard;
+      game.get_hand(3)->removeCard(playedCard);
+      game.nextTurn();
+      drawPlayedCards();
+      AIgameplay();
+      break;
+    default:
+      break;
+    }
+    cout << "======================================" << endl; //Makes terminal pretty
+  }
+}
+  
+//Draws menus
+void drawOption() {
+  if (DisplayState == 0){
+    // draw the button
+    Button Playgame;
+    if ( PlayBIsPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, 0.0, 0.0);  // gray
+    Playgame.drawButton(PlaygamePos);
+    //draw button2
+    Button Option;
+    if ( button2IsPressed ) glColor3f(1., 0., 0.);  // make it green
+    else if ( overButton2 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(.0, 0.0, 0.0);  // white
+    Option.drawButton(OptionPos); 
+    //Button funtion
+    Button Exit;
+    if ( button3IsPressed) glColor3f(1., 0., 0.);
+    else if (overButton3) glColor3f(.75, .75, .75);
+    else glColor3f(0.0, 0.0, 0.0);
+    Exit.drawButton(ExitPos); 
+    //draw stuff
+    drawTexture(whistT, 0, 30,   400, 150); // texID,   x,y,    width, height
+    drawTexture(w2T,  450,250,    300, 150, 1);
+    //main menu buttons textures
+    drawTexture(w3T,  290,115,    170, 70 );
+    drawTexture(oT,  302, 203,    145, 50 );
+    drawTexture(eT,  300, 285,    152, 50 ); 
+  }
+  if (DisplayState == 1){
+    Button Sound;
+    if ( SouBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Sound.drawButton(SouPos);
+    Button Ai;
+    if ( AiBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Ai.drawButton(AiPos);
+    
+    Button Con;
+    if ( ConBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Con.drawButton(ConPos);
+    
+    Button Back;
+    if ( BackBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Back.drawButton(BackPos);
+    //button texture
+    drawTexture(dT,  305, 85, 142, 50);
+    drawTexture(mT,  305, 165, 142, 50);
+    drawTexture(bg,  305, 245, 142, 50);
+    drawTexture(bT,  509, 324,  82, 50 );
+    drawTexture(pwT,  10, 205, 250, 200);
+
+  }
+
+  else if (DisplayState ==4){
+    Button Easy;
+    if ( EBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton4 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Easy.drawButton(EPos);
+    
+    Button Medium;
+    if ( MBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton5 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Medium.drawButton(MPos);
+    
+    Button Hard;
+    if ( HBISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton6 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Hard.drawButton(HPos);
+    
+    Button Back2;
+    if ( Back2BISPressed ) glColor3f(1., 0., 0.);  // make it red
+    else if ( overButton7 ) glColor3f(.75,.75,.75);  // light gray
+    else glColor3f(0.0, .65, .1);  // gray
+    Back2.drawButton(Back2Pos);
+    //button textures
+    drawTexture(w2T,  10,250,    300, 150, 1);
+
+    drawTexture(deT,  305, 85, 142, 50);
+    drawTexture(dmT,  305, 165,  142, 50 );
+    drawTexture(dhT,  305, 245, 142, 50);
+    drawTexture(bT,  509, 324,  82, 50 );
+  }
+}
+    
+void loadAllTextures();
+
+//Glut sees this, then it calls other functions
 void drawWindow(){
+  int j = 0;
   glClear(GL_COLOR_BUFFER_BIT);
+<<<<<<< HEAD
 
   if(DisplayState == 0){
     // draw the button
@@ -282,8 +652,67 @@ void drawWindow(){
     }
   }
   glutSwapBuffers();
+=======
+  if(DisplayState == 0){
+    drawOption(); //Draw the main menu
+  }
+  else if (DisplayState ==1){
+    drawOption(); //Draw the options menu
+  }
+  else if(DisplayState == 2){ //Drwa the game, run a few checks periodically
+    drawTexture(bkg,0,0,game_Width, game_Height, 1, 0);
+    drawCards();
+    for(int i = 0; i < game.get_handLen(0); ++i){
+      if(game.get_card(0,i)->mouse_over(mouseX, mouseY)) drawCards(i);
+    }
+    for(int i = 0; i < 4; ++i){
+      if(game.who_played[i] != -1) ++j;
+    }
+    if(j == 4){
+      game.chkWinner();
+      for(int i = 0; i < 4; ++i) drawcards[i] = 0;
+      cout << "Tricks played so far: " << game.tricksPlayed << endl;
+      if(game.tricksPlayed == 13){
+	game.chkWinnerH();
+      }
+      drawWindow();
+      timer(30);
+      for(int i = 0; i < 4; i++){
+	drawWindow();
+	timer(0.3);
+	playedText[i] = 0;
+	game.cards_played[i] = 0;
+      }
+      AIgameplay();
+    }
+  }
+  else if (DisplayState ==3){
+    int win = glutGetWindow();
+    glutDestroyWindow(win);
+    exit(0);
+    glutPostRedisplay();
+  }
+  else if(DisplayState == 7){
+
+    DisplayState=0;
+    drawWindow();
+  }
+  else if(DisplayState == 8){
+  	drawOption();
+  	DisplayState=1;
+  }
+  	
+  else if(DisplayState == 4){
+    drawOption();
+  }
+glutSwapBuffers();
+
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
 }
 
+/*
+  If the user presses Q, quit the game and end all processes.
+*/
 void keyboard(unsigned char c, int x, int y){
   int win = glutGetWindow();
   switch(c){
@@ -299,14 +728,20 @@ void keyboard(unsigned char c, int x, int y){
   glutPostRedisplay();
 }
 
-//I don't want to mess with resizing textures and mipmaps, if at all possible.
-//This likely only delays the inevitable ;_;
+/*
+  Borrowed from lab files, works very nicely.
+*/
 void reshape(int w, int h){
+<<<<<<< HEAD
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+=======
+  glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
    game_Width = w;  game_Height = h;
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    glOrtho(0.,game_Width -1, game_Height-1, 0., -1.0, 1.0);
+<<<<<<< HEAD
 
   //glutReshapeWindow(game_Width,game_Height);
 }
@@ -325,6 +760,20 @@ bool onButton2(int x, int y)
          x <= buttonPos2[0] + buttonPos2[2] &&
          y <= buttonPos2[1] + buttonPos2[3];
 }
+=======
+}
+
+// the following function tests whether a point at position x,y is inside
+//   the rectangle on the screen corresponding to the button
+bool onButton(int x, int y, double* buttonPos)
+{
+  return x >= buttonPos[0]  && y >= buttonPos[1] &&
+         x <= buttonPos[0] + buttonPos[2] &&
+         y <= buttonPos[1] + buttonPos[3];
+}
+
+int play_suit = 0; //GLOBAL - this one snuck down here somehow. Oh well.
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
 
 // the mouse function is called when a mouse button is pressed down or released
 void mouse(int button, int state, int x, int y){
@@ -333,6 +782,7 @@ void mouse(int button, int state, int x, int y){
       //mouseIsDragging = true;
       // the user just pressed down on the mouse-- do something
       if(DisplayState==2){
+<<<<<<< HEAD
 	for(int i = 0; i < 13; i++){
 	  if(game.get_card(0,i)->mouse_over(x,y)){
 	    //if(game.get_hand(0)->getCard(i)->mouse_over(x,y)){
@@ -367,13 +817,189 @@ void mouse(int button, int state, int x, int y){
         cout << "Button press." << endl;
       }
       button2IsPressed = false;
+=======
+		if ( onButton(x,y, Back3Pos) ) Back3BIsPressed = true;
+		else  Back3BIsPressed = false;
+		z=true;
+
+
+	if(game.cards_played[0] != 0) play_suit = game.cards_played[0]->get_suit();
+	else play_suit = 0;
+	if(game.getTurn() == 0){
+	  for(int i = 0; i < 13; i++){
+	    if(game.get_card(0,i)->mouse_over(x,y)){
+	      cardMatch = i;
+	    }
+	  }
+	}
+      }
+      else if (DisplayState == 0){
+	if ( onButton(x,y, PlaygamePos) ) PlayBIsPressed = true;
+	else PlayBIsPressed = false;
+	if ( onButton(x,y, OptionPos) ) button2IsPressed = true;
+	else button2IsPressed = false;
+	if ( onButton(x,y, ExitPos) ) button3IsPressed = true;
+	else button3IsPressed = false;
+      }
+      
+      else if (DisplayState == 1){
+	if ( onButton(x,y, SouPos) ) SouBISPressed = true;
+	else  SouBISPressed = false;
+	if ( onButton(x,y, AiPos) ) AiBISPressed = true;
+	else AiBISPressed = false; 
+	if ( onButton(x,y, ConPos) ) ConBISPressed = true;
+	else ConBISPressed = false; 
+	if ( onButton(x,y, BackPos) ) BackBISPressed = true;
+	else BackBISPressed = false; 
+      }
+      else if (DisplayState == 4){
+	if ( onButton(x,y, EPos) ) EBISPressed = true;
+	else  EBISPressed = false;
+	if ( onButton(x,y, MPos) ) MBISPressed = true;
+	else MBISPressed = false; 
+	if ( onButton(x,y, HPos) ) HBISPressed = true;
+	else HBISPressed = false; 
+	if ( onButton(x,y, Back2Pos) ) Back2BISPressed = true;
+	else Back2BISPressed = false; 
+}
+      
+    }
+    else{
+      //mouseIsDragging = false;
+      // the user just let go the mouse-- do something
+      if(DisplayState == 2){
+	//If this is the same card that you just had your mouse over
+	if(game.get_card(0,cardMatch)->mouse_over(x,y) && game.getTurn() == 0){
+	  //If this is a legal play in the game
+	  if(game.isLegal(game.get_card(0, cardMatch), play_suit, 0) || play_suit == 0){
+	    //Tell the program you played this card
+	    for(int i = 0; i < 4; ++i){
+	      if(game.who_played[i] == -1){
+		game.set_who_played(i, 0);
+		break;
+	      }
+	    }
+	    //Tell the program which card you played
+	    for(int i = 0; i < 4; ++i){
+	      if(game.cards_played[i] == 0){
+		game.set_cards_played(i,game.get_card(0,cardMatch)); //The user played this card
+		break;
+	      }
+	    }
+	    //Add the card to this array to be drawn later
+	    drawcards[0] = game.get_card(0,cardMatch);
+	    game.get_hand(0)->removeCard(cardMatch);
+	    game.nextTurn();
+	    drawPlayedCards();
+	    AIgameplay();
+	  }
+	}
+	for(int i = 0; i < 4; i++){
+	  playedText[i] = 0;
+	}
+      }
+
+      if ( onButton(x,y, PlaygamePos) && PlayBIsPressed){
+        DisplayState=2;
+        game.deal();
+        loadUserText();
+		cout << "PlayGame Button press." << endl;
+      }
+      	PlayBIsPressed = false;
+      
+      if ( onButton(x,y,OptionPos) && button2IsPressed ){
+        DisplayState=1;
+        cout << "Options Button press." << endl;
+      }
+      button2IsPressed = false;
+      
+      if ( onButton(x,y,ExitPos) && button3IsPressed ){
+        DisplayState=3;
+        cout << "Exit Button press." << endl;
+      }
+      button3IsPressed = false;
+      
+      if ( onButton(x,y,SouPos) && SouBISPressed ){
+	cout << "Sound Button press." << endl;
+      }
+      SouBISPressed = false;
+      
+      if ( onButton(x,y,AiPos) && AiBISPressed ){
+        DisplayState = 4;
+	cout << "Ai Button press." << endl;
+      }
+      AiBISPressed = false;
+
+      if ( onButton(x,y,Back3Pos) && Back3BIsPressed ){
+      	DisplayState=8;
+      		cout << "Back button in Playgame screen press." << endl;
+      }
+      Back3BIsPressed = false;
+
+      if ( onButton(x,y,ConPos) && ConBISPressed ){
+	if(whichcb < 3){
+	  ++whichcb;
+	}
+	else whichcb = 0;
+	if(whichcb == 0) bg = bg5; //cardback = stolaf
+	else if(whichcb == 1) bg = bg2; //cardback = black
+	else if(whichcb == 2) bg = bg3; //cardback = blue
+	else if(whichcb == 3) bg = bg4; //cardback = red
+	else bg = bg5; //default to ole
+	cout << "Cardback Button press." << endl;
+      }
+      ConBISPressed = false;
+      
+      if ( onButton(x,y,BackPos) && BackBISPressed ){
+      	if (z==false){DisplayState=7;}
+      	else { 
+      		DisplayState=2;
+      		drawWindow();}
+	cout << "Back Button press." << endl;
+      }
+      BackBISPressed = false;
+      
+      //difficulty button
+      if ( onButton(x,y,EPos) && EBISPressed ){
+	ai1.set_diff(0);
+	ai2.set_diff(0);
+	ai3.set_diff(0);
+	cout << "Easy Difficulty Button press." << endl;
+      }
+      EBISPressed = false;
+      
+      if ( onButton(x,y,MPos) && MBISPressed ){
+	ai1.set_diff(0);
+	ai2.set_diff(0);
+	ai3.set_diff(0);
+	cout << "Medium difficulty Button press." << endl;
+      }
+      MBISPressed = false;
+      
+      if ( onButton(x,y,HPos) && HBISPressed ){
+	ai1.set_diff(0);
+	ai2.set_diff(0);
+	ai3.set_diff(0);
+	cout << "Hard difficulty Button press." << endl;
+      }
+      HBISPressed = false;
+      
+      if ( onButton(x,y,Back2Pos) && Back2BISPressed ){
+        DisplayState=8;
+	cout << "Back2 Button press." << endl;
+      }
+      Back2BISPressed = false;
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
     }
   }
   else if(GLUT_RIGHT_BUTTON == button){ /*empty*/ };
   mouseX = x; mouseY = y;
   glutPostRedisplay();
 }
+//}
 
+
+<<<<<<< HEAD
 
 // the mouse_motion function is called when the mouse is being dragged,
 //   and gives the current location of the mouse
@@ -381,6 +1007,14 @@ void mouse_motion(int x, int y){
   //The mouse is moving and a button is down?!?! Will be integrated in time.
   mouseX = x, mouseY = y;
   glutPostRedisplay();
+=======
+// the mouse_motion function is called when the mouse is being dragged,
+//   and gives the current location of the mouse
+void mouse_motion(int x, int y){
+  //The mouse is moving and a button is down?!?! Will likely not be integrated.
+  mouseX = x, mouseY = y;
+  if(userTurn) glutPostRedisplay();
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
 }
 
 //This function is important, I think.
@@ -396,16 +1030,22 @@ void init(void){
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
 
-  cout << "Welcome to " << programName << "." << endl;
-  cout << "A Functional demo!" << endl;
-  cout << "Shuffles the deck, and deals out four hands." << endl;
+  cout << "Welcome to " << programName << "!" << endl;
+  //No longer a demo, and yet is nothing more...
+  //cout << "A Functional demo!" << endl;
+  cout << "The deck is shuffled and the cards are layed! /n /t Let's Play!" << endl;
 }
 
 //Loads all textures, 
-void loadAllTextures()
-{
+void loadAllTextures(){
 	bg = loadTexture("imgs/cardback.pam");
-	
+	bg2 = loadTexture("imgs/cbblack.pam");
+	bg3 = loadTexture("imgs/cbblue.pam");
+	bg4 = loadTexture("imgs/cbred.pam");
+	bg5 = loadTexture("imgs/cardback.pam");
+	bkg = loadTexture("imgs/gameback.pam");
+	//gear = loadTexture("imgs/settings.pam");
+
 	//load textures for clubs
 	for(int i = 0; i < 9; ++i)
 	{
@@ -478,6 +1118,7 @@ void init_gl_window(){
   glutInitWindowPosition(300,50);
   glutCreateWindow(programName);
   init();
+<<<<<<< HEAD
 
   //LOAD ALL THE TEXTURES
   loadAllTextures();
@@ -486,6 +1127,30 @@ void init_gl_window(){
   w2T= loadTexture("w2.pam");
   w3T= loadTexture("w3.pam");
 
+=======
+ 
+  whistT= loadTexture("imgs/whist1.pam"); // key to textures:  load them!
+  w2T= loadTexture("imgs/mo1.pam");
+
+  w3T= loadTexture("imgs/p1.pam");
+  oT= loadTexture("imgs/o1.pam");
+  eT= loadTexture("imgs/e1.pam");
+  pwT= loadTexture("imgs/pw1.pam");
+
+  //options
+  dT= loadTexture("imgs/dd.pam");
+  mT= loadTexture("imgs/m1.pam");
+  bT= loadTexture("imgs/b1.pam");
+//Difficulty buttons
+  deT= loadTexture("imgs/de1.pam");
+  dmT= loadTexture("imgs/dm1.pam");
+  dhT= loadTexture("imgs/dh1.pam");
+  bT= loadTexture("imgs/b1.pam");
+  //game play menu
+  gpT= loadTexture("imgs/gpm.pam");
+   //LOAD ALL THE TEXTURES
+  loadAllTextures();  
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
   //Draw stuff
   glutDisplayFunc(drawWindow);
   glutReshapeFunc(reshape);
@@ -496,9 +1161,11 @@ void init_gl_window(){
   glutMainLoop();
 }
 
+
 //This stays like this.
 int main ()
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
   loadAllTextures();
   game.deal();
@@ -509,5 +1176,10 @@ int main ()
 	ai3.aiSetHand(game.get_hand(3), ai3HandLen);
 =======
 >>>>>>> 9bc896daae7f51eb102983969d7f14310a6b8be8
+=======
+>>>>>>> e10e6c07685f42fdfeb282564a296f0f13c84f6f
   init_gl_window();
 }
+
+	
+	
