@@ -19,5 +19,5 @@ This project started as a project for a Software Design project in the fall seem
 ## Tasks
 - [ ] Create a windows version of the linux code
 - [ ] Fix the linux code 
-  - [ ] Most issues are in AI code, and bad user input implementation
+  - (Most issues are in AI code, and bad user input implementation)
 - [ ] Generally make the game better
