@@ -1,8 +1,21 @@
+# Ignore everything
 *
+
+#Except for these types of files
+
+#C++ Files
 !*.h
 !*.cpp
-!*.pam
+
+#Text files
+!*.txt
+!README.md
+
+#Git and makefiles
 !.gitignore
-!*.md
-!*.pam
 !makefile
+
+#Images and sounds
+!*.pam
+!*.png
+!*.mp3
