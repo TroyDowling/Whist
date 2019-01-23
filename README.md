@@ -2,7 +2,12 @@
 Project for Software Design Fall 2017
 
 ## Getting Started
-Eventually, and ideally, there will be a way to install this to many Computers
+### Linux:
+1. Make sure you have OpenGL installed
+2. Clone or Download this repository
+3. Navigate to the folder where you stored everything
+4. Run `make Whist`
+5. Enjoy! Follow along with the command console to see helpful outputs.
 
 ## Contributing
 As usual, **pull _before_ pushing.** This is especially important if you are working on main for some reason.
