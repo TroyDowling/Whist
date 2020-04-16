@@ -6,7 +6,7 @@ Project for Software Design Fall 2017
 1. Make sure you have OpenGL installed
 2. Clone or Download this repository
 3. Navigate to the folder where you stored everything
-4. Run `make Whist`
+4. Run `make`
 5. Enjoy! Follow along with the command console to see helpful outputs.
 
 ## Contributing
